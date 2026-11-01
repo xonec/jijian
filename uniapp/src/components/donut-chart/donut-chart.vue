@@ -4,6 +4,7 @@
       <view class="donut__hole" :style="{ width: hole + '%', height: hole + '%' }" />
     </view>
     <view
+      v-if="labels"
       v-for="(item, i) in items"
       :key="i"
       class="donut-label"
@@ -19,6 +20,7 @@ export default {
   name: 'donut-chart',
   props: {
     items: { type: Array, default: () => [] },
+    labels: { type: Boolean, default: true },
     size: { type: Number, default: 232 },
     hole: { type: Number, default: 78 }
   },

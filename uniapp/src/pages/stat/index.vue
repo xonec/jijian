@@ -11,7 +11,7 @@
 
     <view v-if="stat.donut && stat.donut.length" class="card mt10">
       <view class="stat-donut">
-        <donut-chart :items="stat.donut" :size="232" />
+        <donut-chart :items="stat.donut" :size="232" :labels="false" />
       </view>
       <view class="legend-grid">
         <view v-for="x in stat.donut" :key="x.name" class="legend-grid__item">

@@ -70,7 +70,8 @@ export default {
         let lunar = ''
         let lunarClass = ''
         if (this.showLunar) {
-          lunar = info.lunar || ''
+          // 正常显示农历/节气/节日；仅在“关闭节假日”时把节日换成农历日名
+          lunar = info.holiday && !this.showHoliday ? info.lunarDay || '' : info.lunar || ''
           if (info.holiday && this.showHoliday) lunarClass = 'cal-lunar--holiday'
           else if (info.swap) lunarClass = 'cal-lunar--swap'
         }

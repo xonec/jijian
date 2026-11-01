@@ -1,9 +1,10 @@
-import { reactive, computed } from 'vue'
+import { reactive, computed, watch } from 'vue'
 import {
   TODAY, VIEW0, SHIFTS, DAYS, REMARKS, ALARMS, STAT,
   SETTING_GROUPS, DISPLAY_CONFIG, PALETTES, VIP, PROJECTS, FAQ, UPDATE_INTRO
 } from '@/data/mock.js'
 import api from '@/services/api.js'
+import { getLunarInfo } from '@/utils/lunar.js'
 
 export const WEEK = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
 export const CN_MONTH = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二']
@@ -85,7 +86,7 @@ export function applyBootstrap(db) {
   store.loaded = true
 }
 
-/* 依据 scheduleRaw 重建当月 days（保留农历/节日静态角标） */
+/* 依据 scheduleRaw 重建当月 days；农历/节气/节日按真实日期动态计算 */
 export function rebuildDays() {
   const list = []
   const y = store.view.y
@@ -96,17 +97,30 @@ export function rebuildDays() {
   for (let d = 1; d <= total; d++) {
     const key = y + '-' + m + '-' + String(d).padStart(2, '0')
     const rec = store.scheduleRaw[key]
-    const info = base[d] || { d, lunar: '' }
+    const info = base[d] || { d }
+    const lunar = getLunarInfo(y, store.view.m, d)
     list.push({
       d,
-      lunar: info.lunar,
-      holiday: info.holiday,
+      lunar: lunar.label,
+      lunarDay: lunar.lunarDay,
+      monthLabel: lunar.monthLabel,
+      holiday: lunar.holiday,
+      jieqi: lunar.jieqi,
+      festival: lunar.festival,
       swap: info.swap,
       work: rec && rec.workId ? rec.workId : info.work || ''
     })
   }
   store.days = list
 }
+
+/* 切换月份/年份时自动重建当月数据（含农历） */
+watch(
+  () => [store.view.y, store.view.m],
+  () => {
+    if (store.loaded) rebuildDays()
+  }
+)
 
 /* 修改某天班次（同时写后端） */
 export async function setDayWork(day, workId, reply) {
@@ -141,7 +155,7 @@ export function monthDays(y, m) {
 }
 export function dayMap() {
   const map = {}
-  if (store.view.y === 2024 && store.view.m === 9) store.days.forEach((d) => (map[d.d] = d))
+  store.days.forEach((d) => (map[d.d] = d))
   return map
 }
 

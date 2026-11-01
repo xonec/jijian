@@ -3,8 +3,16 @@ export function goTab(key) {
   uni.reLaunch({ url: '/pages/' + key + '/index' })
 }
 
-export function goPage(path) {
-  uni.navigateTo({ url: '/pages/sub/' + path + '/index' })
+export function goPage(path, params) {
+  let url = '/pages/sub/' + path + '/index'
+  if (params && typeof params === 'object') {
+    const qs = Object.keys(params)
+      .filter((k) => params[k] !== undefined && params[k] !== null && params[k] !== '')
+      .map((k) => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+      .join('&')
+    if (qs) url += '?' + qs
+  }
+  uni.navigateTo({ url })
 }
 
 export function back() {

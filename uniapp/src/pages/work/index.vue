@@ -12,7 +12,7 @@
           v-for="sh in shifts"
           :key="sh._id || sh.id"
           class="shift-row"
-          @click="openEdit"
+          @click="openEdit(sh)"
         >
           <shift-badge mode="chip" :shift="sh" />
           <text class="shift-row__name" />
@@ -20,7 +20,7 @@
         </view>
       </view>
       <view v-else class="empty">暂无班次</view>
-      <view class="add-row" @click="openEdit">添加班次</view>
+      <view class="add-row" @click="openAdd">添加班次</view>
       <view class="sort-link" @click="onSort">班次排序</view>
     </view>
 
@@ -68,7 +68,12 @@ export default {
         /* 网络/云函数异常时保留 store 内置班次，保证页面可用 */
       }
     },
-    openEdit() {
+    openEdit(sh) {
+      if (!sh) return this.openAdd()
+      const id = sh._id || sh.id
+      goPage('work-edit', id ? { id } : {})
+    },
+    openAdd() {
       goPage('work-edit')
     },
     onSort() {

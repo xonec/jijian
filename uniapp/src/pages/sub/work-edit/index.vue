@@ -136,11 +136,34 @@ const restOptions = [
 ]
 
 const form = store.workForm
-if (form.remark === undefined) form.remark = ''
-if (form.tab === undefined) form.tab = 'normal'
+
+const DEFAULTS = {
+  tab: 'normal',
+  name: '',
+  allDay: false,
+  start: '09:00',
+  end: '18:00',
+  rest: '60',
+  remark: ''
+}
 
 const editId = ref('')
 const sheet = ref('')
+
+function resetForm() {
+  form.tab = DEFAULTS.tab
+  form.name = DEFAULTS.name
+  form.allDay = DEFAULTS.allDay
+  form.start = DEFAULTS.start
+  form.end = DEFAULTS.end
+  form.rest = DEFAULTS.rest
+  form.remark = DEFAULTS.remark
+  store.selectedColor = COLORS[0]
+}
+
+function genId() {
+  return 's' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5)
+}
 
 const pageTitle = computed(() => (editId.value ? '编辑班次' : '添加班次'))
 const placeholderStyle = computed(() => 'color:' + (theme.value === 'dark' ? '#888888' : '#999999'))
@@ -191,22 +214,27 @@ function pickRest(v) {
 }
 
 onLoad((options) => {
+  // 每次进入页面先重置，避免“编辑后返回再添加”残留上一次表单内容
+  resetForm()
   if (!options || !options.id) return
   editId.value = options.id
   api.fetchShifts()
     .then((list) => {
       const sh = (list || []).find((x) => x._id === options.id || x.id === options.id)
-      if (!sh) return
+      if (!sh) {
+        toast('班次不存在')
+        return
+      }
       form.tab = 'normal'
       form.name = sh.name || ''
       form.allDay = !!sh.allDay
       form.start = (sh.start || '09:00').replace(/^次日/, '')
       form.end = (sh.end || '18:00').replace(/^次日/, '')
-      form.rest = sh.rest || '60'
+      form.rest = String(sh.rest || '60')
       form.remark = sh.remark || ''
-      store.selectedColor = sh.color || store.selectedColor
+      store.selectedColor = sh.color || COLORS[0]
     })
-    .catch(() => {})
+    .catch(() => toast('加载班次失败'))
 })
 
 async function save() {
@@ -215,8 +243,27 @@ async function save() {
     toast('请输入班次名称')
     return
   }
+  if (form.tab === 'combo') {
+    toast('组合班次暂未开放，请使用普通班次')
+    return
+  }
+  if (!form.allDay && !form.start) {
+    toast('请选择开始时间')
+    return
+  }
+  // 同名班次检查（编辑自身除外）
+  const dup = (store.shifts || []).find((s) => {
+    const sid = s._id || s.id
+    return s.name === name && sid !== editId.value
+  })
+  if (dup) {
+    toast('已存在同名班次')
+    return
+  }
+
+  const id = editId.value || genId()
   const payload = {
-    id: editId.value || 's' + Date.now().toString(36),
+    id,
     name,
     color: store.selectedColor,
     allDay: !!form.allDay,
@@ -236,17 +283,21 @@ async function save() {
   }
 }
 
-/* 同步到共享 store，首页/提醒页可立即使用新班次 */
+/* 同步到共享 store，首页/提醒页可立即使用新班次；编辑时按 id/_id 合并，避免重复 */
 function syncStoreShift(payload, saved) {
   const item = { ...payload, ...(saved && typeof saved === 'object' ? saved : {}) }
-  const key = editId.value
-  const idx = store.shifts.findIndex(
-    (s) => (key && (s.id === key || s._id === key)) || (item.id && s.id === item.id)
-  )
+  const key = item.id || item._id || editId.value
+  const idx = store.shifts.findIndex((s) => {
+    const sid = s.id || s._id
+    return (
+      (key && sid === key) ||
+      (item._id && (s._id === item._id || s.id === item._id))
+    )
+  })
   if (idx >= 0) {
-    store.shifts.splice(idx, 1, { ...store.shifts[idx], ...item })
+    store.shifts.splice(idx, 1, { ...store.shifts[idx], ...item, id: key })
   } else {
-    store.shifts.push(item)
+    store.shifts.push({ ...item, id: key })
   }
 }
 </script>

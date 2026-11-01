@@ -62,13 +62,22 @@ async function runPage(route) {
   await send('Runtime.enable')
   await send('Emulation.setDeviceMetricsOverride', { width: 411, height: 914, deviceScaleFactor: 2, mobile: true })
   await send('Page.navigate', { url: BASE + '/?theme=light#/' + route })
-  await sleep(1400)
-  const r = await send('Runtime.evaluate', {
-    expression: 'JSON.stringify({len: document.body.innerText.length, text: document.body.innerText.slice(0,120), title: document.title})',
-    returnByValue: true
-  })
+
+  // CI 机器较慢：轮询等待页面渲染（最多约 12s）
   let info = { len: 0, text: '', title: '' }
-  try { info = JSON.parse(r.result.value) } catch (e) {}
+  for (let i = 0; i < 30; i += 1) {
+    await sleep(400)
+    try {
+      const r = await send('Runtime.evaluate', {
+        expression: 'JSON.stringify({len: document.body.innerText.length, text: document.body.innerText.slice(0,120), title: document.title})',
+        returnByValue: true
+      })
+      info = JSON.parse(r.result.value)
+    } catch (e) {
+      info = { len: 0, text: '', title: '' }
+    }
+    if (info.len > 20) break
+  }
   await fetch(CDP + '/json/close/' + target.id)
   ws.close()
   return { route, ok: errors.length === 0 && info.len > 20, errors, ...info }
@@ -104,6 +113,8 @@ for (const route of routes) {
   try {
     const r = await runPage(route)
     results.push(r)
+    const detail = r.errors.length ? r.errors.join(' ; ') : '正文长度=' + r.len + '（页面未渲染）'
+    if (!r.ok) console.log('::error::冒烟失败 ' + route + '：' + detail.slice(0, 300))
     console.log(r.ok ? 'OK' : 'FAIL' + (r.errors.length ? ' | ' + r.errors.join(' ; ').slice(0, 120) : ''))
   } catch (e) {
     results.push({ route, ok: false, errors: [String(e)], len: 0, text: '' })

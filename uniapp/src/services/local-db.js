@@ -5,7 +5,7 @@
 import { SHIFTS, DAYS, REMARKS, ALARMS, PROJECTS, DISPLAY_CONFIG, FAQ } from '@/data/mock.js'
 
 const KEY = 'jy_db_v1'
-const SEED_VERSION = 3
+const SEED_VERSION = 4
 
 function seed() {
   const shifts = SHIFTS.map((s, i) => ({ _id: s.id, ...s, sort: i }))
@@ -70,8 +70,13 @@ function load() {
     }
   }
   if ((db._seedVersion || 0) < SEED_VERSION) {
-    // v3：原版日历默认周一开头
+    // v3：原版日历默认周一开头；v4：默认班次补休息时长
     if (db.config && db.config['一周开始日'] === '周日') db.config['一周开始日'] = '周一'
+    if (Array.isArray(db.shifts)) {
+      db.shifts.forEach((s) => {
+        if (s.rest === undefined || s.rest === '') s.rest = s.allDay ? '0' : '60'
+      })
+    }
     db._seedVersion = SEED_VERSION
     save(db)
   }
@@ -220,7 +225,7 @@ export async function computeStat(start, end) {
     if (s) {
       counts[s.name] = (counts[s.name] || 0) + 1
       totalHours += hours
-      restHours += s.allDay ? 0 : 1
+      restHours += s.allDay ? 0 : (Number(s.rest) || 0) / 60
     }
     if (d.workId) {
       details.push({

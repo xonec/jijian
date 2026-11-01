@@ -6,12 +6,12 @@
 const db = uniCloud.database()
 
 const SHIFTS = [
-  { _id: 'shift-early', id: 'early', name: '早班', color: '#1BA784', start: '08:00', end: '16:00', allDay: false, sort: 0 },
-  { _id: 'shift-mid', id: 'mid', name: '中班', color: '#3E7BD6', start: '16:00', end: '24:00', allDay: false, sort: 1 },
-  { _id: 'shift-night', id: 'night', name: '夜班', color: '#303048', start: '00:00', end: '08:00', allDay: false, sort: 2 },
-  { _id: 'shift-long-early', id: 'long_early', name: '长早班', color: '#2D8A7A', start: '08:00', end: '20:00', allDay: false, sort: 3 },
-  { _id: 'shift-long-night', id: 'long_night', name: '中夜班', color: '#806D9E', start: '20:00', end: '次日08:00', allDay: false, sort: 4 },
-  { _id: 'shift-rest', id: 'rest', name: '休息', color: '#F8723D', start: '', end: '', allDay: true, sort: 5 }
+  { _id: 'shift-early', id: 'early', name: '早班', color: '#1BA784', start: '08:00', end: '16:00', allDay: false, rest: '60', sort: 0 },
+  { _id: 'shift-mid', id: 'mid', name: '中班', color: '#3E7BD6', start: '16:00', end: '24:00', allDay: false, rest: '60', sort: 1 },
+  { _id: 'shift-night', id: 'night', name: '夜班', color: '#303048', start: '00:00', end: '08:00', allDay: false, rest: '60', sort: 2 },
+  { _id: 'shift-long-early', id: 'long_early', name: '长早班', color: '#2D8A7A', start: '08:00', end: '20:00', allDay: false, rest: '60', sort: 3 },
+  { _id: 'shift-long-night', id: 'long_night', name: '中夜班', color: '#806D9E', start: '20:00', end: '次日08:00', allDay: false, rest: '60', sort: 4 },
+  { _id: 'shift-rest', id: 'rest', name: '休息', color: '#F8723D', start: '', end: '', allDay: true, rest: '0', sort: 5 }
 ]
 
 const WORK_BY_DAY = {

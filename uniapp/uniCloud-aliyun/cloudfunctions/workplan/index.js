@@ -246,7 +246,7 @@ async function computeStat(ctx, start, end) {
     if (s) {
       counts[s.name] = (counts[s.name] || 0) + 1
       totalHours += hours
-      restHours += s.allDay ? 0 : 1
+      restHours += s.allDay ? 0 : (Number(s.rest) || 0) / 60
     }
     if (d.workId) {
       details.push({

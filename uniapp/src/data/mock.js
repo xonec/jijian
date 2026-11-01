@@ -7,12 +7,12 @@ export const TODAY = { y: 2024, m: 9, d: 2 }
 export const VIEW0 = { y: 2024, m: 9 }
 
 export const SHIFTS = [
-  { id: 'early', name: '早班', color: '#1BA784', start: '08:00', end: '16:00', allDay: false },
-  { id: 'mid', name: '中班', color: '#3E7BD6', start: '16:00', end: '24:00', allDay: false },
-  { id: 'night', name: '夜班', color: '#303048', start: '00:00', end: '08:00', allDay: false },
-  { id: 'long_early', name: '长早班', color: '#2D8A7A', start: '08:00', end: '20:00', allDay: false },
-  { id: 'long_night', name: '中夜班', color: '#806D9E', start: '20:00', end: '次日08:00', allDay: false },
-  { id: 'rest', name: '休息', color: '#F8723D', start: '', end: '', allDay: true }
+  { id: 'early', name: '早班', color: '#1BA784', start: '08:00', end: '16:00', allDay: false, rest: '60' },
+  { id: 'mid', name: '中班', color: '#3E7BD6', start: '16:00', end: '24:00', allDay: false, rest: '60' },
+  { id: 'night', name: '夜班', color: '#303048', start: '00:00', end: '08:00', allDay: false, rest: '60' },
+  { id: 'long_early', name: '长早班', color: '#2D8A7A', start: '08:00', end: '20:00', allDay: false, rest: '60' },
+  { id: 'long_night', name: '中夜班', color: '#806D9E', start: '20:00', end: '次日08:00', allDay: false, rest: '60' },
+  { id: 'rest', name: '休息', color: '#F8723D', start: '', end: '', allDay: true, rest: '0' }
 ]
 
 /* 2024-09 排班：work=班次 id；农历/节日/节气由 src/utils/lunar.js 按真实日期计算，swap=调班蓝标 */

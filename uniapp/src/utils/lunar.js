@@ -25,10 +25,9 @@ const LUNAR_FESTIVAL = {
 
 const SOLAR_FESTIVAL = {
   '元旦': '元旦',
-  '情人节': '情人节',
-  '妇女节': '妇女节',
-  '植树节': '植树节',
-  '消费者权益日': '315',
+  '情人节': '情人',
+  '妇女节': '妇女',
+  '植树节': '植树',
   '愚人节': '愚人',
   '劳动节': '劳动',
   '青年节': '青年',
@@ -39,7 +38,7 @@ const SOLAR_FESTIVAL = {
   '国庆节': '国庆',
   '万圣节': '万圣',
   '感恩节': '感恩',
-  '平安夜': '平安夜',
+  '平安夜': '平安',
   '圣诞节': '圣诞'
 }
 
@@ -47,8 +46,8 @@ const EMPTY = { label: '', lunarDay: '', monthLabel: '', holiday: false, jieqi: 
 
 function shortFestival(name, map) {
   if (!name) return ''
-  if (map[name]) return map[name]
-  return String(name).replace(/节$/, '').slice(0, 2)
+  const v = map[name] || String(name).replace(/节$/, '')
+  return String(v).slice(0, 2)
 }
 
 export function getLunarInfo(y, m, d) {
@@ -89,6 +88,6 @@ export function getLunarInfo(y, m, d) {
   } else {
     label = lunarDay
   }
-  return { label, lunarDay, monthLabel, holiday, jieqi, festival }
+  return { label: String(label).slice(0, 2), lunarDay, monthLabel: String(monthLabel).slice(0, 2), holiday, jieqi, festival }
 }
 

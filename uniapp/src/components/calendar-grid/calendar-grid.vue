@@ -71,7 +71,7 @@ export default {
         let lunarClass = ''
         if (this.showLunar) {
           // 正常显示农历/节气/节日；仅在“关闭节假日”时把节日换成农历日名
-          lunar = info.holiday && !this.showHoliday ? info.lunarDay || '' : info.lunar || ''
+          lunar = (info.holiday && !this.showHoliday ? info.lunarDay || '' : info.lunar || '').slice(0, 2)
           if (info.holiday && this.showHoliday) lunarClass = 'cal-lunar--holiday'
           else if (info.swap) lunarClass = 'cal-lunar--swap'
         }
@@ -166,8 +166,8 @@ export default {
 .cal-date {
   display: flex;
   align-items: flex-start;
-  gap: 1px;
-  height: 22px;
+  gap: 2px;
+  height: 24px;
   line-height: 1;
   white-space: nowrap;
 }
@@ -181,11 +181,16 @@ export default {
   font-weight: 700;
 }
 .cal-lunar {
+  display: inline-block;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
   font-size: 8.5px;
+  line-height: 9px;
   color: var(--text-3);
   white-space: nowrap;
   flex-shrink: 0;
-  letter-spacing: -0.2px;
+  letter-spacing: 0;
+  height: 18px;
 }
 .cal-lunar--swap {
   font-size: 8px;

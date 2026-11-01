@@ -18,6 +18,8 @@
 演示参数（仅 H5）：在 URL 加 ?theme=dark 或 ?theme=light 可强制主题，例如
 http://127.0.0.1:5273/?theme=dark#/pages/home/index
 
+> **HBuilderX 原生打包（完整原生包）**：见 [HBUILDERX.md](./HBUILDERX.md) —— 导入项目、配置 appid/权限/支付、构建 uni-widget AAR、制作自定义基座、云打包/离线打包成正式 APK。
+
 ## 2. 目录结构
 
     uniapp/

@@ -56,8 +56,9 @@ function arrangeShifts(list) {
   const byId = (id) => list.find((s) => s.id === id || s._id === id)
   const picked = [
     byName('早班') || byId('early') || list[0],
-    byName('晚班') || byId('late') || list[1],
-    byName('休息') || byId('rest') || list[2]
+    byName('中班') || byId('mid') || list[1],
+    byName('夜班') || byId('night') || list[2],
+    byName('休息') || byId('rest') || list[3]
   ]
   const out = []
   picked.forEach((s) => {

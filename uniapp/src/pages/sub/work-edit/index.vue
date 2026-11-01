@@ -142,8 +142,8 @@ const DEFAULTS = {
   tab: 'normal',
   name: '',
   allDay: false,
-  start: '09:00',
-  end: '18:00',
+  start: '08:00',
+  end: '16:00',
   rest: '60',
   remark: ''
 }

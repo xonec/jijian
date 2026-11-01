@@ -5,6 +5,7 @@
 import { SHIFTS, DAYS, REMARKS, ALARMS, PROJECTS, DISPLAY_CONFIG, FAQ } from '@/data/mock.js'
 
 const KEY = 'jy_db_v1'
+const SEED_VERSION = 2
 
 function seed() {
   const shifts = SHIFTS.map((s, i) => ({ _id: s.id, ...s, sort: i }))
@@ -25,8 +26,30 @@ function seed() {
     alarms: ALARMS.map((a) => ({ ...a })),
     projects: PROJECTS.map((p) => ({ ...p })),
     config: { ...DISPLAY_CONFIG.reduce((o, x) => ((o[x.k] = x.v), o), {}), currentProjectId: 'p1', themeMode: 'system' },
-    faq: FAQ
+    faq: FAQ,
+    _seedVersion: SEED_VERSION
   }
+}
+
+/* 旧版默认班次（早班 09:00-18:00 / 晚班 20:00-次日08:00 / 休息）→ 新默认班次迁移 */
+function isLegacyDefaultShifts(shifts) {
+  const list = shifts || []
+  const ids = list.map((s) => s.id || s._id).sort().join(',')
+  if (ids !== 'early,late,rest') return false
+  const get = (id) => list.find((s) => (s.id || s._id) === id) || {}
+  const early = get('early')
+  const late = get('late')
+  const rest = get('rest')
+  return early.start === '09:00' && early.end === '18:00' && late.start === '20:00' && !!rest.allDay
+}
+
+function migrateSeedV2(db) {
+  const fresh = seed()
+  db.shifts = fresh.shifts
+  db.schedule = fresh.schedule
+  db.alarms = fresh.alarms
+  db._seedVersion = SEED_VERSION
+  save(db)
 }
 
 function load() {
@@ -34,6 +57,17 @@ function load() {
   if (!db || !db.shifts) {
     db = seed()
     uni.setStorageSync(KEY, db)
+    return db
+  }
+  if (!db._seedVersion) {
+    if (isLegacyDefaultShifts(db.shifts)) {
+      migrateSeedV2(db)
+      db = uni.getStorageSync(KEY)
+    } else {
+      // 用户已自定义过班次：只记录版本，不覆盖数据
+      db._seedVersion = SEED_VERSION
+      uni.setStorageSync(KEY, db)
+    }
   }
   return db
 }

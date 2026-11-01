@@ -7,69 +7,75 @@ export const TODAY = { y: 2024, m: 9, d: 2 }
 export const VIEW0 = { y: 2024, m: 9 }
 
 export const SHIFTS = [
-  { id: 'early', name: '早班', color: '#1BA784', start: '09:00', end: '18:00', allDay: false },
-  { id: 'late', name: '晚班', color: '#303048', start: '20:00', end: '次日08:00', allDay: false },
+  { id: 'early', name: '早班', color: '#1BA784', start: '08:00', end: '16:00', allDay: false },
+  { id: 'mid', name: '中班', color: '#3E7BD6', start: '16:00', end: '24:00', allDay: false },
+  { id: 'night', name: '夜班', color: '#303048', start: '00:00', end: '08:00', allDay: false },
+  { id: 'long_early', name: '长早班', color: '#2D8A7A', start: '08:00', end: '20:00', allDay: false },
+  { id: 'long_night', name: '中夜班', color: '#806D9E', start: '20:00', end: '次日08:00', allDay: false },
   { id: 'rest', name: '休息', color: '#F8723D', start: '', end: '', allDay: true }
 ]
 
 /* 2024-09 排班：lunar=农历角标, holiday=节日红标, swap=调班蓝标 */
 export const DAYS = [
   { d: 1, lunar: '廿九', work: 'early' },
-  { d: 2, lunar: '三十', work: 'early' },
-  { d: 3, lunar: '八月', work: 'early' },
-  { d: 4, lunar: '初一', work: 'late' },
-  { d: 5, lunar: '初二', work: 'late' },
-  { d: 6, lunar: '初三', work: 'late' },
-  { d: 7, lunar: '初四', work: 'rest' },
-  { d: 8, lunar: '初五', work: 'early' },
-  { d: 9, lunar: '初六', work: 'early' },
-  { d: 10, lunar: '初七', work: 'early' },
-  { d: 11, lunar: '初八', work: 'late' },
-  { d: 12, lunar: '初九', work: 'late' },
-  { d: 13, lunar: '初十', work: 'late' },
-  { d: 14, lunar: '十一', work: 'rest', swap: true },
-  { d: 15, lunar: '中秋', work: 'early', holiday: true },
-  { d: 16, lunar: '中秋', work: 'early', holiday: true },
-  { d: 17, lunar: '中秋', work: 'early', holiday: true },
-  { d: 18, lunar: '十六', work: 'late' },
-  { d: 19, lunar: '十七', work: 'late' },
-  { d: 20, lunar: '十八', work: 'late' },
-  { d: 21, lunar: '十九', work: 'rest' },
-  { d: 22, lunar: '二十', work: 'early' },
-  { d: 23, lunar: '廿一', work: 'early' },
-  { d: 24, lunar: '廿二', work: 'early' },
-  { d: 25, lunar: '廿三', work: 'late' },
-  { d: 26, lunar: '廿四', work: 'late' },
-  { d: 27, lunar: '廿五', work: 'late' },
-  { d: 28, lunar: '廿六', work: 'rest' },
-  { d: 29, lunar: '廿七', work: 'early', swap: true },
-  { d: 30, lunar: '廿八', work: 'early' }
+  { d: 2, lunar: '三十', work: 'mid' },
+  { d: 3, lunar: '八月', work: 'night' },
+  { d: 4, lunar: '初一', work: 'long_early' },
+  { d: 5, lunar: '初二', work: 'long_night' },
+  { d: 6, lunar: '初三', work: 'rest' },
+  { d: 7, lunar: '初四', work: 'early' },
+  { d: 8, lunar: '初五', work: 'mid' },
+  { d: 9, lunar: '初六', work: 'night' },
+  { d: 10, lunar: '初七', work: 'long_early' },
+  { d: 11, lunar: '初八', work: 'long_night' },
+  { d: 12, lunar: '初九', work: 'rest' },
+  { d: 13, lunar: '初十', work: 'early' },
+  { d: 14, lunar: '十一', work: 'mid', swap: true },
+  { d: 15, lunar: '中秋', work: 'night', holiday: true },
+  { d: 16, lunar: '中秋', work: 'long_early', holiday: true },
+  { d: 17, lunar: '中秋', work: 'long_night', holiday: true },
+  { d: 18, lunar: '十六', work: 'rest' },
+  { d: 19, lunar: '十七', work: 'early' },
+  { d: 20, lunar: '十八', work: 'mid' },
+  { d: 21, lunar: '十九', work: 'night' },
+  { d: 22, lunar: '二十', work: 'long_early' },
+  { d: 23, lunar: '廿一', work: 'long_night' },
+  { d: 24, lunar: '廿二', work: 'rest' },
+  { d: 25, lunar: '廿三', work: 'early' },
+  { d: 26, lunar: '廿四', work: 'mid' },
+  { d: 27, lunar: '廿五', work: 'night' },
+  { d: 28, lunar: '廿六', work: 'long_early' },
+  { d: 29, lunar: '廿七', work: 'long_night', swap: true },
+  { d: 30, lunar: '廿八', work: 'rest' }
 ]
 
 export const REMARKS = { 2: '下午例会，记得带工牌' }
 
 export const ALARMS = [
-  { id: 'a1', time: '07:55', shift: 'late', range: '20:00~次日08:00', tags: ['普通提醒', '第二天'], next: '后天 07:55提醒', on: true },
-  { id: 'a2', time: '08:30', shift: 'early', range: '09:00~18:00', tags: ['普通提醒', '当天'], next: '5天后 08:30提醒', on: true }
+  { id: 'a1', time: '07:30', shift: 'early', range: '08:00~16:00', tags: ['普通提醒', '当天'], next: '明天 07:30提醒', on: true },
+  { id: 'a2', time: '19:30', shift: 'long_night', range: '20:00~次日08:00', tags: ['普通提醒', '当天'], next: '明天 19:30提醒', on: true }
 ]
 
 export const STAT = {
   range: ['2024-09-01', '2024-09-30'],
   donut: [
-    { name: '早班', value: 14, pct: 47, color: '#1BA784' },
-    { name: '晚班', value: 12, pct: 40, color: '#303048' },
-    { name: '休息', value: 4, pct: 13, color: '#F8723D' }
+    { name: '早班', value: 5, pct: 17, color: '#1BA784' },
+    { name: '中班', value: 5, pct: 17, color: '#3E7BD6' },
+    { name: '夜班', value: 5, pct: 17, color: '#303048' },
+    { name: '长早班', value: 5, pct: 17, color: '#2D8A7A' },
+    { name: '中夜班', value: 5, pct: 17, color: '#806D9E' },
+    { name: '休息', value: 5, pct: 17, color: '#F8723D' }
   ],
-  totalHours: 270,
-  avgHours: 9.0,
-  restHours: 26,
+  totalHours: 240,
+  avgHours: 8.0,
+  restHours: 25,
   details: [
-    { d: '09-01', w: '周日', work: 'early', start: '09:00', end: '18:00', dur: '9h' },
-    { d: '09-02', w: '周一', work: 'early', start: '09:00', end: '18:00', dur: '9h' },
-    { d: '09-03', w: '周二', work: 'early', start: '09:00', end: '18:00', dur: '9h' },
-    { d: '09-04', w: '周三', work: 'late', start: '20:00', end: '次日08:00', dur: '12h' },
-    { d: '09-05', w: '周四', work: 'late', start: '20:00', end: '次日08:00', dur: '12h' },
-    { d: '09-07', w: '周六', work: 'rest', start: '—', end: '—', dur: '0h' }
+    { d: '09-01', w: '周日', work: 'early', start: '08:00', end: '16:00', dur: '8h' },
+    { d: '09-02', w: '周一', work: 'mid', start: '16:00', end: '24:00', dur: '8h' },
+    { d: '09-03', w: '周二', work: 'night', start: '00:00', end: '08:00', dur: '8h' },
+    { d: '09-04', w: '周三', work: 'long_early', start: '08:00', end: '20:00', dur: '12h' },
+    { d: '09-05', w: '周四', work: 'long_night', start: '20:00', end: '次日08:00', dur: '12h' },
+    { d: '09-06', w: '周五', work: 'rest', start: '—', end: '—', dur: '0h' }
   ]
 }
 

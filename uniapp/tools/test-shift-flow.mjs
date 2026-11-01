@@ -53,6 +53,9 @@ await evaluate("localStorage.setItem('jy_privacy_agreed','true');localStorage.se
 await send('Page.navigate', { url: BASE + '/?theme=light#/pages/work/index' })
 await sleep(1800)
 
+const baseRows = await evaluate("document.querySelectorAll('.shift-row').length")
+check('默认班次数=6', baseRows === 6, 'actual=' + baseRows)
+
 // 1. 进入添加班次
 await evaluate(`(() => { const els=[...document.querySelectorAll('*')]; const el=els.find(n=>n.textContent.trim()==='添加班次'); if(el){el.click();return true} return false })()`)
 await sleep(1000)
@@ -64,9 +67,9 @@ check('填写名称', await setInput('测试班次'))
 await evaluate(`(() => { const els=[...document.querySelectorAll('*')]; const el=els.filter(n=>n.textContent.trim()==='保存').pop(); if(el){el.click();return true} return false })()`)
 await sleep(1200)
 const listText1 = await evaluate('document.body.innerText')
-const rows1 = await evaluate(`document.querySelectorAll('.shift-row').length`)
+const rows1 = await evaluate("document.querySelectorAll('.shift-row').length")
 check('新增后列表含新班次', listText1.includes('测试班次'), 'rows=' + rows1)
-check('新增后行数=4', rows1 === 4, 'actual=' + rows1)
+check('新增后行数+1', rows1 === baseRows + 1, 'base=' + baseRows + ' actual=' + rows1)
 
 // 3. 点新班次进入编辑
 await evaluate(`(() => { const rows=[...document.querySelectorAll('.shift-row')]; const row=rows.find(r=>r.textContent.indexOf('测试班次')>=0); if(row){row.click();return true} return false })()`)
@@ -83,7 +86,7 @@ await sleep(1200)
 const listText2 = await evaluate('document.body.innerText')
 const rows2 = await evaluate(`document.querySelectorAll('.shift-row').length`)
 check('编辑后名称更新', listText2.includes('测试班次2') && !/测试班次(?!2)/.test(listText2.replace(/测试班次2/g,'')), '')
-check('编辑后不重复新增', rows2 === 4, 'actual=' + rows2)
+check('编辑后不重复新增', rows2 === baseRows + 1, 'actual=' + rows2)
 
 // 5. 再点添加，验证表单已重置
 await evaluate(`(() => { const els=[...document.querySelectorAll('*')]; const el=els.find(n=>n.textContent.trim()==='添加班次'); if(el){el.click();return true} return false })()`)
@@ -109,7 +112,7 @@ const listText3 = await evaluate('document.body.innerText')
 const rows3 = await evaluate("document.querySelectorAll('.shift-row').length")
 check('删除确认弹窗出现', modalShown)
 check('删除后列表不含该班次', !listText3.includes('测试班次2'), 'rows=' + rows3)
-check('删除后行数=3', rows3 === 3, 'actual=' + rows3)
+check('删除后行数恢复', rows3 === baseRows, 'base=' + baseRows + ' actual=' + rows3)
 
 const failed = results.filter((r) => !r.ok)
 console.log('\n结果: ' + (results.length - failed.length) + '/' + results.length + ' 通过')

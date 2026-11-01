@@ -6,24 +6,27 @@
 const db = uniCloud.database()
 
 const SHIFTS = [
-  { _id: 'shift-early', id: 'early', name: '早班', color: '#1BA784', start: '09:00', end: '18:00', allDay: false, sort: 0 },
-  { _id: 'shift-late', id: 'late', name: '晚班', color: '#303048', start: '20:00', end: '次日08:00', allDay: false, sort: 1 },
-  { _id: 'shift-rest', id: 'rest', name: '休息', color: '#F8723D', start: '', end: '', allDay: true, sort: 2 }
+  { _id: 'shift-early', id: 'early', name: '早班', color: '#1BA784', start: '08:00', end: '16:00', allDay: false, sort: 0 },
+  { _id: 'shift-mid', id: 'mid', name: '中班', color: '#3E7BD6', start: '16:00', end: '24:00', allDay: false, sort: 1 },
+  { _id: 'shift-night', id: 'night', name: '夜班', color: '#303048', start: '00:00', end: '08:00', allDay: false, sort: 2 },
+  { _id: 'shift-long-early', id: 'long_early', name: '长早班', color: '#2D8A7A', start: '08:00', end: '20:00', allDay: false, sort: 3 },
+  { _id: 'shift-long-night', id: 'long_night', name: '中夜班', color: '#806D9E', start: '20:00', end: '次日08:00', allDay: false, sort: 4 },
+  { _id: 'shift-rest', id: 'rest', name: '休息', color: '#F8723D', start: '', end: '', allDay: true, sort: 5 }
 ]
 
 const WORK_BY_DAY = {
-  1: 'early', 2: 'early', 3: 'early', 4: 'late', 5: 'late', 6: 'late', 7: 'rest',
-  8: 'early', 9: 'early', 10: 'early', 11: 'late', 12: 'late', 13: 'late', 14: 'rest',
-  15: 'early', 16: 'early', 17: 'early', 18: 'late', 19: 'late', 20: 'late', 21: 'rest',
-  22: 'early', 23: 'early', 24: 'early', 25: 'late', 26: 'late', 27: 'late', 28: 'rest',
-  29: 'early', 30: 'early'
+  1: 'early', 2: 'mid', 3: 'night', 4: 'long_early', 5: 'long_night', 6: 'rest',
+  7: 'early', 8: 'mid', 9: 'night', 10: 'long_early', 11: 'long_night', 12: 'rest',
+  13: 'early', 14: 'mid', 15: 'night', 16: 'long_early', 17: 'long_night', 18: 'rest',
+  19: 'early', 20: 'mid', 21: 'night', 22: 'long_early', 23: 'long_night', 24: 'rest',
+  25: 'early', 26: 'mid', 27: 'night', 28: 'long_early', 29: 'long_night', 30: 'rest'
 }
 
 const REMARK_BY_DAY = { 2: '下午例会，记得带工牌' }
 
 const ALARMS = [
-  { _id: 'alarm-1', id: 'a1', time: '07:55', shift: 'late', range: '20:00~次日08:00', tags: ['普通提醒', '第二天'], next: '后天 07:55提醒', on: true },
-  { _id: 'alarm-2', id: 'a2', time: '08:30', shift: 'early', range: '09:00~18:00', tags: ['普通提醒', '当天'], next: '5天后 08:30提醒', on: true }
+  { _id: 'alarm-1', id: 'a1', time: '07:30', shift: 'early', range: '08:00~16:00', tags: ['普通提醒', '当天'], next: '明天 07:30提醒', on: true },
+  { _id: 'alarm-2', id: 'a2', time: '19:30', shift: 'long_night', range: '20:00~次日08:00', tags: ['普通提醒', '当天'], next: '明天 19:30提醒', on: true }
 ]
 
 const PROJECTS = [

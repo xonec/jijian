@@ -80,10 +80,17 @@ export default {
     },
     bars() {
       const d = this.stat.donut || []
-      return [
-        { label: '早班', width: 56, hours: '126h', color: (d[0] && d[0].color) || '#1BA784' },
-        { label: '晚班', width: 64, hours: '144h', color: (d[1] && d[1].color) || '#303048' }
-      ]
+      const total = d.reduce((s, x) => s + (x.value || 0), 0) || 1
+      return d.slice(0, 3).map((x) => {
+        const sh = (this.store.shifts || []).find((s) => s.name === x.name)
+        const hours = this.shiftHours(sh) * (x.value || 0)
+        return {
+          label: x.name,
+          width: Math.round(((x.value || 0) / total) * 100),
+          hours: Math.round(hours) + 'h',
+          color: x.color
+        }
+      })
     }
   },
   onShow() {
@@ -92,6 +99,19 @@ export default {
   methods: {
     shiftOf(id) {
       return shiftById(id)
+    },
+    shiftHours(sh) {
+      if (!sh || sh.allDay) return 0
+      const toMin = (t) => {
+        const m = /^(\d{1,2}):(\d{2})$/.exec(String(t || '').replace(/^次日/, ''))
+        return m ? Number(m[1]) * 60 + Number(m[2]) : 0
+      }
+      let start = toMin(sh.start)
+      let end = toMin(sh.end)
+      if (/次日/.test(sh.end || '')) end += 24 * 60
+      let diff = end - start
+      if (diff < 0) diff += 24 * 60
+      return diff / 60
     },
     async loadStat() {
       try {

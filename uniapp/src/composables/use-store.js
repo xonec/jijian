@@ -38,7 +38,7 @@ export const store = reactive({
   sheetArg: '',
   dialog: '',
   workForm: { tab: 'normal', name: '早班', allDay: false, start: '09:00', end: '18:00', rest: '60' },
-  alarmForm: { shift: 'late', when: '上班前30分钟', day: '当天', strong: false },
+  alarmForm: { shift: 'early', when: '上班前30分钟', day: '当天', strong: false },
 
   /* 第二班次（date -> shiftId），演示数据里为空 */
   secondWorks: {},

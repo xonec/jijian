@@ -39,3 +39,6 @@ release/*.apk.idsig
 # APK 构建中间目录
 /release/webview-apk/build/
 release/*.apk.idsig
+uniapp/nativeplugins/uni-widget/android/.gradle/
+uniapp/nativeplugins/uni-widget/android/build/
+uniapp/nativeplugins/uni-widget/android/local.properties

@@ -108,7 +108,7 @@ HBuilderX 对「CLI 项目 + 本地原生插件 + 云打包」的兼容性不如
 
 ### 3.4 支付模块（可选，真实支付宝才需要）
 
-`manifest.json` 已加入：
+真实支付时在 manifest 中加入（默认为空，避免 HBuilderX 校验「appid 不能为空」而打包失败）：
 
 ```json
 "modules": { "Payment": {} },
@@ -121,7 +121,7 @@ HBuilderX 对「CLI 项目 + 本地原生插件 + 云打包」的兼容性不如
 }
 ```
 
-- 只做 UI 预览 / mock 支付：appid 留空即可，`src/config.js` 保持 `useCloud: false`。
+- 只做 UI 预览 / mock 支付：不要添加 Payment 模块和 sdkConfigs.payment（本项目默认未添加），`src/config.js` 保持 `useCloud: false`。
 - 真实支付：填支付宝 AppId，并把 `src/composables/use-vip.js` 走 `uni.requestPayment({ provider: "alipay" ... })` 的分支打开；云函数 `vip` 的 `mock` 必须设为 `false`（见 `PAYMENT.md`）。
 
 ### 3.5 原生插件 uni-widget（桌面小组件）
@@ -131,6 +131,7 @@ HBuilderX 对「CLI 项目 + 本地原生插件 + 云打包」的兼容性不如
 1. 按第 5 节把插件构建成 `nativeplugins/uni-widget/android/uni-widget.aar`；
 2. 在 manifest → **App 原生插件配置** → 检查 `uni-widget` 在列表中（本地插件，非云端插件）；
 3. 没有 AAR 时不要勾选/保留该插件，否则打包会报插件缺失；只打普通功能可先移除。
+4. **HBuilderX 5.34 校验要求**：`_dp_nativeplugin.android.plugins` 必须是非空数组（即使插件没有 JS API）。本插件已放一个占位 `module` 条目，AAR 里的 AppWidget Provider 仍会正常合并进 APK；不要删除该条目，否则会报「plugins节点下存在为空的对象」。
 
 ---
 
@@ -184,7 +185,7 @@ HBuilderX 对「CLI 项目 + 本地原生插件 + 云打包」的兼容性不如
 1. 菜单 **发行 → 原生App-云打包**。
 2. Android 设置：
    - **包名**：`cn.jianyun.workplan.replica`（或你自己的包名，发布后不可改）。
-   - **证书**：选「使用自有证书」。测试可用仓库 demo 证书：
+   - **证书**：选「使用自有证书」。（公共测试证书已被 DCloud 禁用，会报「存在安全隐患」；云端证书需申请。）测试可用仓库 demo 证书：
 
          keystore: release/keystore/replica-release.jks
          别名: replica

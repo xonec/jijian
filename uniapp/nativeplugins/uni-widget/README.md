@@ -20,6 +20,8 @@
 
 ## 2. 构建 AAR（Android Studio）
 
+> 仓库已提供预构建 `android/uni-widget.aar`，多数情况可跳过本节；修改插件源码后按下面步骤重新构建。
+
 1. Android Studio 打开 `nativeplugins/uni-widget/android`；
 2. 首次同步会自动生成 `local.properties`（sdk.dir 指向你的 Android SDK）；
 3. Build → Build Module '`uni-widget`'，产物在 `android/build/outputs/aar/uni-widget-release.aar`；

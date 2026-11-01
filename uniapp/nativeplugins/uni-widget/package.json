@@ -6,12 +6,18 @@
   "_dp_type": "nativeplugin",
   "_dp_nativeplugin": {
     "android": {
-      "plugins": [],
       "integrateType": "aar",
       "minSdkVersion": 26,
       "abis": [
         "armeabi-v7a",
         "arm64-v8a"
+      ],
+      "plugins": [
+        {
+          "type": "module",
+          "name": "uni-widget",
+          "class": "cn.jianyun.replica.widget.WidgetModule"
+        }
       ]
     }
   }

@@ -15,9 +15,7 @@
       "autoclose": true,
       "delay": 0
     },
-    "modules": {
-      "Payment": {}
-    },
+    "modules": {},
     "distribute": {
       "android": {
         "minSdkVersion": 26,
@@ -32,16 +30,7 @@
         ]
       },
       "ios": {},
-      "sdkConfigs": {
-        "payment": {
-          "alipay": {
-            "__platform__": [
-              "android"
-            ],
-            "appid": ""
-          }
-        }
-      }
+      "sdkConfigs": {}
     },
     "nativePlugins": {
       "uni-widget": {

@@ -144,7 +144,7 @@ const DEFAULTS = {
   allDay: false,
   start: '08:00',
   end: '16:00',
-  rest: '60',
+  rest: '0',
   remark: ''
 }
 

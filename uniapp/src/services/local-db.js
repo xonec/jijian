@@ -5,7 +5,7 @@
 import { SHIFTS, DAYS, REMARKS, ALARMS, PROJECTS, DISPLAY_CONFIG, FAQ } from '@/data/mock.js'
 
 const KEY = 'jy_db_v1'
-const SEED_VERSION = 5
+const SEED_VERSION = 6
 
 function seed() {
   const shifts = SHIFTS.map((s, i) => ({ _id: s.id, ...s, sort: i }))
@@ -73,12 +73,9 @@ function load() {
     // v3：原版日历默认周一开头；v4：默认班次补休息时长
     if (db.config && db.config['一周开始日'] === '周日') db.config['一周开始日'] = '周一'
     if (Array.isArray(db.shifts)) {
+      // v6：每个班的休息时长统一为 0
       db.shifts.forEach((s) => {
-        if (s.allDay) {
-          if (s.rest === undefined || s.rest === '') s.rest = '0'
-        } else if (s.rest === undefined || s.rest === '' || Number(s.rest) === 0) {
-          s.rest = '60'
-        }
+        s.rest = '0'
       })
     }
     db._seedVersion = SEED_VERSION

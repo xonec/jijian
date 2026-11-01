@@ -1,5 +1,7 @@
 # 极简排班 3.5.0 — APK 解包 · 前端界面分析 · 高保真复刻
 
+> 仓库：<https://github.com/xonec/jijian>
+
 > 对象：cn.jianyun.workplan「极简排班」v3.5.0（versionCode 36，44,927,974 B）
 > 结论先行：这是一个 **原生 Android + Kotlin + Jetpack Compose** 应用（不是 H5/uni-app/RN），界面全部是硬编码 Compose，可以 1:1 复刻。
 > ⚠️ **免责声明**：本仓库仅用于技术学习与逆向分析研究，与「极简排班」原作者/杭州简蕴科技有限公司无任何关联；不含原 App 代码/资源的分发授权。请勿将本项目或其素材用于商业上架、冒充官方或侵犯他人权利。

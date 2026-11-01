@@ -10,7 +10,7 @@
 | 位置 | `ACCESS_FINE_LOCATION`、`ACCESS_COARSE_LOCATION`，模块 `Geolocation` | 是 | 仅前台定位；后台定位暂缓 |
 | 日历 | `READ_CALENDAR`、`WRITE_CALENDAR` | 是 | 提醒写入系统日历 |
 | 通知 | `POST_NOTIFICATIONS`（Android 13+）、`VIBRATE` | 是 | 本地通知/提醒 |
-| 文件 | `READ_EXTERNAL_STORAGE`(≤32)、`WRITE_EXTERNAL_STORAGE`(≤28)、`READ_MEDIA_IMAGES/VIDEO/AUDIO` | 是（旧系统） | App 私有目录不需要；导出/保存到公共目录时申请 |
+| 文件 | `READ_MEDIA_IMAGES/VIDEO/AUDIO`（手动声明）；旧系统 `READ/WRITE_EXTERNAL_STORAGE` 由 HBuilderX 基础/模块自动合并，**不要手写** | 是（旧系统） | App 私有目录不需要；导出/保存到公共目录时申请 |
 | 相机 | `CAMERA`，模块 `Camera` | 是 | 拍照/扫码等 |
 | 相册 | `READ_MEDIA_IMAGES`、`READ_MEDIA_VIDEO`（Android 13+） | 是 | 选择图片/视频 |
 | 录音 | `RECORD_AUDIO`，模块 `Record` | 是 | 相机录像/语音相关 |
@@ -39,3 +39,20 @@ App 内：**我的 → 通知权限设置 → 申请全部权限**（网络/日�
 2. **支付**：当前 manifest 未加入 `Payment` / 支付宝配置，避免因空 appid 导致打包校验失败；会员页默认走 mock 支付。
 3. 权限被拒绝后，可在系统设置里手动开启；权限页提供「前往系统设置」。
 4. 相机/相册/文件/定位如果需要上架应用市场，需在隐私政策中说明用途。
+
+## 云打包 AndroidManifest 重复错误
+
+报错示例：
+
+```
+Element uses-permission#android.permission.WRITE_EXTERNAL_STORAGE duplicated
+Manifest merger failed
+```
+
+原因：HBuilderX 云打包会生成 `includePermissions` 模块，基础包和所选模块（Camera/Record/Push 等）已经自动声明了 `READ_EXTERNAL_STORAGE`/`WRITE_EXTERNAL_STORAGE`。如果在 `manifest.json` 的 `android.permissions` 里再手写同名权限，尤其是带 `android:maxSdkVersion` 属性的版本，Manifest Merger 会认为属性不一致而报 duplicated。
+
+修复：
+
+1. 删除手写的 `READ_EXTERNAL_STORAGE`、`WRITE_EXTERNAL_STORAGE`；
+2. 只保留 `READ_MEDIA_IMAGES`/`READ_MEDIA_VIDEO`/`READ_MEDIA_AUDIO` 等模块不会自动声明的媒体权限；
+3. 重启 HBuilderX 后重新云打包。

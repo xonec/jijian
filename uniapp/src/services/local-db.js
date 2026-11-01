@@ -210,6 +210,21 @@ export async function saveConfig(config) {
   return db.config
 }
 
+function formatStatDuration(hours) {
+  if (!hours || hours <= 0) return '--'
+  if (hours < 1) return Math.round(hours * 60) + 'min'
+  if (Number.isInteger(hours)) return hours + 'h'
+  return hours.toFixed(1) + 'h'
+}
+
+function formatStatRest(minutes) {
+  const m = Number(minutes) || 0
+  if (m <= 0) return '--'
+  if (m < 60) return m + 'min'
+  if (m % 60 === 0) return m / 60 + 'h'
+  return (m / 60).toFixed(1) + 'h'
+}
+
 export async function computeStat(start, end) {
   const db = load()
   const shiftMap = {}
@@ -234,7 +249,9 @@ export async function computeStat(start, end) {
         work: d.workId,
         start: s && !s.allDay ? s.start : '—',
         end: s && !s.allDay ? s.end : '—',
-        dur: hours ? hours.toFixed(0) + 'h' : '0h'
+        restText: formatStatRest(s && s.rest),
+        dur: formatStatDuration(hours),
+        remark: d.remark || ''
       })
     }
   })
@@ -255,7 +272,7 @@ export async function computeStat(start, end) {
     totalHours: Math.round(totalHours),
     avgHours: totalHours && total ? Number((totalHours / total).toFixed(1)) : 0,
     restHours: Math.round(restHours),
-    details: details.slice(0, 30)
+    details
   }
 }
 

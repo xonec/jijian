@@ -3,6 +3,10 @@
     <view class="donut" :style="{ background: gradient }">
       <view class="donut__hole" :style="{ width: hole + '%', height: hole + '%' }" />
     </view>
+    <view v-if="centerText" class="donut__center">
+      <text class="donut__center-v">{{ centerText }}</text>
+      <text v-if="centerSub" class="donut__center-k">{{ centerSub }}</text>
+    </view>
     <view
       v-if="labels"
       v-for="(item, i) in items"
@@ -21,6 +25,8 @@ export default {
   props: {
     items: { type: Array, default: () => [] },
     labels: { type: Boolean, default: true },
+    centerText: { type: String, default: '' },
+    centerSub: { type: String, default: '' },
     size: { type: Number, default: 232 },
     hole: { type: Number, default: 78 }
   },
@@ -73,6 +79,29 @@ export default {
   right: 0;
   bottom: 0;
   border-radius: 50%;
+}
+.donut__center {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.donut__center-v {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-1);
+  line-height: 1.1;
+}
+.donut__center-k {
+  font-size: 11px;
+  color: var(--text-3);
+  margin-top: 2px;
 }
 .donut__hole {
   position: absolute;

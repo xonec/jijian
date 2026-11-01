@@ -9,7 +9,7 @@
       <ri-icon name="down" :size="14" />
     </view>
 
-    <view v-if="stat.donut && stat.donut.length" class="card mt10">
+    <view v-if="hasData" class="card mt10">
       <view class="stat-donut">
         <donut-chart :items="stat.donut" :size="232" :labels="false" />
       </view>
@@ -26,24 +26,21 @@
     <view class="stat-card">
       <view class="stat-card__title">时长统计</view>
       <template v-if="hasData">
-        <view class="metric-row">
-          <view class="metric">
-            <view class="metric__v">{{ stat.totalHours }}<text class="metric__u"> 小时</text></view>
-            <view class="metric__k">总工作时长</view>
-          </view>
-          <view class="metric">
-            <view class="metric__v">{{ avgText }}<text class="metric__u"> 小时</text></view>
-            <view class="metric__k">平均每班</view>
-          </view>
-          <view class="metric">
-            <view class="metric__v">{{ stat.restHours }}<text class="metric__u"> 小时</text></view>
-            <view class="metric__k">休息时长</view>
-          </view>
+        <view class="stat-donut">
+          <donut-chart
+            :items="durationItems"
+            :size="200"
+            :labels="false"
+            :center-text="stat.totalHours + 'h'"
+            center-sub="总时长"
+          />
         </view>
-        <view v-for="b in bars" :key="b.label" class="bar-line">
-          <text>{{ b.label }}</text>
-          <view class="bar-line__bar" :style="{ width: b.width + '%', background: b.color }" />
-          <text class="bar-line__num">{{ b.hours }}</text>
+        <view class="legend-grid">
+          <view v-for="x in durationItems" :key="x.name" class="legend-grid__item">
+            <view class="legend-grid__dot" :style="{ background: x.color }" />
+            <text>{{ x.name }}</text>
+            <text class="legend-grid__num">{{ x.hours }}小时</text>
+          </view>
         </view>
       </template>
       <view v-else class="hint center">当前区间暂无可统计时长</view>
@@ -51,17 +48,35 @@
 
     <view class="stat-card">
       <view class="stat-card__title">排班详情</view>
-      <view v-for="d in stat.details" :key="d.d" class="detail-row">
-        <text class="detail-row__date">{{ d.d }}</text>
-        <text class="detail-row__week">{{ d.w }}</text>
-        <shift-badge mode="chip" :shift="shiftOf(d.work)" />
-        <view class="detail-row__blank" />
-        <text class="detail-row__time">{{ d.start }} – {{ d.end }}</text>
-        <text class="detail-row__dur">{{ d.dur }}</text>
+      <view class="detail-scroll">
+        <view class="detail-table">
+          <view class="detail-tr detail-tr--head">
+            <text class="detail-td detail-td--date">日期</text>
+            <text class="detail-td detail-td--week">星期</text>
+            <text class="detail-td detail-td--shift">班次</text>
+            <text class="detail-td detail-td--time">上班</text>
+            <text class="detail-td detail-td--end">下班</text>
+            <text class="detail-td detail-td--rest">休息</text>
+            <text class="detail-td detail-td--dur">时长</text>
+            <text class="detail-td detail-td--remark">备注</text>
+          </view>
+          <view v-for="d in stat.details || []" :key="d.d" class="detail-tr">
+            <text class="detail-td detail-td--date">{{ d.d }}</text>
+            <text class="detail-td detail-td--week">{{ d.w }}</text>
+            <view class="detail-td detail-td--shift">
+              <view class="detail-chip" :style="{ background: shiftColor(d.work) }">{{ shiftName(d.work) }}</view>
+            </view>
+            <text class="detail-td detail-td--time">{{ d.start }}</text>
+            <text class="detail-td detail-td--end">{{ d.end }}</text>
+            <text class="detail-td detail-td--rest">{{ d.restText || '--' }}</text>
+            <text class="detail-td detail-td--dur">{{ d.dur }}</text>
+            <text class="detail-td detail-td--remark">{{ d.remark }}</text>
+          </view>
+        </view>
       </view>
       <view v-if="stat.details && stat.details.length" class="hint center" @click="onExport">查看并导出全部 Excel</view>
-      <view v-else class="hint center">当前月份暂无排班记录</view>
     </view>
+
     <app-sheet :visible="monthSheet" title="选择月份" @close="monthSheet = false">
       <view class="month-bar">
         <view class="month-bar__nav" @click="statView.y = statView.y - 1">
@@ -110,23 +125,16 @@ export default {
     hasData() {
       return !!(this.stat.donut && this.stat.donut.length)
     },
-    avgText() {
-      const v = this.stat.avgHours
-      return v === undefined || v === null ? '0' : String(Number(v))
-    },
-    bars() {
+    durationItems() {
       const d = this.stat.donut || []
-      const total = d.reduce((s, x) => s + (x.value || 0), 0) || 1
-      return d.map((x) => {
+      const items = []
+      d.forEach((x) => {
         const sh = (this.store.shifts || []).find((s) => s.name === x.name)
         const hours = this.shiftHours(sh) * (x.value || 0)
-        return {
-          label: x.name,
-          width: Math.round(((x.value || 0) / total) * 100),
-          hours: Math.round(hours) + 'h',
-          color: x.color
-        }
+        if (hours > 0) items.push({ name: x.name, color: x.color, hours: Math.round(hours * 10) / 10, value: hours })
       })
+      const total = items.reduce((s, x) => s + x.value, 0) || 1
+      return items.map((x) => ({ ...x, pct: Math.round((x.value / total) * 100) }))
     }
   },
   onShow() {
@@ -135,6 +143,14 @@ export default {
   methods: {
     shiftOf(id) {
       return shiftById(id)
+    },
+    shiftName(id) {
+      const s = shiftById(id)
+      return s ? s.name : id
+    },
+    shiftColor(id) {
+      const s = shiftById(id)
+      return s ? s.color : '#55BB8A'
     },
     shiftHours(sh) {
       if (!sh || sh.allDay) return 0
@@ -153,13 +169,13 @@ export default {
       const y = this.statView.y
       const m = String(this.statView.m).padStart(2, '0')
       const last = new Date(y, this.statView.m, 0).getDate()
-      const start = `${y}-${m}-01`
-      const end = `${y}-${m}-${String(last).padStart(2, '0')}`
+      const start = y + '-' + m + '-01'
+      const end = y + '-' + m + '-' + String(last).padStart(2, '0')
       try {
         const st = await api.fetchStat(start, end)
         if (st) this.stat = st
       } catch (e) {
-        /* 异常时保留 store 内置统计 */
+        /* 异常时保留已有统计 */
       }
     },
     openMonth() {
@@ -178,19 +194,100 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.empty-stat {
-  padding: 36px 0;
-  text-align: center;
-  font-size: 14px;
-  color: var(--text-3);
-}
 .export-btn {
   font-size: 14px;
   color: var(--primary);
   padding: 6px;
   line-height: 1.2;
 }
+.stat-range {
+  margin-top: 10px;
+  background: var(--surface);
+  border-radius: var(--r-card);
+  padding: 14px 0;
+}
+.empty-stat {
+  padding: 36px 0;
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-3);
+}
 .stat-donut {
   padding: 8px 0 2px;
+}
+.detail-scroll {
+  width: 100%;
+  margin-top: 2px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.detail-scroll::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+.detail-table {
+  display: inline-block;
+  min-width: 100%;
+}
+.detail-tr {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  font-size: 12px;
+  color: var(--text-2);
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.detail-tr--head {
+  height: 32px;
+  color: var(--text-3);
+  border-bottom: 1px solid var(--line);
+}
+.detail-td {
+  flex: none;
+  padding-right: 6px;
+  white-space: nowrap;
+}
+.detail-td--date {
+  width: 56px;
+  font-variant-numeric: tabular-nums;
+}
+.detail-td--week {
+  width: 40px;
+}
+.detail-td--shift {
+  width: 64px;
+}
+.detail-td--time {
+  width: 48px;
+  font-variant-numeric: tabular-nums;
+}
+.detail-td--end {
+  width: 66px;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.detail-td--rest {
+  width: 38px;
+}
+.detail-td--dur {
+  width: 42px;
+}
+.detail-td--remark {
+  width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.detail-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 11.5px;
+  line-height: 1;
 }
 </style>

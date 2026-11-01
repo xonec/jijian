@@ -65,23 +65,17 @@ export default {
       const total = monthDays(this.year, this.month)
       for (let i = 0; i < first; i++) list.push({ day: 0 })
       for (let d = 1; d <= total; d++) {
-        const info = this.days[d] || { d, lunar: '' }
-        // 同一位置只显示一条，优先级：调班 > 节假日 > 节气 > 农历日期
+        const info = this.days[d] || { d }
+        // 与原版一致：同位置只显示一条；调班 > 法定节假日 > 节气 > 农历日
+        // 显隐规则同原版：显示农历 或 (显示节假日 且 该天是节假日)
         let lunar = ''
         let lunarClass = ''
-        if (info.swap) {
-          lunar = '调班'
-          lunarClass = 'cal-lunar--swap'
-        } else if (this.showLunar) {
-          const showFestival = !!info.holiday && this.showHoliday
-          if (showFestival) {
-            lunar = info.festivalShort || info.lunar || ''
-            lunarClass = 'cal-lunar--holiday'
-          } else if (info.jieqi) {
-            lunar = info.jieqi
-          } else {
-            lunar = info.lunarDay === '初一' ? info.monthLabel || '' : info.lunarDay || info.lunar || ''
-          }
+        const kind = info.kind || (info.lunar ? 'lunar' : '')
+        const showHoliday = this.showHoliday && kind === 'holiday'
+        if (this.showLunar || showHoliday) {
+          lunar = info.label || info.lunar || ''
+          if (kind === 'holiday' || kind === 'term') lunarClass = 'cal-lunar--festival'
+          else if (kind === 'work') lunarClass = 'cal-lunar--work'
         }
         const isToday =
           this.year === this.today.y && this.month === this.today.m && d === this.today.d
@@ -89,7 +83,6 @@ export default {
           day: d,
           lunar,
           lunarClass,
-          swap: !!info.swap,
           shift: info.work ? shiftById(info.work) : null,
           isToday,
           isSelected: d === this.selected
@@ -200,15 +193,12 @@ export default {
   letter-spacing: 0;
   height: 18px;
 }
-.cal-lunar--swap {
-  font-size: 8px;
-  letter-spacing: -0.3px;
+/* 法定节假日 / 节气：原版主题绿；调班：原版蓝 */
+.cal-lunar--festival {
+  color: var(--primary);
 }
-.cal-lunar--holiday {
-  color: var(--important);
-}
-.cal-lunar--swap {
-  color: #5a8fd6;
+.cal-lunar--work {
+  color: #1974E8;
 }
 .cal-foot {
   display: flex;

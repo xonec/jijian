@@ -5,7 +5,7 @@
 import { SHIFTS, DAYS, REMARKS, ALARMS, PROJECTS, DISPLAY_CONFIG, FAQ } from '@/data/mock.js'
 
 const KEY = 'jy_db_v1'
-const SEED_VERSION = 2
+const SEED_VERSION = 3
 
 function seed() {
   const shifts = SHIFTS.map((s, i) => ({ _id: s.id, ...s, sort: i }))
@@ -68,6 +68,12 @@ function load() {
       db._seedVersion = SEED_VERSION
       uni.setStorageSync(KEY, db)
     }
+  }
+  if ((db._seedVersion || 0) < SEED_VERSION) {
+    // v3：原版日历默认周一开头
+    if (db.config && db.config['一周开始日'] === '周日') db.config['一周开始日'] = '周一'
+    db._seedVersion = SEED_VERSION
+    save(db)
   }
   return db
 }

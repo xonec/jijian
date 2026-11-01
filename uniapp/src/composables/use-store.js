@@ -5,6 +5,7 @@ import {
 } from '@/data/mock.js'
 import api from '@/services/api.js'
 import { getLunarInfo } from '@/utils/lunar.js'
+import { HOLIDAY_MAP } from '@/data/holidays.js'
 
 export const WEEK = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
 export const CN_MONTH = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二']
@@ -13,8 +14,8 @@ export const store = reactive({
   today: TODAY,
   view: { ...VIEW0 },
   selected: TODAY.d,
-  weekStart: 0, // 0=周日（官方截图）1=周一（APK 小组件默认）
-  weekStartLabel: '周日',
+  weekStart: 1, // 原版默认周一开头
+  weekStartLabel: '周一',
   shifts: SHIFTS.map((s) => ({ ...s })),
   days: DAYS.map((d) => ({ ...d })),
   remarks: { ...REMARKS },
@@ -86,7 +87,8 @@ export function applyBootstrap(db) {
   store.loaded = true
 }
 
-/* 依据 scheduleRaw 重建当月 days；农历/节气/节日按真实日期动态计算 */
+/* 依据 scheduleRaw 重建当月 days；农历位置与原版一致：
+   调班 > 法定节假日 > 节气 > 农历日（初一显示月份） */
 export function rebuildDays() {
   const list = []
   const y = store.view.y
@@ -95,20 +97,33 @@ export function rebuildDays() {
   const base = {}
   if (y === 2024 && store.view.m === 9) DAYS.forEach((d) => (base[d.d] = d))
   for (let d = 1; d <= total; d++) {
-    const key = y + '-' + m + '-' + String(d).padStart(2, '0')
-    const rec = store.scheduleRaw[key]
+    const dateStr = y + '-' + m + '-' + String(d).padStart(2, '0')
+    const rec = store.scheduleRaw[dateStr]
     const info = base[d] || { d }
+    const holiday = HOLIDAY_MAP[dateStr]
     const lunar = getLunarInfo(y, store.view.m, d)
+    let label = ''
+    let kind = ''
+    if (holiday) {
+      label = holiday.name
+      kind = holiday.holiday ? 'holiday' : 'work'
+    } else if (lunar.jieqi) {
+      label = lunar.jieqi
+      kind = 'term'
+    } else {
+      label = lunar.lunarDay === '初一' ? lunar.monthLabel : lunar.lunarDay
+      kind = 'lunar'
+    }
     list.push({
       d,
-      lunar: lunar.label,
-      festivalShort: lunar.festivalShort,
+      label,
+      kind,
+      lunar: label,
       lunarDay: lunar.lunarDay,
       monthLabel: lunar.monthLabel,
-      holiday: lunar.holiday,
       jieqi: lunar.jieqi,
-      festival: lunar.festival,
-      swap: info.swap,
+      holiday: kind === 'holiday',
+      swap: kind === 'work',
       work: rec && rec.workId ? rec.workId : info.work || ''
     })
   }

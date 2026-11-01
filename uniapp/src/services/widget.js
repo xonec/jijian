@@ -93,7 +93,7 @@ export function buildPayload(cfg) {
       d: valid ? dn : 0,
       lunar: (info && info.lunar) || '',
       holiday: (info && info.holiday) || '',
-      swap: !!(info && info.swap),
+      swap: !!(info && (info.swap || info.kind === 'work')),
       work: sh ? sh.name : '',
       color: sh && sh.color ? sh.color : '',
       textColor: sh && sh.color ? textColorFor(sh.color) : '',

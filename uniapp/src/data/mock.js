@@ -30,7 +30,7 @@ export const DAYS = [
   { d: 11, work: 'long_night' },
   { d: 12, work: 'rest' },
   { d: 13, work: 'early' },
-  { d: 14, work: 'mid', swap: true },
+  { d: 14, work: 'mid' },
   { d: 15, work: 'night' },
   { d: 16, work: 'long_early' },
   { d: 17, work: 'long_night' },
@@ -45,7 +45,7 @@ export const DAYS = [
   { d: 26, work: 'mid' },
   { d: 27, work: 'night' },
   { d: 28, work: 'long_early' },
-  { d: 29, work: 'long_night', swap: true },
+  { d: 29, work: 'long_night' },
   { d: 30, work: 'rest' }
 ]
 
@@ -110,7 +110,7 @@ export const SETTING_GROUPS = [
 ]
 
 export const DISPLAY_CONFIG = [
-  { k: '一周开始日', v: '周日', type: 'segment' },
+  { k: '一周开始日', v: '周一', type: 'segment' },
   { k: '日期字号', v: '20' },
   { k: '班次字号', v: '12' },
   { k: '时间字号', v: '10' },

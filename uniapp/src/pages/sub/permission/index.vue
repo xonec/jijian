@@ -27,13 +27,33 @@
         <text class="perm-row__v" :class="stateClass(diag.network)">{{ stateText(diag.network) }}</text>
       </view>
       <view class="perm-row">
+        <text class="perm-row__k">相机权限</text>
+        <text class="perm-row__v" :class="stateClass(diag.camera)">{{ stateText(diag.camera) }}</text>
+      </view>
+      <view class="perm-row">
+        <text class="perm-row__k">相册权限</text>
+        <text class="perm-row__v" :class="stateClass(diag.media)">{{ stateText(diag.media) }}</text>
+      </view>
+      <view class="perm-row">
+        <text class="perm-row__k">文件权限</text>
+        <text class="perm-row__v" :class="stateClass(diag.file)">{{ stateText(diag.file) }}</text>
+      </view>
+      <view class="perm-row">
+        <text class="perm-row__k">录音权限</text>
+        <text class="perm-row__v" :class="stateClass(diag.record)">{{ stateText(diag.record) }}</text>
+      </view>
+      <view class="perm-row">
+        <text class="perm-row__k">消息推送（uni-push 2.0）</text>
+        <text class="perm-row__v">已配置，需在 DCloud 开通</text>
+      </view>
+      <view class="perm-row">
         <text class="perm-row__k">精确闹钟（Android 12+）</text>
         <text class="perm-row__v" :class="stateClass(diag.canExactAlarm)">{{ stateText(diag.canExactAlarm) }}</text>
       </view>
       <view v-if="!diag.supported" class="hint perm-hint">H5 / 小程序无法检测系统权限，请在 App 中查看与操作。</view>
     </view>
 
-    <view class="btn btn--primary mt14" @click="requestAll">申请全部权限（网络 / 日历 / 通知 / 位置）</view>
+    <view class="btn btn--primary mt14" @click="requestAll">申请全部权限（网络 / 日历 / 通知 / 位置 / 相机 / 相册 / 文件）</view>
     <view class="btn btn--soft mt10" @click="verifyReminder">验证日历提醒（1 分钟后）</view>
     <view class="btn btn--primary mt10" @click="enableNotify">开启通知</view>
     <view class="btn btn--soft auth-btn mt10" @click="requestCalendar">授权极简排班访问日历（读 + 写）</view>
@@ -91,6 +111,10 @@ const diag = ref({
   calendarWrite: false,
   location: false,
   network: false,
+  camera: false,
+  media: false,
+  file: false,
+  record: false,
   canExactAlarm: false,
   platform: bridge ? 'android-webview' : ''
 })
@@ -115,6 +139,10 @@ async function refresh() {
         calendarWrite: !!s.calendar,
         location: !!s.location,
         network: s.network !== false,
+        camera: !!s.camera,
+        media: !!s.media,
+        file: !!s.file,
+        record: !!s.record,
         canExactAlarm: true,
         platform: 'android-webview'
       }
@@ -124,7 +152,7 @@ async function refresh() {
   try {
     diag.value = await diagnose()
   } catch (e) {
-    diag.value = { supported: false, notification: false, calendarRead: false, calendarWrite: false, location: false, network: false, canExactAlarm: false }
+    diag.value = { supported: false, notification: false, calendarRead: false, calendarWrite: false, location: false, network: false, camera: false, media: false, file: false, record: false, canExactAlarm: false }
   }
 }
 
@@ -161,8 +189,7 @@ async function requestAll() {
     return
   }
   try {
-    await requestPermissions('notification')
-    await requestPermissions('calendar')
+    await requestPermissions('all')
   } catch (e) {}
   await refresh()
   toast('已发起权限申请')

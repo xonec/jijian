@@ -104,7 +104,11 @@ HBuilderX 对「CLI 项目 + 本地原生插件 + 云打包」的兼容性不如
 ]
 ```
 
-`INTERNET` 由 uni-app 自动加入。Android 6+ 的日历/位置、Android 13+ 的通知属于**运行时权限**：App 里「我的 → 通知权限设置」会调用 `plus.android.requestPermissions` 申请；首次启动时也会在需要时弹窗。
+`INTERNET` 由 uni-app 自动加入。Android 6+ 的日历/位置/相机/相册/文件、Android 13+ 的通知属于**运行时权限**：App 里「我的 → 通知权限设置」会调用 `plus.android.requestPermissions` 申请。
+
+完整权限清单、模块配置、暂缓项见 [PERMISSIONS.md](./PERMISSIONS.md)。
+
+> 注意：manifest 已加入 `Push`（uni-push 2.0）模块。若尚未在 DCloud 控制台开通 uni-push 2.0，云打包会报「应用尚未开通 uni-push 2.0 服务」；开通后再打包。支付模块暂未加入（需企业支付宝资质）。
 
 ### 3.4 支付模块（可选，真实支付宝才需要）
 

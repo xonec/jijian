@@ -7,8 +7,8 @@
  *
  * 对外 API（均为 async，失败抛 Error 或返回 supported:false）：
  *   isSupported()
- *   diagnose()               → { supported, platform, notification, calendarRead, calendarWrite, canExactAlarm, sdkInt, calendarId }
- *   requestPermissions(kind) → kind: 'notification' | 'calendar' | 'all'
+ *   diagnose()               → { supported, platform, notification, calendarRead, calendarWrite, location, camera, media, file, record, canExactAlarm, sdkInt, calendarId }
+ *   requestPermissions(kind) → kind: 'notification' | 'calendar' | 'location' | 'camera' | 'record' | 'media' | 'file' | 'all'
  *   syncAlarm(alarm)         → 把提醒写入系统日历（有则更新），返回 { eventId, start, calendarId }
  *   removeAlarm(alarmId)     → 删除该提醒对应的系统日历事件
  *   testCalendarAlarm()      → 1 分钟后的测试日历事件（权限页「验证日历提醒」用）
@@ -101,6 +101,7 @@ function createAndroidImpl() {
   }
 
   function diagnose() {
+    const hasMedia = sdkInt >= 33 ? checkPerm('android.permission.READ_MEDIA_IMAGES') : checkPerm('android.permission.READ_EXTERNAL_STORAGE')
     return {
       supported: true,
       platform: 'android',
@@ -108,6 +109,11 @@ function createAndroidImpl() {
       notification: sdkInt < 33 ? true : checkPerm('android.permission.POST_NOTIFICATIONS'),
       calendarRead: checkPerm('android.permission.READ_CALENDAR'),
       calendarWrite: checkPerm('android.permission.WRITE_CALENDAR'),
+      location: checkPerm('android.permission.ACCESS_FINE_LOCATION') || checkPerm('android.permission.ACCESS_COARSE_LOCATION'),
+      camera: checkPerm('android.permission.CAMERA'),
+      record: checkPerm('android.permission.RECORD_AUDIO'),
+      media: hasMedia,
+      file: sdkInt >= 33 ? true : hasMedia,
       canExactAlarm: canExactAlarm(),
       calendarId: uni.getStorageSync(CAL_ID_KEY) || ''
     }
@@ -115,11 +121,24 @@ function createAndroidImpl() {
 
   function requestPermissions(kind) {
     const list = []
-    if (kind === 'notification' || kind === 'all') {
-      if (sdkInt >= 33) list.push('android.permission.POST_NOTIFICATIONS')
+    const add = (...items) => {
+      items.forEach((p) => {
+        if (p && list.indexOf(p) < 0) list.push(p)
+      })
     }
-    if (kind === 'calendar' || kind === 'all') {
-      list.push('android.permission.READ_CALENDAR', 'android.permission.WRITE_CALENDAR')
+    const want = (k) => kind === k || kind === 'all'
+    if (want('notification') && sdkInt >= 33) add('android.permission.POST_NOTIFICATIONS')
+    if (want('calendar')) add('android.permission.READ_CALENDAR', 'android.permission.WRITE_CALENDAR')
+    if (want('location')) add('android.permission.ACCESS_FINE_LOCATION', 'android.permission.ACCESS_COARSE_LOCATION')
+    if (want('camera')) add('android.permission.CAMERA')
+    if (want('record')) add('android.permission.RECORD_AUDIO')
+    if (want('media')) {
+      if (sdkInt >= 33) add('android.permission.READ_MEDIA_IMAGES', 'android.permission.READ_MEDIA_VIDEO')
+      else add('android.permission.READ_EXTERNAL_STORAGE')
+    }
+    if (want('file')) {
+      if (sdkInt <= 32) add('android.permission.READ_EXTERNAL_STORAGE')
+      if (sdkInt <= 28) add('android.permission.WRITE_EXTERNAL_STORAGE')
     }
     if (!list.length) return Promise.resolve({ granted: [], denied: [], sdkInt })
     return new Promise((resolve) => {

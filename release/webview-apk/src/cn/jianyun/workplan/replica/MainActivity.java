@@ -48,8 +48,17 @@ public class MainActivity extends Activity {
         addIfMissing(need, Manifest.permission.WRITE_CALENDAR);
         addIfMissing(need, Manifest.permission.ACCESS_FINE_LOCATION);
         addIfMissing(need, Manifest.permission.ACCESS_COARSE_LOCATION);
+        addIfMissing(need, Manifest.permission.CAMERA);
+        addIfMissing(need, Manifest.permission.RECORD_AUDIO);
         if (Build.VERSION.SDK_INT >= 33) {
+            addIfMissing(need, Manifest.permission.READ_MEDIA_IMAGES);
+            addIfMissing(need, Manifest.permission.READ_MEDIA_VIDEO);
             addIfMissing(need, Manifest.permission.POST_NOTIFICATIONS);
+        } else {
+            addIfMissing(need, Manifest.permission.READ_EXTERNAL_STORAGE);
+            if (Build.VERSION.SDK_INT <= 28) {
+                addIfMissing(need, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
         }
         if (!need.isEmpty()) {
             requestPermissions(need.toArray(new String[0]), REQ_PERMISSIONS);
@@ -72,6 +81,15 @@ public class MainActivity extends Activity {
                 o.put("notification", notify);
                 o.put("location", granted(Manifest.permission.ACCESS_FINE_LOCATION) || granted(Manifest.permission.ACCESS_COARSE_LOCATION));
                 o.put("network", true);
+                o.put("camera", granted(Manifest.permission.CAMERA));
+                o.put("record", granted(Manifest.permission.RECORD_AUDIO));
+                if (Build.VERSION.SDK_INT >= 33) {
+                    o.put("media", granted(Manifest.permission.READ_MEDIA_IMAGES));
+                    o.put("file", true);
+                } else {
+                    o.put("media", granted(Manifest.permission.READ_EXTERNAL_STORAGE));
+                    o.put("file", granted(Manifest.permission.READ_EXTERNAL_STORAGE));
+                }
                 return o.toString();
             } catch (Exception e) {
                 return "{}";

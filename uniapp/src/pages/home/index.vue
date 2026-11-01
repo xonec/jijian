@@ -29,13 +29,14 @@
       </view>
     </view>
 
-    <!-- 当月班次统计色条 -->
-    <view class="legend">
+    <!-- 当月班次统计色条；空月份与原版一致显示提示 -->
+    <view v-if="hasSchedule" class="legend">
       <view v-for="(it, i) in legendItems" :key="i" class="legend__item">
         <view class="legend__dot" :style="{ background: it.color }" />
         <text class="legend__text">{{ it.name }}({{ it.value }})</text>
       </view>
     </view>
+    <view v-else class="empty-month">当前月份没有设置排班</view>
 
     <!-- 月历 -->
     <calendar-grid
@@ -228,7 +229,19 @@ export default {
     const { themeClass } = useTheme()
     const remarkDraft = ref('')
 
-    const legendItems = computed(() => store.stat.donut || [])
+    const legendItems = computed(() => {
+      const counts = {}
+      ;(store.days || []).forEach((d) => {
+        if (d.work) counts[d.work] = (counts[d.work] || 0) + 1
+      })
+      const list = []
+      Object.keys(counts).forEach((id) => {
+        const sh = store.shifts.find((s) => (s.id || s._id) === id)
+        list.push({ name: sh ? sh.name : id, value: counts[id], color: sh ? sh.color : '#55BB8A' })
+      })
+      return list
+    })
+    const hasSchedule = computed(() => legendItems.value.length > 0)
     const selectedWeekdayText = computed(() => WEEK[selectedWeekday.value])
     const remarkText = computed(() => store.remarks[store.selected] || '')
     const secondShift = computed(() => {
@@ -358,6 +371,7 @@ export default {
       secondShift,
       sheetShiftTitle,
       legendItems,
+      hasSchedule,
       operItems,
       dayMapData,
       showLunar,
@@ -395,6 +409,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.empty-month {
+  font-size: 13px;
+  color: var(--text-3);
+  padding: 4px 2px 10px;
+}
 .legend {
   display: flex;
   gap: 16px;

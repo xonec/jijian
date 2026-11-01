@@ -1,18 +1,21 @@
 import { reactive, computed, watch } from 'vue'
 import {
-  TODAY, VIEW0, SHIFTS, DAYS, REMARKS, ALARMS, STAT,
+  SHIFTS, DAYS, REMARKS, ALARMS, STAT,
   SETTING_GROUPS, DISPLAY_CONFIG, PALETTES, VIP, PROJECTS, FAQ, UPDATE_INTRO
 } from '@/data/mock.js'
 import api from '@/services/api.js'
 import { getLunarInfo } from '@/utils/lunar.js'
 import { HOLIDAY_MAP } from '@/data/holidays.js'
 
+const NOW = new Date()
+const TODAY = { y: NOW.getFullYear(), m: NOW.getMonth() + 1, d: NOW.getDate() }
+
 export const WEEK = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
 export const CN_MONTH = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二']
 
 export const store = reactive({
   today: TODAY,
-  view: { ...VIEW0 },
+  view: { y: TODAY.y, m: TODAY.m },
   selected: TODAY.d,
   weekStart: 1, // 原版默认周一开头
   weekStartLabel: '周一',

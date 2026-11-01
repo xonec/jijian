@@ -9,7 +9,7 @@
       <ri-icon name="down" :size="14" />
     </view>
 
-    <view class="card mt10">
+    <view v-if="stat.donut && stat.donut.length" class="card mt10">
       <view class="stat-donut">
         <donut-chart :items="stat.donut" :size="232" />
       </view>
@@ -21,6 +21,7 @@
         </view>
       </view>
     </view>
+    <view v-else class="card mt10 empty-stat">当前月份暂无排班数据</view>
 
     <view class="stat-card">
       <view class="stat-card__title">时长统计</view>
@@ -55,7 +56,8 @@
         <text class="detail-row__time">{{ d.start }} – {{ d.end }}</text>
         <text class="detail-row__dur">{{ d.dur }}</text>
       </view>
-      <view class="hint center" @click="onExport">查看并导出全部 Excel</view>
+      <view v-if="stat.details && stat.details.length" class="hint center" @click="onExport">查看并导出全部 Excel</view>
+      <view v-else class="hint center">当前月份暂无排班记录</view>
     </view>
   </page-frame>
 </template>
@@ -114,9 +116,14 @@ export default {
       return diff / 60
     },
     async loadStat() {
+      const y = store.view.y
+      const m = String(store.view.m).padStart(2, '0')
+      const last = new Date(y, store.view.m, 0).getDate()
+      const start = `${y}-${m}-01`
+      const end = `${y}-${m}-${String(last).padStart(2, '0')}`
       try {
-        const st = await api.fetchStat('2024-09-01', '2024-09-30')
-        if (st && Array.isArray(st.donut) && st.donut.length) this.stat = st
+        const st = await api.fetchStat(start, end)
+        if (st) this.stat = st
       } catch (e) {
         /* 异常时保留 store 内置统计 */
       }
@@ -132,6 +139,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.empty-stat {
+  padding: 36px 0;
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-3);
+}
 .export-btn {
   font-size: 14px;
   color: var(--primary);

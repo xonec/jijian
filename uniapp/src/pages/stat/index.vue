@@ -26,21 +26,24 @@
     <view class="stat-card">
       <view class="stat-card__title">时长统计</view>
       <template v-if="hasData">
-        <view class="stat-donut">
-          <donut-chart
-            :items="durationItems"
-            :size="200"
-            :labels="false"
-            :center-text="stat.totalHours + 'h'"
-            center-sub="总时长"
-          />
-        </view>
-        <view class="legend-grid">
-          <view v-for="x in durationItems" :key="x.name" class="legend-grid__item">
-            <view class="legend-grid__dot" :style="{ background: x.color }" />
-            <text>{{ x.name }}</text>
-            <text class="legend-grid__num">{{ x.hours }}小时</text>
+        <view class="metric-row">
+          <view class="metric">
+            <view class="metric__v">{{ stat.totalHours }}<text class="metric__u"> 小时</text></view>
+            <view class="metric__k">总工作时长</view>
           </view>
+          <view class="metric">
+            <view class="metric__v">{{ avgText }}<text class="metric__u"> 小时</text></view>
+            <view class="metric__k">平均每班</view>
+          </view>
+          <view class="metric">
+            <view class="metric__v">{{ stat.restHours }}<text class="metric__u"> 小时</text></view>
+            <view class="metric__k">休息时长</view>
+          </view>
+        </view>
+        <view v-for="b in bars" :key="b.label" class="bar-line">
+          <text>{{ b.label }}</text>
+          <view class="bar-line__bar" :style="{ width: b.width + '%', background: b.color }" />
+          <text class="bar-line__num">{{ b.hours }}</text>
         </view>
       </template>
       <view v-else class="hint center">当前区间暂无可统计时长</view>
@@ -125,16 +128,23 @@ export default {
     hasData() {
       return !!(this.stat.donut && this.stat.donut.length)
     },
-    durationItems() {
+    avgText() {
+      const v = this.stat.avgHours
+      return v === undefined || v === null ? '0' : String(Number(v))
+    },
+    bars() {
       const d = this.stat.donut || []
-      const items = []
-      d.forEach((x) => {
+      const total = d.reduce((s, x) => s + (x.value || 0), 0) || 1
+      return d.map((x) => {
         const sh = (this.store.shifts || []).find((s) => s.name === x.name)
         const hours = this.shiftHours(sh) * (x.value || 0)
-        if (hours > 0) items.push({ name: x.name, color: x.color, hours: Math.round(hours * 10) / 10, value: hours })
+        return {
+          label: x.name,
+          width: Math.round(((x.value || 0) / total) * 100),
+          hours: Math.round(hours) + 'h',
+          color: x.color
+        }
       })
-      const total = items.reduce((s, x) => s + x.value, 0) || 1
-      return items.map((x) => ({ ...x, pct: Math.round((x.value / total) * 100) }))
     }
   },
   onShow() {

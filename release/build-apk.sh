@@ -69,7 +69,7 @@ grep -o 'android:version[^ ]*' "$BUILD/AndroidManifest.xml" | head -2
   --min-sdk-version 26 --target-sdk-version 34
 
 echo "== 5/8 javac =="
-javac -source 17 -target 17 -encoding UTF-8 -Xlint:-options -classpath "$AJAR" -d "$BUILD/classes" \
+javac --release 17 -encoding UTF-8 -Xlint:-options -classpath "$AJAR" -d "$BUILD/classes" \
   $(find "$BUILD/gen" -name '*.java') $(find "$PROJ/src" -name '*.java')
 
 echo "== 6/8 d8 -> classes.dex =="

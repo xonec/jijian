@@ -20,7 +20,31 @@
 - 项目仓库：`/root/jijian`
 - 资源构建：`/root/build-resources.sh`（内部执行 `pnpm build:app`，输出 `dist/build/app`）
 
-## 离线打包 DCloud SDK（手动一步）
+## 离线打包 DCloud SDK（已安装）
+
+已使用用户下载的 `Android-SDK@5.34.82692_20261030`，解压到：
+
+```
+/opt/dcloud-offline-sdk/HBuilder-Integrate-AS
+```
+
+离线工程 `simpleDemo` 已配置：appid `__UNI__11376C4`、包名 `cn.jianyun.workplan.replica`、versionCode 100、versionName 1.0.0、DCloud 云端证书签名、uni-widget AAR。
+
+一键构建：
+
+```bash
+ssh android-builder /root/build-offline-apk.sh
+```
+
+产物：
+
+```
+/opt/dcloud-offline-sdk/HBuilder-Integrate-AS/simpleDemo/build/outputs/apk/release/simpleDemo-release.apk
+```
+
+已验证：SHA1 `C1:E5:55:37:13:A1:43:77:0F:A4:C1:E1:31:E7:0A:86:49:82:84:F9`，包含月历/班次小组件。
+
+## 手动步骤（已完成，保留备查）
 
 DCloud 的 Android 离线 SDK 只提供网盘下载，需要手动下载后放到：
 
@@ -60,6 +84,12 @@ app/src/main/assets/apps/__UNI__11376C4/www
 - `/root/keystores/replica-release.jks`：演示证书，alias `replica`
 - `/root/keystores/dcloud-__UNI__11376C4.jks`：DCloud 云端证书，alias `__uni__11376c4`
 - 密码：`/root/keystores/password.txt`
+
+## 离线 APK 验证记录
+
+- 2026-11-02：DCloud Android-SDK@5.34.82692 安装完成
+- 2026-11-02：`simpleDemo` 离线工程构建成功，APK 30.8MB
+- 已确认包名、targetSdk 34、13 项权限、云端证书 SHA1、uni-widget Provider 全部正确
 
 ## 验证记录
 

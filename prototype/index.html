@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>极简排班 · 界面复刻原型</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="assets/icons/icon.css">
+</head>
+<body>
+  <div class="stage">
+    <aside class="side" id="side">
+      <h1>极简排班 <span style="color:#55BB8A">UI 复刻</span></h1>
+      <p class="sub">基于 APK <code>cn.jianyun.workplan 3.5.0</code> 反编译还原。<br>
+      配色 / 字号 / 图标 / 文案均取自安装包本体。</p>
+
+      <h2>界面</h2>
+      <div class="chips">
+        <button data-ctrl="screen" data-value="home" class="on">排班</button>
+        <button data-ctrl="screen" data-value="work">班次</button>
+        <button data-ctrl="screen" data-value="alarm">提醒</button>
+        <button data-ctrl="screen" data-value="stat">统计</button>
+        <button data-ctrl="screen" data-value="setting">我的</button>
+        <button data-ctrl="screen" data-value="workEdit">添加班次</button>
+        <button data-ctrl="screen" data-value="alarmEdit">添加提醒</button>
+        <button data-ctrl="screen" data-value="share">分享/导入</button>
+        <button data-ctrl="screen" data-value="vip">会员</button>
+        <button data-ctrl="screen" data-value="widget">小组件</button>
+        <button data-ctrl="screen" data-value="project">项目管理</button>
+        <button data-ctrl="screen" data-value="faq">常见问题</button>
+        <button data-ctrl="screen" data-value="userDetail">我的信息</button>
+      </div>
+
+      <h2>主题</h2>
+      <div class="chips">
+        <button data-ctrl="theme" data-value="dark" class="on">暗色</button>
+        <button data-ctrl="theme" data-value="light">亮色</button>
+      </div>
+
+      <h2>一周开始日（APK 可配置，默认周一）</h2>
+      <div class="chips">
+        <button data-ctrl="weekStart" data-value="1">周一</button>
+        <button data-ctrl="weekStart" data-value="0" class="on">周日</button>
+      </div>
+
+      <h2>强调色（3.5.0 固定 #55BB8A，无换肤入口）</h2>
+      <div class="swatches">
+        <button class="sw on" data-ctrl="primary" data-value="#55BB8A" style="background:#55BB8A"></button><button class="sw" data-ctrl="primary" data-value="#1BA784" style="background:#1BA784"></button><button class="sw" data-ctrl="primary" data-value="#2775B6" style="background:#2775B6"></button><button class="sw" data-ctrl="primary" data-value="#ED3333" style="background:#ED3333"></button><button class="sw" data-ctrl="primary" data-value="#FCA104" style="background:#FCA104"></button><button class="sw" data-ctrl="primary" data-value="#806D9E" style="background:#806D9E"></button><button class="sw" data-ctrl="primary" data-value="#681752" style="background:#681752"></button><button class="sw" data-ctrl="primary" data-value="#4F4032" style="background:#4F4032"></button><button class="sw" data-ctrl="primary" data-value="#126E82" style="background:#126E82"></button><button class="sw" data-ctrl="primary" data-value="#F07C82" style="background:#F07C82"></button><button class="sw" data-ctrl="primary" data-value="#BEC936" style="background:#BEC936"></button><button class="sw" data-ctrl="primary" data-value="#C5A874" style="background:#C5A874"></button>
+      </div>
+
+      <h2>可交互</h2>
+      <p class="note">· 点日期选择当天，日历下方显示班次/备注<br>
+      · 下方色板仅用于演示：APK 内 230 中国色实际用于「班次颜色 / 小组件配色」<br>
+      · 点「开启排班」进入排班模式（底部操作面板）<br>
+      · 点右上角 3 个按钮：去广告 / 项目管理 / 显示配置<br>
+      · 点「9月」打开月份选择；提醒卡片开关可切换</p>
+
+      <p class="note">截图/画廊模式：<a href="board.html">board.html</a><br>
+      单屏截图：<code>?screen=home&amp;theme=dark&amp;bare=1</code></p>
+    </aside>
+
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="island"></div>
+        <div class="app" id="app"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

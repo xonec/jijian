@@ -1,0 +1,9 @@
+{
+  "name": "backup",
+  "version": "1.0.0",
+  "description": "极简排班云备份：快照 list/create/restore/delete（jy_backup）",
+  "main": "index.js",
+  "dependencies": {
+    "uni-id-common": "file:../common/uni-id-common"
+  }
+}

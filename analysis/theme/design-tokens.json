@@ -1,0 +1,2986 @@
+{
+  "_meta": {
+    "app": {
+      "name": "极简排班",
+      "package": "cn.jianyun.workplan",
+      "versionName": "3.5.0",
+      "versionCode": 36,
+      "minSdk": 26,
+      "targetSdk": 33
+    },
+    "generatedAt": "2026-10-27",
+    "sources": [
+      "jadx-src/sources/cn/jianyun/workplan/ui/theme/ColorKt.java",
+      "jadx-src/sources/cn/jianyun/workplan/ui/theme/ThemeKt.java",
+      "jadx-src/sources/cn/jianyun/workplan/ui/theme/TypeKt.java",
+      "jadx-src/sources/cn/jianyun/workplan/widget/WidgetConfig.java",
+      "jadx-src/sources/cn/jianyun/workplan/util/SelectUtil.java",
+      "decoded/res/values/colors.xml",
+      "decoded/res/values/styles.xml",
+      "decoded/res/values-night/colors.xml",
+      "decoded/assets/data/color.json",
+      "jadx-src/sources/cn/jianyun/workplan/ui/component/nav/IconFont.java",
+      "decoded/res/font/remixicon.ttf"
+    ],
+    "method": "反编译 Kotlin/Compose 源码 + apktool 解码资源 + aapt2 资源表(/tmp/res.txt) 交叉核对; 每项附 evidence 路径:行号; 标注 inferred 的为推断。",
+    "notes": [
+      "Compose Material3 调色板在 Kotlin (ColorKt/ThemeKt) 中, 不在 res/values/colors.xml; res 颜色仅 splash 背景等少量 App 自有色。",
+      "主题色可变性: ColorKt 的 Light*/Dark* 字段是 Kotlin var (有 setter), 但反编译代码中未发现 setter 调用方 (见 evidence.negativeFindings)。App 唯一强调色为 ThemeColor #55BB8A (麦苗绿), 大量组件直接引用 ColorKt.getThemeColor()。",
+      "230 个中国色预设 (assets/data/color.json) 用于班次颜色/小组件颜色选择器 (ShowColorPickerView), 不是 App 整体换肤。"
+    ]
+  },
+  "colors": {
+    "brand": {
+      "theme": {
+        "value": "#FF55BB8A",
+        "usage": "App 强调色/选中态/按钮/图标/小组件标题栏默认色",
+        "source": "ColorKt.ThemeColor",
+        "alias": "麦苗绿 (assets/data/color.json catalog=3)",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/ui/theme/ColorKt.java:10"
+      },
+      "primaryAction": {
+        "value": "#FF1974E8",
+        "usage": "补贴/次要强调(蓝)",
+        "source": "ColorKt.PrimaryColor",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/ui/theme/ColorKt.java:11"
+      }
+    },
+    "semantic": {
+      "delete": {
+        "value": "#FFF87679",
+        "usage": "删除/扣款/错误",
+        "source": "ColorKt.DeleteColor",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/ui/theme/ColorKt.java:12"
+      },
+      "important": {
+        "value": "#FFEE3F4D",
+        "usage": "重要提醒(茶花红)",
+        "source": "ColorKt.ImportantColor",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/ui/theme/ColorKt.java:13"
+      },
+      "vip": {
+        "value": "#FFC5A874",
+        "usage": "会员/VIP 金色",
+        "source": "ColorKt.VipColor",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/ui/theme/ColorKt.java:14"
+      },
+      "private": {
+        "value": "#FF806D9E",
+        "usage": "私密/加密(紫)",
+        "source": "ColorKt.PrivateColor",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/ui/theme/ColorKt.java:9"
+      }
+    },
+    "lightScheme": {
+      "background": {
+        "value": "#FFF6F5F4",
+        "source": "ColorKt.LightBgColor",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/ui/theme/ColorKt.java:16"
+      },
+      "surface": {
+        "value": "#FFFDFDFD",
+        "source": "ColorKt.LightBg0Color",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/ui/theme/ColorKt.java:15"
+      },
+      "surfaceVariant": {
+        "value": "#FFEEEEEE",
+        "source": "ColorKt.LightSelectColor",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/ui/theme/ColorKt.java:17"
+      },
+      "textPrimary": {
+        "value": "#FF000000",
+        "source": "ColorKt.LightPrimaryColor (mutable var, 运行时默认 #FF000000)",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/ui/theme/ColorKt.java:18"
+      },
+      "textSecondary": {
+        "value": "#FF222222",
+        "source": "ColorKt.LightSecondColor",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/ui/theme/ColorKt.java:19"
+      },
+      "textTertiary": {
+        "value": "#FF999999",
+        "source": "ColorKt.LightThirdColor",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/ui/theme/ColorKt.java:20"
+      },
+      "divider": {
+        "value": "#FFE5E5E5",
+        "source": "decoded/res/values/colors.xml colorDivider",
+        "evidence": "decoded/res/values/colors.xml (colorDivider)",
+        "inferred": false
+      },
+      "splashBackground": {
+        "value": "#FFFFFFFF",
+        "source": "decoded/res/values/colors.xml color/screen",
+        "evidence": "decoded/res/values/colors.xml:170"
+      },
+      "widgetLegendText": {
+        "value": "#FF767676",
+        "source": "decoded/res/layout/widget_circle_pie_legends.xml android:textColor",
+        "evidence": "decoded/res/layout/widget_circle_pie_legends.xml"
+      }
+    },
+    "darkScheme": {
+      "background": {
+        "value": "#FF111111",
+        "source": "ColorKt.DarkBg0Color",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/ui/theme/ColorKt.java:22"
+      },
+      "surface": {
+        "value": "#FF191919",
+        "source": "ColorKt.DarkBgColor",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/ui/theme/ColorKt.java:23"
+      },
+      "surfaceVariant": {
+        "value": "#FF222222",
+        "source": "ColorKt.DarkSelectColor",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/ui/theme/ColorKt.java:24"
+      },
+      "textPrimary": {
+        "value": "#FFFFFFFF",
+        "source": "ColorKt.DarkPrimaryColor (mutable var)",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/ui/theme/ColorKt.java:25"
+      },
+      "textSecondary": {
+        "value": "#FFDDDDDD",
+        "source": "ColorKt.DarkSecondColor",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/ui/theme/ColorKt.java:26"
+      },
+      "textTertiary": {
+        "value": "#FF888888",
+        "source": "ColorKt.DarkThirdColor",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/ui/theme/ColorKt.java:27"
+      },
+      "splashBackground": {
+        "value": "#FF111111",
+        "source": "decoded/res/values-night/colors.xml color/screen",
+        "evidence": "decoded/res/values-night/colors.xml:30"
+      }
+    },
+    "material3Mapping": {
+      "note": "ThemeKt 用 lightColorScheme/darkColorScheme 覆盖以下槽位 (位置参数语义), 其余为 Material3 默认值; 文本色被映射到 primary/secondary/tertiary 槽 (代码中 getPrimary 399次/getTertiary 195次/getSurface 714次)。",
+      "light": {
+        "primary": "LightPrimaryColor (#FF000000)",
+        "secondary": "LightSecondColor (#FF222222)",
+        "tertiary": "LightThirdColor (#FF999999)",
+        "background": "LightBgColor (#FFF6F5F4)",
+        "onBackground": "LightPrimaryColor (#FF000000)",
+        "surface": "LightBg0Color (#FFFDFDFD)",
+        "surfaceVariant": "LightSelectColor (#FFEEEEEE)",
+        "error": "LightDeleteColor (#FFF87679)",
+        "onSurface": "Material3 默认 #FF1C1B1F (推断)",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/ui/theme/ThemeKt.java:41"
+      },
+      "dark": {
+        "primary": "DarkPrimaryColor (#FFFFFFFF)",
+        "secondary": "DarkSecondColor (#FFDDDDDD)",
+        "tertiary": "DarkThirdColor (#FF888888)",
+        "background": "DarkBg0Color (#FF111111)",
+        "surface": "DarkBgColor (#FF191919)",
+        "surfaceVariant": "DarkSelectColor (#FF222222)",
+        "error": "DarkDeleteColor (#FFF87679)",
+        "onSurface": "Material3 默认 #FFE6E1E5 (推断)",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/ui/theme/ThemeKt.java:40"
+      }
+    },
+    "tagColors": {
+      "note": "排班/记账项默认标签配色 (SelectUtil.DEFAULT_TYPES: 打卡/补贴/扣款)",
+      "sign": {
+        "value": "#FF776AD4",
+        "name": "打卡",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/util/SelectUtil.java:27"
+      },
+      "award": {
+        "value": "#FF1974E8",
+        "name": "补贴",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/util/SelectUtil.java:27"
+      },
+      "fine": {
+        "value": "#FFF87679",
+        "name": "扣款",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/util/SelectUtil.java:27"
+      }
+    },
+    "widgetDefaults": {
+      "note": "桌面小组件 WidgetConfig 默认值 (亮/暗色独立配置)",
+      "light": {
+        "headerBg": "#FF55BB8A",
+        "headerTextColor": "#FFFFFFFF",
+        "bgColor": "#FFFFFFFF",
+        "textColor": "#FF111111",
+        "tintColor": "#FF111111",
+        "markColor": "#FF111111",
+        "headerOpacity": 1.0,
+        "opacity": 1.0,
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/widget/WidgetConfig.java:341"
+      },
+      "dark": {
+        "headerBg": "#FF22352D",
+        "headerTextColor": "#FFFFFFFF",
+        "bgColor": "#FF141414",
+        "textColor": "#FFF5F5F5",
+        "tintColor": "#FFD8D8D8",
+        "markColor": "#FFD8D8D8",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/widget/WidgetConfig.java:341"
+      },
+      "todayBorder": {
+        "value": "#FFEE4863",
+        "usage": "widget_today.xml 2dp stroke / radius 6dp",
+        "evidence": "decoded/res/drawable/widget_today.xml"
+      },
+      "legendText": {
+        "value": "#FF767676",
+        "evidence": "decoded/res/layout/widget_default_pie_legends.xml"
+      },
+      "fontSizes": {
+        "dateFontSize": "17",
+        "workFontSize": "11",
+        "timeFontSize": "11",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/widget/WidgetConfig.java:341"
+      },
+      "toggles": {
+        "mondayFirst": true,
+        "showLunar": true,
+        "showFestival": true,
+        "showRemark": false,
+        "showBeginTime": false,
+        "showEndTime": false,
+        "showLine": false,
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/widget/WidgetConfig.java:341"
+      },
+      "layoutDp": {
+        "minWidth": 320,
+        "minHeight": 180,
+        "updatePeriodMillis": 1800000,
+        "resizeMode": "horizontal|vertical",
+        "evidence": "decoded/res/xml/app_widget.xml"
+      }
+    },
+    "widgetPreviewSampled": {
+      "note": "从 APK 内置小组件预览图 assets_extracted/widget/quick.png 采样(图像有压缩噪点, 仅供对照; 代码默认值以上方 widgetDefaults 为准)",
+      "headerApprox": "#FF4AB380",
+      "blueChipApprox": "#FF1A67AC",
+      "purpleChipApprox": "#FF5A5893",
+      "body": "#FFFFFFFF",
+      "evidence": "decoded/res/drawable/quick.png (452x466)",
+      "nearestChineseColors": {
+        "header": "麦苗绿 #55BB8A / 蛙绿 #45B787",
+        "blueChip": "靛青 #1661AB",
+        "purpleChip": "野菊紫 #525288 / 山梗紫 #61649F"
+      }
+    },
+    "chinesePalette": {
+      "source": "decoded/assets/data/color.json",
+      "copiedTo": "assets_extracted/palette/color.json",
+      "count": 230,
+      "groups": [
+        {
+          "catalog": 0,
+          "approxName": "红/粉 色系",
+          "count": 51,
+          "colors": [
+            {
+              "name": "香叶红",
+              "color": "#F07C82",
+              "catalog": 0
+            },
+            {
+              "name": "玉红",
+              "color": "#C04851",
+              "catalog": 0
+            },
+            {
+              "name": "茶花红",
+              "color": "#EE3F4D",
+              "catalog": 0
+            },
+            {
+              "name": "高粱红",
+              "color": "#C02C38",
+              "catalog": 0
+            },
+            {
+              "name": "满江红",
+              "color": "#A7535A",
+              "catalog": 0
+            },
+            {
+              "name": "烟红",
+              "color": "#894E54",
+              "catalog": 0
+            },
+            {
+              "name": "莓红",
+              "color": "#C45A65",
+              "catalog": 0
+            },
+            {
+              "name": "石竹红",
+              "color": "#EE4863",
+              "catalog": 0
+            },
+            {
+              "name": "淡茜红",
+              "color": "#E77C8E",
+              "catalog": 0
+            },
+            {
+              "name": "月季红",
+              "color": "#CE5777",
+              "catalog": 0
+            },
+            {
+              "name": "锦葵红",
+              "color": "#BF3553",
+              "catalog": 0
+            },
+            {
+              "name": "凤仙花红",
+              "color": "#EA7293",
+              "catalog": 0
+            },
+            {
+              "name": "夹竹桃红",
+              "color": "#EB507E",
+              "catalog": 0
+            },
+            {
+              "name": "榲桲红",
+              "color": "#ED2F6A",
+              "catalog": 0
+            },
+            {
+              "name": "吊钟花红",
+              "color": "#CE5E8A",
+              "catalog": 0
+            },
+            {
+              "name": "紫荆红",
+              "color": "#EE2C79",
+              "catalog": 0
+            },
+            {
+              "name": "扁豆花红",
+              "color": "#EF498B",
+              "catalog": 0
+            },
+            {
+              "name": "藏花红",
+              "color": "#EC2D7A",
+              "catalog": 0
+            },
+            {
+              "name": "丹紫红",
+              "color": "#D2568C",
+              "catalog": 0
+            },
+            {
+              "name": "龙须红",
+              "color": "#CC5595",
+              "catalog": 0
+            },
+            {
+              "name": "电气石红",
+              "color": "#C35691",
+              "catalog": 0
+            },
+            {
+              "name": "陶瓷红",
+              "color": "#E16723",
+              "catalog": 0
+            },
+            {
+              "name": "菠萝红",
+              "color": "#FC7930",
+              "catalog": 0
+            },
+            {
+              "name": "火砖红",
+              "color": "#CD6227",
+              "catalog": 0
+            },
+            {
+              "name": "蟹壳红",
+              "color": "#F27635",
+              "catalog": 0
+            },
+            {
+              "name": "燕颔红",
+              "color": "#FC6315",
+              "catalog": 0
+            },
+            {
+              "name": "晨曦红",
+              "color": "#EA8958",
+              "catalog": 0
+            },
+            {
+              "name": "莓酱红",
+              "color": "#FA5D19",
+              "catalog": 0
+            },
+            {
+              "name": "龙睛鱼红",
+              "color": "#EF632B",
+              "catalog": 0
+            },
+            {
+              "name": "芙蓉红",
+              "color": "#F9723D",
+              "catalog": 0
+            },
+            {
+              "name": "落霞红",
+              "color": "#CF4813",
+              "catalog": 0
+            },
+            {
+              "name": "法螺红",
+              "color": "#EE8055",
+              "catalog": 0
+            },
+            {
+              "name": "草莓红",
+              "color": "#EF6F48",
+              "catalog": 0
+            },
+            {
+              "name": "朱红",
+              "color": "#ED5126",
+              "catalog": 0
+            },
+            {
+              "name": "榴花红",
+              "color": "#F34718",
+              "catalog": 0
+            },
+            {
+              "name": "柿红",
+              "color": "#F2481B",
+              "catalog": 0
+            },
+            {
+              "name": "大红",
+              "color": "#F04B22",
+              "catalog": 0
+            },
+            {
+              "name": "蜻蜓红",
+              "color": "#F1441D",
+              "catalog": 0
+            },
+            {
+              "name": "铁水红",
+              "color": "#F5391C",
+              "catalog": 0
+            },
+            {
+              "name": "极光红",
+              "color": "#F33B1F",
+              "catalog": 0
+            },
+            {
+              "name": "萝卜红",
+              "color": "#F13C22",
+              "catalog": 0
+            },
+            {
+              "name": "曲红",
+              "color": "#F05A46",
+              "catalog": 0
+            },
+            {
+              "name": "苹果红",
+              "color": "#F15642",
+              "catalog": 0
+            },
+            {
+              "name": "桂红",
+              "color": "#F25A47",
+              "catalog": 0
+            },
+            {
+              "name": "夕阳红",
+              "color": "#DE2A18",
+              "catalog": 0
+            },
+            {
+              "name": "樱桃红",
+              "color": "#ED3321",
+              "catalog": 0
+            },
+            {
+              "name": "珊瑚红",
+              "color": "#F04A3A",
+              "catalog": 0
+            },
+            {
+              "name": "鹤顶红",
+              "color": "#D42517",
+              "catalog": 0
+            },
+            {
+              "name": "鱼鳃红",
+              "color": "#ED3B2F",
+              "catalog": 0
+            },
+            {
+              "name": "丽春红",
+              "color": "#EB261A",
+              "catalog": 0
+            },
+            {
+              "name": "枸枢红",
+              "color": "#ED3333",
+              "catalog": 0
+            }
+          ]
+        },
+        {
+          "catalog": 1,
+          "approxName": "橙 色系",
+          "count": 6,
+          "colors": [
+            {
+              "name": "橙皮黄",
+              "color": "#FCA104",
+              "catalog": 1
+            },
+            {
+              "name": "淡橘橙",
+              "color": "#FBA414",
+              "catalog": 1
+            },
+            {
+              "name": "橘橙",
+              "color": "#F97D1C",
+              "catalog": 1
+            },
+            {
+              "name": "美人焦橙",
+              "color": "#FA7E23",
+              "catalog": 1
+            },
+            {
+              "name": "海螺橙",
+              "color": "#F0945D",
+              "catalog": 1
+            },
+            {
+              "name": "金莲花橙",
+              "color": "#F86B1D",
+              "catalog": 1
+            }
+          ]
+        },
+        {
+          "catalog": 2,
+          "approxName": "黄 色系",
+          "count": 23,
+          "colors": [
+            {
+              "name": "橄榄黄绿",
+              "color": "#BEC936",
+              "catalog": 2
+            },
+            {
+              "name": "谷黄",
+              "color": "#E8B004",
+              "catalog": 2
+            },
+            {
+              "name": "土黄",
+              "color": "#D6A01D",
+              "catalog": 2
+            },
+            {
+              "name": "虎皮黄",
+              "color": "#EAAD1A",
+              "catalog": 2
+            },
+            {
+              "name": "鸡蛋黄",
+              "color": "#FBB612",
+              "catalog": 2
+            },
+            {
+              "name": "山鸡黄",
+              "color": "#B78B26",
+              "catalog": 2
+            },
+            {
+              "name": "沙石黄",
+              "color": "#E5B751",
+              "catalog": 2
+            },
+            {
+              "name": "鹅掌黄",
+              "color": "#FBB929",
+              "catalog": 2
+            },
+            {
+              "name": "莱阳梨黄",
+              "color": "#815F25",
+              "catalog": 2
+            },
+            {
+              "name": "枇杷黄",
+              "color": "#FCA106",
+              "catalog": 2
+            },
+            {
+              "name": "金叶黄",
+              "color": "#FFA60F",
+              "catalog": 2
+            },
+            {
+              "name": "苍黄",
+              "color": "#806332",
+              "catalog": 2
+            },
+            {
+              "name": "龟背黄",
+              "color": "#826B48",
+              "catalog": 2
+            },
+            {
+              "name": "蜜黄",
+              "color": "#FBB957",
+              "catalog": 2
+            },
+            {
+              "name": "风帆黄",
+              "color": "#DC9123",
+              "catalog": 2
+            },
+            {
+              "name": "金莺黄",
+              "color": "#F4A83A",
+              "catalog": 2
+            },
+            {
+              "name": "软木黄",
+              "color": "#DE9E44",
+              "catalog": 2
+            },
+            {
+              "name": "榴萼黄",
+              "color": "#F9A633",
+              "catalog": 2
+            },
+            {
+              "name": "万寿菊黄",
+              "color": "#FB8B05",
+              "catalog": 2
+            },
+            {
+              "name": "杏黄",
+              "color": "#F28E16",
+              "catalog": 2
+            },
+            {
+              "name": "北瓜黄",
+              "color": "#FC8C23",
+              "catalog": 2
+            },
+            {
+              "name": "金黄",
+              "color": "#F26B1F",
+              "catalog": 2
+            },
+            {
+              "name": "淡土黄",
+              "color": "#8C4B31",
+              "catalog": 2
+            }
+          ]
+        },
+        {
+          "catalog": 3,
+          "approxName": "绿 色系",
+          "count": 38,
+          "colors": [
+            {
+              "name": "石绿",
+              "color": "#57C3C2",
+              "catalog": 3
+            },
+            {
+              "name": "美蝶绿",
+              "color": "#12AA9C",
+              "catalog": 3
+            },
+            {
+              "name": "蓝绿",
+              "color": "#12A182",
+              "catalog": 3
+            },
+            {
+              "name": "竹绿",
+              "color": "#1BA784",
+              "catalog": 3
+            },
+            {
+              "name": "亚丁绿",
+              "color": "#428675",
+              "catalog": 3
+            },
+            {
+              "name": "海王绿",
+              "color": "#248067",
+              "catalog": 3
+            },
+            {
+              "name": "深海绿",
+              "color": "#1A3B32",
+              "catalog": 3
+            },
+            {
+              "name": "绿灰",
+              "color": "#314A43",
+              "catalog": 3
+            },
+            {
+              "name": "青矾绿",
+              "color": "#2C9678",
+              "catalog": 3
+            },
+            {
+              "name": "苍绿",
+              "color": "#223E36",
+              "catalog": 3
+            },
+            {
+              "name": "飞泉绿",
+              "color": "#497568",
+              "catalog": 3
+            },
+            {
+              "name": "梧枝绿",
+              "color": "#69A794",
+              "catalog": 3
+            },
+            {
+              "name": "铜绿",
+              "color": "#2BAE85",
+              "catalog": 3
+            },
+            {
+              "name": "蛙绿",
+              "color": "#45B787",
+              "catalog": 3
+            },
+            {
+              "name": "浪花绿",
+              "color": "#92B3A5",
+              "catalog": 3
+            },
+            {
+              "name": "麦苗绿",
+              "color": "#55BB8A",
+              "catalog": 3
+            },
+            {
+              "name": "翠绿",
+              "color": "#20A162",
+              "catalog": 3
+            },
+            {
+              "name": "葱绿",
+              "color": "#40A070",
+              "catalog": 3
+            },
+            {
+              "name": "荷叶绿",
+              "color": "#1A6840",
+              "catalog": 3
+            },
+            {
+              "name": "淡绿",
+              "color": "#61AC85",
+              "catalog": 3
+            },
+            {
+              "name": "蟾绿",
+              "color": "#3C9566",
+              "catalog": 3
+            },
+            {
+              "name": "薄荷绿",
+              "color": "#207F4C",
+              "catalog": 3
+            },
+            {
+              "name": "孔雀绿",
+              "color": "#229453",
+              "catalog": 3
+            },
+            {
+              "name": "宫殿绿",
+              "color": "#20894D",
+              "catalog": 3
+            },
+            {
+              "name": "云杉绿",
+              "color": "#15231B",
+              "catalog": 3
+            },
+            {
+              "name": "白屈菜绿",
+              "color": "#485B4D",
+              "catalog": 3
+            },
+            {
+              "name": "玉髓绿",
+              "color": "#41B349",
+              "catalog": 3
+            },
+            {
+              "name": "鲜绿",
+              "color": "#43B244",
+              "catalog": 3
+            },
+            {
+              "name": "油绿",
+              "color": "#253D24",
+              "catalog": 3
+            },
+            {
+              "name": "水绿",
+              "color": "#8CC269",
+              "catalog": 3
+            },
+            {
+              "name": "鹦鹉绿",
+              "color": "#5BAE23",
+              "catalog": 3
+            },
+            {
+              "name": "芽绿",
+              "color": "#96C24E",
+              "catalog": 3
+            },
+            {
+              "name": "碧螺春绿",
+              "color": "#867018",
+              "catalog": 3
+            },
+            {
+              "name": "草灰绿",
+              "color": "#8E804B",
+              "catalog": 3
+            },
+            {
+              "name": "枯绿",
+              "color": "#B78D12",
+              "catalog": 3
+            },
+            {
+              "name": "蜴蜊绿",
+              "color": "#835E1D",
+              "catalog": 3
+            },
+            {
+              "name": "古铜绿",
+              "color": "#533C1B",
+              "catalog": 3
+            },
+            {
+              "name": "焦茶绿",
+              "color": "#553B18",
+              "catalog": 3
+            }
+          ]
+        },
+        {
+          "catalog": 4,
+          "approxName": "青/靛 色系",
+          "count": 9,
+          "colors": [
+            {
+              "name": "青蛤壳紫",
+              "color": "#BC84A8",
+              "catalog": 4
+            },
+            {
+              "name": "青莲",
+              "color": "#8B2671",
+              "catalog": 4
+            },
+            {
+              "name": "青灰",
+              "color": "#2B333E",
+              "catalog": 4
+            },
+            {
+              "name": "钢青",
+              "color": "#142334",
+              "catalog": 4
+            },
+            {
+              "name": "靛青",
+              "color": "#1661AB",
+              "catalog": 4
+            },
+            {
+              "name": "花青",
+              "color": "#2376B7",
+              "catalog": 4
+            },
+            {
+              "name": "群青",
+              "color": "#1772B4",
+              "catalog": 4
+            },
+            {
+              "name": "海青",
+              "color": "#22A2C3",
+              "catalog": 4
+            },
+            {
+              "name": "鲛青",
+              "color": "#87723E",
+              "catalog": 4
+            }
+          ]
+        },
+        {
+          "catalog": 5,
+          "approxName": "蓝 色系",
+          "count": 31,
+          "colors": [
+            {
+              "name": "淡蓝紫",
+              "color": "#A7A8BD",
+              "catalog": 5
+            },
+            {
+              "name": "燕颔蓝",
+              "color": "#131824",
+              "catalog": 5
+            },
+            {
+              "name": "暗蓝",
+              "color": "#101F30",
+              "catalog": 5
+            },
+            {
+              "name": "海涛蓝",
+              "color": "#15559A",
+              "catalog": 5
+            },
+            {
+              "name": "飞燕草蓝",
+              "color": "#0F59A4",
+              "catalog": 5
+            },
+            {
+              "name": "安安蓝",
+              "color": "#3170A7",
+              "catalog": 5
+            },
+            {
+              "name": "海军蓝",
+              "color": "#346C9C",
+              "catalog": 5
+            },
+            {
+              "name": "景泰蓝",
+              "color": "#2775B6",
+              "catalog": 5
+            },
+            {
+              "name": "品蓝",
+              "color": "#2B73AF",
+              "catalog": 5
+            },
+            {
+              "name": "尼罗蓝",
+              "color": "#2474B5",
+              "catalog": 5
+            },
+            {
+              "name": "鷃蓝",
+              "color": "#144A74",
+              "catalog": 5
+            },
+            {
+              "name": "虹蓝",
+              "color": "#2177B8",
+              "catalog": 5
+            },
+            {
+              "name": "羽扇豆蓝",
+              "color": "#619AC3",
+              "catalog": 5
+            },
+            {
+              "name": "搪磁蓝",
+              "color": "#11659A",
+              "catalog": 5
+            },
+            {
+              "name": "潮蓝",
+              "color": "#2983BB",
+              "catalog": 5
+            },
+            {
+              "name": "天蓝",
+              "color": "#1677B3",
+              "catalog": 5
+            },
+            {
+              "name": "牵牛花蓝",
+              "color": "#1177B0",
+              "catalog": 5
+            },
+            {
+              "name": "淡蓝灰",
+              "color": "#5E7987",
+              "catalog": 5
+            },
+            {
+              "name": "釉蓝",
+              "color": "#1781B5",
+              "catalog": 5
+            },
+            {
+              "name": "云山蓝",
+              "color": "#2F90B9",
+              "catalog": 5
+            },
+            {
+              "name": "鸢尾蓝",
+              "color": "#158BB8",
+              "catalog": 5
+            },
+            {
+              "name": "钴蓝",
+              "color": "#1A94BC",
+              "catalog": 5
+            },
+            {
+              "name": "苍蓝",
+              "color": "#134857",
+              "catalog": 5
+            },
+            {
+              "name": "玉鈫蓝",
+              "color": "#126E82",
+              "catalog": 5
+            },
+            {
+              "name": "胆矾蓝",
+              "color": "#0F95B0",
+              "catalog": 5
+            },
+            {
+              "name": "樫鸟蓝",
+              "color": "#1491A8",
+              "catalog": 5
+            },
+            {
+              "name": "翠蓝",
+              "color": "#1E9EB3",
+              "catalog": 5
+            },
+            {
+              "name": "蜻蜓蓝",
+              "color": "#3B818C",
+              "catalog": 5
+            },
+            {
+              "name": "闪蓝",
+              "color": "#7CABB1",
+              "catalog": 5
+            },
+            {
+              "name": "甸子蓝",
+              "color": "#10AEC2",
+              "catalog": 5
+            },
+            {
+              "name": "晚波蓝",
+              "color": "#648E93",
+              "catalog": 5
+            }
+          ]
+        },
+        {
+          "catalog": 6,
+          "approxName": "紫 色系",
+          "count": 38,
+          "colors": [
+            {
+              "name": "暗玉紫",
+              "color": "#5C2223",
+              "catalog": 6
+            },
+            {
+              "name": "栗紫",
+              "color": "#5A191B",
+              "catalog": 6
+            },
+            {
+              "name": "葡萄紫",
+              "color": "#4C1F24",
+              "catalog": 6
+            },
+            {
+              "name": "茄皮紫",
+              "color": "#2D0C13",
+              "catalog": 6
+            },
+            {
+              "name": "卵石紫",
+              "color": "#30161C",
+              "catalog": 6
+            },
+            {
+              "name": "火鹅紫",
+              "color": "#33141E",
+              "catalog": 6
+            },
+            {
+              "name": "磨石紫",
+              "color": "#382129",
+              "catalog": 6
+            },
+            {
+              "name": "墨紫",
+              "color": "#310F1B",
+              "catalog": 6
+            },
+            {
+              "name": "檀紫",
+              "color": "#381924",
+              "catalog": 6
+            },
+            {
+              "name": "洋葱紫",
+              "color": "#A8456B",
+              "catalog": 6
+            },
+            {
+              "name": "绀紫",
+              "color": "#461629",
+              "catalog": 6
+            },
+            {
+              "name": "古铜紫",
+              "color": "#440E25",
+              "catalog": 6
+            },
+            {
+              "name": "樱草紫",
+              "color": "#C06F98",
+              "catalog": 6
+            },
+            {
+              "name": "玫瑰紫",
+              "color": "#BA2F7B",
+              "catalog": 6
+            },
+            {
+              "name": "苋菜紫",
+              "color": "#9B1E64",
+              "catalog": 6
+            },
+            {
+              "name": "紫灰",
+              "color": "#5D3F51",
+              "catalog": 6
+            },
+            {
+              "name": "荸荠紫",
+              "color": "#411C35",
+              "catalog": 6
+            },
+            {
+              "name": "豆蔻紫",
+              "color": "#AD6598",
+              "catalog": 6
+            },
+            {
+              "name": "扁豆紫",
+              "color": "#A35C8F",
+              "catalog": 6
+            },
+            {
+              "name": "牵牛紫",
+              "color": "#681752",
+              "catalog": 6
+            },
+            {
+              "name": "芓紫",
+              "color": "#894276",
+              "catalog": 6
+            },
+            {
+              "name": "葛巾紫",
+              "color": "#7E2065",
+              "catalog": 6
+            },
+            {
+              "name": "芥花紫",
+              "color": "#983680",
+              "catalog": 6
+            },
+            {
+              "name": "魏紫",
+              "color": "#7E1671",
+              "catalog": 6
+            },
+            {
+              "name": "桔梗紫",
+              "color": "#813C85",
+              "catalog": 6
+            },
+            {
+              "name": "剑锋紫",
+              "color": "#3E3841",
+              "catalog": 6
+            },
+            {
+              "name": "蕈紫",
+              "color": "#815C94",
+              "catalog": 6
+            },
+            {
+              "name": "槿紫",
+              "color": "#806D9E",
+              "catalog": 6
+            },
+            {
+              "name": "龙葵紫",
+              "color": "#322F3B",
+              "catalog": 6
+            },
+            {
+              "name": "藤萝紫",
+              "color": "#8076A3",
+              "catalog": 6
+            },
+            {
+              "name": "暗龙胆紫",
+              "color": "#22202E",
+              "catalog": 6
+            },
+            {
+              "name": "野葡萄紫",
+              "color": "#302F4B",
+              "catalog": 6
+            },
+            {
+              "name": "野菊紫",
+              "color": "#525288",
+              "catalog": 6
+            },
+            {
+              "name": "螺甸紫",
+              "color": "#74759B",
+              "catalog": 6
+            },
+            {
+              "name": "晶石紫",
+              "color": "#1F2040",
+              "catalog": 6
+            },
+            {
+              "name": "满天星紫",
+              "color": "#2E317C",
+              "catalog": 6
+            },
+            {
+              "name": "山梗紫",
+              "color": "#61649F",
+              "catalog": 6
+            },
+            {
+              "name": "貂紫",
+              "color": "#5D3131",
+              "catalog": 6
+            }
+          ]
+        },
+        {
+          "catalog": 7,
+          "approxName": "灰/褐 色系",
+          "count": 34,
+          "colors": [
+            {
+              "name": "锌灰",
+              "color": "#7A7374",
+              "catalog": 7
+            },
+            {
+              "name": "鼠背灰",
+              "color": "#73575C",
+              "catalog": 7
+            },
+            {
+              "name": "芦灰",
+              "color": "#856D72",
+              "catalog": 7
+            },
+            {
+              "name": "苍蝇灰",
+              "color": "#36282B",
+              "catalog": 7
+            },
+            {
+              "name": "斑鸠灰",
+              "color": "#482936",
+              "catalog": 7
+            },
+            {
+              "name": "古鼎灰",
+              "color": "#36292F",
+              "catalog": 7
+            },
+            {
+              "name": "沙鱼灰",
+              "color": "#35333C",
+              "catalog": 7
+            },
+            {
+              "name": "水牛灰",
+              "color": "#2F2F35",
+              "catalog": 7
+            },
+            {
+              "name": "牛角灰",
+              "color": "#2D2E36",
+              "catalog": 7
+            },
+            {
+              "name": "鱼尾灰",
+              "color": "#5E616D",
+              "catalog": 7
+            },
+            {
+              "name": "瓦罐灰",
+              "color": "#47484C",
+              "catalog": 7
+            },
+            {
+              "name": "鲸鱼灰",
+              "color": "#475164",
+              "catalog": 7
+            },
+            {
+              "name": "战舰灰",
+              "color": "#495C69",
+              "catalog": 7
+            },
+            {
+              "name": "垩灰",
+              "color": "#737C7B",
+              "catalog": 7
+            },
+            {
+              "name": "明灰",
+              "color": "#8A988E",
+              "catalog": 7
+            },
+            {
+              "name": "狼烟灰",
+              "color": "#5D655F",
+              "catalog": 7
+            },
+            {
+              "name": "月灰",
+              "color": "#B7AE8F",
+              "catalog": 7
+            },
+            {
+              "name": "银鼠灰",
+              "color": "#B5AA90",
+              "catalog": 7
+            },
+            {
+              "name": "蟹壳灰",
+              "color": "#695E45",
+              "catalog": 7
+            },
+            {
+              "name": "燕羽灰",
+              "color": "#685E48",
+              "catalog": 7
+            },
+            {
+              "name": "河豚灰",
+              "color": "#393733",
+              "catalog": 7
+            },
+            {
+              "name": "猴毛灰",
+              "color": "#97846C",
+              "catalog": 7
+            },
+            {
+              "name": "橄榄灰",
+              "color": "#503E2A",
+              "catalog": 7
+            },
+            {
+              "name": "鹤灰",
+              "color": "#4A4035",
+              "catalog": 7
+            },
+            {
+              "name": "夜灰",
+              "color": "#847C74",
+              "catalog": 7
+            },
+            {
+              "name": "松鼠灰",
+              "color": "#4F4032",
+              "catalog": 7
+            },
+            {
+              "name": "深灰",
+              "color": "#81776E",
+              "catalog": 7
+            },
+            {
+              "name": "雁灰",
+              "color": "#80766E",
+              "catalog": 7
+            },
+            {
+              "name": "长石灰",
+              "color": "#363433",
+              "catalog": 7
+            },
+            {
+              "name": "中灰驼",
+              "color": "#603D30",
+              "catalog": 7
+            },
+            {
+              "name": "淡铁灰",
+              "color": "#5B423A",
+              "catalog": 7
+            },
+            {
+              "name": "石板灰",
+              "color": "#624941",
+              "catalog": 7
+            },
+            {
+              "name": "海报灰",
+              "color": "#483332",
+              "catalog": 7
+            },
+            {
+              "name": "玫瑰灰",
+              "color": "#4B2E2B",
+              "catalog": 7
+            }
+          ]
+        }
+      ],
+      "evidence": "decoded/assets/data/color.json; FormItemKt.java ShowColorPickerView 读取 assets/data/color.json"
+    },
+    "others": {
+      "colorPrimaryRes": {
+        "value": "#FF000000",
+        "evidence": "decoded/res/values/colors.xml colorPrimary"
+      },
+      "colorAccentRes": {
+        "value": "#FFD81B60",
+        "evidence": "decoded/res/values/colors.xml colorAccent"
+      },
+      "viewDividerBg": {
+        "value": "#FFE8E9EB",
+        "evidence": "decoded/res/values/colors.xml view_divider_bg"
+      },
+      "warningColor": {
+        "value": "#FFF4511E",
+        "evidence": "decoded/res/values/colors.xml warning_color"
+      },
+      "successColor": {
+        "value": "#FF009688",
+        "evidence": "decoded/res/values/colors.xml success_color"
+      }
+    },
+    "themePresets": {
+      "note": "可选颜色预设列表（230 个中国传统色）。按反编译证据，它用于班次颜色与桌面小组件取色的调色板，而非 App 全局主题换肤；App 主题模式仅 亮白/暗黑/追随系统 三选一。",
+      "modes": [
+        {
+          "label": "中国色",
+          "value": "chinese"
+        },
+        {
+          "label": "自定义",
+          "value": "self"
+        },
+        {
+          "label": "我收藏的",
+          "value": "collect"
+        }
+      ],
+      "modesEvidence": "jadx-src/sources/cn/jianyun/workplan/util/SelectUtil.java:44 (COLOR_MODES)",
+      "source": "decoded/assets/data/color.json",
+      "copiedTo": "assets_extracted/palette/color.json",
+      "count": 230,
+      "groups": [
+        {
+          "catalog": 0,
+          "approxName": "红/粉 色系",
+          "count": 51,
+          "colors": [
+            {
+              "name": "香叶红",
+              "color": "#F07C82",
+              "catalog": 0
+            },
+            {
+              "name": "玉红",
+              "color": "#C04851",
+              "catalog": 0
+            },
+            {
+              "name": "茶花红",
+              "color": "#EE3F4D",
+              "catalog": 0
+            },
+            {
+              "name": "高粱红",
+              "color": "#C02C38",
+              "catalog": 0
+            },
+            {
+              "name": "满江红",
+              "color": "#A7535A",
+              "catalog": 0
+            },
+            {
+              "name": "烟红",
+              "color": "#894E54",
+              "catalog": 0
+            },
+            {
+              "name": "莓红",
+              "color": "#C45A65",
+              "catalog": 0
+            },
+            {
+              "name": "石竹红",
+              "color": "#EE4863",
+              "catalog": 0
+            },
+            {
+              "name": "淡茜红",
+              "color": "#E77C8E",
+              "catalog": 0
+            },
+            {
+              "name": "月季红",
+              "color": "#CE5777",
+              "catalog": 0
+            },
+            {
+              "name": "锦葵红",
+              "color": "#BF3553",
+              "catalog": 0
+            },
+            {
+              "name": "凤仙花红",
+              "color": "#EA7293",
+              "catalog": 0
+            },
+            {
+              "name": "夹竹桃红",
+              "color": "#EB507E",
+              "catalog": 0
+            },
+            {
+              "name": "榲桲红",
+              "color": "#ED2F6A",
+              "catalog": 0
+            },
+            {
+              "name": "吊钟花红",
+              "color": "#CE5E8A",
+              "catalog": 0
+            },
+            {
+              "name": "紫荆红",
+              "color": "#EE2C79",
+              "catalog": 0
+            },
+            {
+              "name": "扁豆花红",
+              "color": "#EF498B",
+              "catalog": 0
+            },
+            {
+              "name": "藏花红",
+              "color": "#EC2D7A",
+              "catalog": 0
+            },
+            {
+              "name": "丹紫红",
+              "color": "#D2568C",
+              "catalog": 0
+            },
+            {
+              "name": "龙须红",
+              "color": "#CC5595",
+              "catalog": 0
+            },
+            {
+              "name": "电气石红",
+              "color": "#C35691",
+              "catalog": 0
+            },
+            {
+              "name": "陶瓷红",
+              "color": "#E16723",
+              "catalog": 0
+            },
+            {
+              "name": "菠萝红",
+              "color": "#FC7930",
+              "catalog": 0
+            },
+            {
+              "name": "火砖红",
+              "color": "#CD6227",
+              "catalog": 0
+            },
+            {
+              "name": "蟹壳红",
+              "color": "#F27635",
+              "catalog": 0
+            },
+            {
+              "name": "燕颔红",
+              "color": "#FC6315",
+              "catalog": 0
+            },
+            {
+              "name": "晨曦红",
+              "color": "#EA8958",
+              "catalog": 0
+            },
+            {
+              "name": "莓酱红",
+              "color": "#FA5D19",
+              "catalog": 0
+            },
+            {
+              "name": "龙睛鱼红",
+              "color": "#EF632B",
+              "catalog": 0
+            },
+            {
+              "name": "芙蓉红",
+              "color": "#F9723D",
+              "catalog": 0
+            },
+            {
+              "name": "落霞红",
+              "color": "#CF4813",
+              "catalog": 0
+            },
+            {
+              "name": "法螺红",
+              "color": "#EE8055",
+              "catalog": 0
+            },
+            {
+              "name": "草莓红",
+              "color": "#EF6F48",
+              "catalog": 0
+            },
+            {
+              "name": "朱红",
+              "color": "#ED5126",
+              "catalog": 0
+            },
+            {
+              "name": "榴花红",
+              "color": "#F34718",
+              "catalog": 0
+            },
+            {
+              "name": "柿红",
+              "color": "#F2481B",
+              "catalog": 0
+            },
+            {
+              "name": "大红",
+              "color": "#F04B22",
+              "catalog": 0
+            },
+            {
+              "name": "蜻蜓红",
+              "color": "#F1441D",
+              "catalog": 0
+            },
+            {
+              "name": "铁水红",
+              "color": "#F5391C",
+              "catalog": 0
+            },
+            {
+              "name": "极光红",
+              "color": "#F33B1F",
+              "catalog": 0
+            },
+            {
+              "name": "萝卜红",
+              "color": "#F13C22",
+              "catalog": 0
+            },
+            {
+              "name": "曲红",
+              "color": "#F05A46",
+              "catalog": 0
+            },
+            {
+              "name": "苹果红",
+              "color": "#F15642",
+              "catalog": 0
+            },
+            {
+              "name": "桂红",
+              "color": "#F25A47",
+              "catalog": 0
+            },
+            {
+              "name": "夕阳红",
+              "color": "#DE2A18",
+              "catalog": 0
+            },
+            {
+              "name": "樱桃红",
+              "color": "#ED3321",
+              "catalog": 0
+            },
+            {
+              "name": "珊瑚红",
+              "color": "#F04A3A",
+              "catalog": 0
+            },
+            {
+              "name": "鹤顶红",
+              "color": "#D42517",
+              "catalog": 0
+            },
+            {
+              "name": "鱼鳃红",
+              "color": "#ED3B2F",
+              "catalog": 0
+            },
+            {
+              "name": "丽春红",
+              "color": "#EB261A",
+              "catalog": 0
+            },
+            {
+              "name": "枸枢红",
+              "color": "#ED3333",
+              "catalog": 0
+            }
+          ]
+        },
+        {
+          "catalog": 1,
+          "approxName": "橙 色系",
+          "count": 6,
+          "colors": [
+            {
+              "name": "橙皮黄",
+              "color": "#FCA104",
+              "catalog": 1
+            },
+            {
+              "name": "淡橘橙",
+              "color": "#FBA414",
+              "catalog": 1
+            },
+            {
+              "name": "橘橙",
+              "color": "#F97D1C",
+              "catalog": 1
+            },
+            {
+              "name": "美人焦橙",
+              "color": "#FA7E23",
+              "catalog": 1
+            },
+            {
+              "name": "海螺橙",
+              "color": "#F0945D",
+              "catalog": 1
+            },
+            {
+              "name": "金莲花橙",
+              "color": "#F86B1D",
+              "catalog": 1
+            }
+          ]
+        },
+        {
+          "catalog": 2,
+          "approxName": "黄 色系",
+          "count": 23,
+          "colors": [
+            {
+              "name": "橄榄黄绿",
+              "color": "#BEC936",
+              "catalog": 2
+            },
+            {
+              "name": "谷黄",
+              "color": "#E8B004",
+              "catalog": 2
+            },
+            {
+              "name": "土黄",
+              "color": "#D6A01D",
+              "catalog": 2
+            },
+            {
+              "name": "虎皮黄",
+              "color": "#EAAD1A",
+              "catalog": 2
+            },
+            {
+              "name": "鸡蛋黄",
+              "color": "#FBB612",
+              "catalog": 2
+            },
+            {
+              "name": "山鸡黄",
+              "color": "#B78B26",
+              "catalog": 2
+            },
+            {
+              "name": "沙石黄",
+              "color": "#E5B751",
+              "catalog": 2
+            },
+            {
+              "name": "鹅掌黄",
+              "color": "#FBB929",
+              "catalog": 2
+            },
+            {
+              "name": "莱阳梨黄",
+              "color": "#815F25",
+              "catalog": 2
+            },
+            {
+              "name": "枇杷黄",
+              "color": "#FCA106",
+              "catalog": 2
+            },
+            {
+              "name": "金叶黄",
+              "color": "#FFA60F",
+              "catalog": 2
+            },
+            {
+              "name": "苍黄",
+              "color": "#806332",
+              "catalog": 2
+            },
+            {
+              "name": "龟背黄",
+              "color": "#826B48",
+              "catalog": 2
+            },
+            {
+              "name": "蜜黄",
+              "color": "#FBB957",
+              "catalog": 2
+            },
+            {
+              "name": "风帆黄",
+              "color": "#DC9123",
+              "catalog": 2
+            },
+            {
+              "name": "金莺黄",
+              "color": "#F4A83A",
+              "catalog": 2
+            },
+            {
+              "name": "软木黄",
+              "color": "#DE9E44",
+              "catalog": 2
+            },
+            {
+              "name": "榴萼黄",
+              "color": "#F9A633",
+              "catalog": 2
+            },
+            {
+              "name": "万寿菊黄",
+              "color": "#FB8B05",
+              "catalog": 2
+            },
+            {
+              "name": "杏黄",
+              "color": "#F28E16",
+              "catalog": 2
+            },
+            {
+              "name": "北瓜黄",
+              "color": "#FC8C23",
+              "catalog": 2
+            },
+            {
+              "name": "金黄",
+              "color": "#F26B1F",
+              "catalog": 2
+            },
+            {
+              "name": "淡土黄",
+              "color": "#8C4B31",
+              "catalog": 2
+            }
+          ]
+        },
+        {
+          "catalog": 3,
+          "approxName": "绿 色系",
+          "count": 38,
+          "colors": [
+            {
+              "name": "石绿",
+              "color": "#57C3C2",
+              "catalog": 3
+            },
+            {
+              "name": "美蝶绿",
+              "color": "#12AA9C",
+              "catalog": 3
+            },
+            {
+              "name": "蓝绿",
+              "color": "#12A182",
+              "catalog": 3
+            },
+            {
+              "name": "竹绿",
+              "color": "#1BA784",
+              "catalog": 3
+            },
+            {
+              "name": "亚丁绿",
+              "color": "#428675",
+              "catalog": 3
+            },
+            {
+              "name": "海王绿",
+              "color": "#248067",
+              "catalog": 3
+            },
+            {
+              "name": "深海绿",
+              "color": "#1A3B32",
+              "catalog": 3
+            },
+            {
+              "name": "绿灰",
+              "color": "#314A43",
+              "catalog": 3
+            },
+            {
+              "name": "青矾绿",
+              "color": "#2C9678",
+              "catalog": 3
+            },
+            {
+              "name": "苍绿",
+              "color": "#223E36",
+              "catalog": 3
+            },
+            {
+              "name": "飞泉绿",
+              "color": "#497568",
+              "catalog": 3
+            },
+            {
+              "name": "梧枝绿",
+              "color": "#69A794",
+              "catalog": 3
+            },
+            {
+              "name": "铜绿",
+              "color": "#2BAE85",
+              "catalog": 3
+            },
+            {
+              "name": "蛙绿",
+              "color": "#45B787",
+              "catalog": 3
+            },
+            {
+              "name": "浪花绿",
+              "color": "#92B3A5",
+              "catalog": 3
+            },
+            {
+              "name": "麦苗绿",
+              "color": "#55BB8A",
+              "catalog": 3
+            },
+            {
+              "name": "翠绿",
+              "color": "#20A162",
+              "catalog": 3
+            },
+            {
+              "name": "葱绿",
+              "color": "#40A070",
+              "catalog": 3
+            },
+            {
+              "name": "荷叶绿",
+              "color": "#1A6840",
+              "catalog": 3
+            },
+            {
+              "name": "淡绿",
+              "color": "#61AC85",
+              "catalog": 3
+            },
+            {
+              "name": "蟾绿",
+              "color": "#3C9566",
+              "catalog": 3
+            },
+            {
+              "name": "薄荷绿",
+              "color": "#207F4C",
+              "catalog": 3
+            },
+            {
+              "name": "孔雀绿",
+              "color": "#229453",
+              "catalog": 3
+            },
+            {
+              "name": "宫殿绿",
+              "color": "#20894D",
+              "catalog": 3
+            },
+            {
+              "name": "云杉绿",
+              "color": "#15231B",
+              "catalog": 3
+            },
+            {
+              "name": "白屈菜绿",
+              "color": "#485B4D",
+              "catalog": 3
+            },
+            {
+              "name": "玉髓绿",
+              "color": "#41B349",
+              "catalog": 3
+            },
+            {
+              "name": "鲜绿",
+              "color": "#43B244",
+              "catalog": 3
+            },
+            {
+              "name": "油绿",
+              "color": "#253D24",
+              "catalog": 3
+            },
+            {
+              "name": "水绿",
+              "color": "#8CC269",
+              "catalog": 3
+            },
+            {
+              "name": "鹦鹉绿",
+              "color": "#5BAE23",
+              "catalog": 3
+            },
+            {
+              "name": "芽绿",
+              "color": "#96C24E",
+              "catalog": 3
+            },
+            {
+              "name": "碧螺春绿",
+              "color": "#867018",
+              "catalog": 3
+            },
+            {
+              "name": "草灰绿",
+              "color": "#8E804B",
+              "catalog": 3
+            },
+            {
+              "name": "枯绿",
+              "color": "#B78D12",
+              "catalog": 3
+            },
+            {
+              "name": "蜴蜊绿",
+              "color": "#835E1D",
+              "catalog": 3
+            },
+            {
+              "name": "古铜绿",
+              "color": "#533C1B",
+              "catalog": 3
+            },
+            {
+              "name": "焦茶绿",
+              "color": "#553B18",
+              "catalog": 3
+            }
+          ]
+        },
+        {
+          "catalog": 4,
+          "approxName": "青/靛 色系",
+          "count": 9,
+          "colors": [
+            {
+              "name": "青蛤壳紫",
+              "color": "#BC84A8",
+              "catalog": 4
+            },
+            {
+              "name": "青莲",
+              "color": "#8B2671",
+              "catalog": 4
+            },
+            {
+              "name": "青灰",
+              "color": "#2B333E",
+              "catalog": 4
+            },
+            {
+              "name": "钢青",
+              "color": "#142334",
+              "catalog": 4
+            },
+            {
+              "name": "靛青",
+              "color": "#1661AB",
+              "catalog": 4
+            },
+            {
+              "name": "花青",
+              "color": "#2376B7",
+              "catalog": 4
+            },
+            {
+              "name": "群青",
+              "color": "#1772B4",
+              "catalog": 4
+            },
+            {
+              "name": "海青",
+              "color": "#22A2C3",
+              "catalog": 4
+            },
+            {
+              "name": "鲛青",
+              "color": "#87723E",
+              "catalog": 4
+            }
+          ]
+        },
+        {
+          "catalog": 5,
+          "approxName": "蓝 色系",
+          "count": 31,
+          "colors": [
+            {
+              "name": "淡蓝紫",
+              "color": "#A7A8BD",
+              "catalog": 5
+            },
+            {
+              "name": "燕颔蓝",
+              "color": "#131824",
+              "catalog": 5
+            },
+            {
+              "name": "暗蓝",
+              "color": "#101F30",
+              "catalog": 5
+            },
+            {
+              "name": "海涛蓝",
+              "color": "#15559A",
+              "catalog": 5
+            },
+            {
+              "name": "飞燕草蓝",
+              "color": "#0F59A4",
+              "catalog": 5
+            },
+            {
+              "name": "安安蓝",
+              "color": "#3170A7",
+              "catalog": 5
+            },
+            {
+              "name": "海军蓝",
+              "color": "#346C9C",
+              "catalog": 5
+            },
+            {
+              "name": "景泰蓝",
+              "color": "#2775B6",
+              "catalog": 5
+            },
+            {
+              "name": "品蓝",
+              "color": "#2B73AF",
+              "catalog": 5
+            },
+            {
+              "name": "尼罗蓝",
+              "color": "#2474B5",
+              "catalog": 5
+            },
+            {
+              "name": "鷃蓝",
+              "color": "#144A74",
+              "catalog": 5
+            },
+            {
+              "name": "虹蓝",
+              "color": "#2177B8",
+              "catalog": 5
+            },
+            {
+              "name": "羽扇豆蓝",
+              "color": "#619AC3",
+              "catalog": 5
+            },
+            {
+              "name": "搪磁蓝",
+              "color": "#11659A",
+              "catalog": 5
+            },
+            {
+              "name": "潮蓝",
+              "color": "#2983BB",
+              "catalog": 5
+            },
+            {
+              "name": "天蓝",
+              "color": "#1677B3",
+              "catalog": 5
+            },
+            {
+              "name": "牵牛花蓝",
+              "color": "#1177B0",
+              "catalog": 5
+            },
+            {
+              "name": "淡蓝灰",
+              "color": "#5E7987",
+              "catalog": 5
+            },
+            {
+              "name": "釉蓝",
+              "color": "#1781B5",
+              "catalog": 5
+            },
+            {
+              "name": "云山蓝",
+              "color": "#2F90B9",
+              "catalog": 5
+            },
+            {
+              "name": "鸢尾蓝",
+              "color": "#158BB8",
+              "catalog": 5
+            },
+            {
+              "name": "钴蓝",
+              "color": "#1A94BC",
+              "catalog": 5
+            },
+            {
+              "name": "苍蓝",
+              "color": "#134857",
+              "catalog": 5
+            },
+            {
+              "name": "玉鈫蓝",
+              "color": "#126E82",
+              "catalog": 5
+            },
+            {
+              "name": "胆矾蓝",
+              "color": "#0F95B0",
+              "catalog": 5
+            },
+            {
+              "name": "樫鸟蓝",
+              "color": "#1491A8",
+              "catalog": 5
+            },
+            {
+              "name": "翠蓝",
+              "color": "#1E9EB3",
+              "catalog": 5
+            },
+            {
+              "name": "蜻蜓蓝",
+              "color": "#3B818C",
+              "catalog": 5
+            },
+            {
+              "name": "闪蓝",
+              "color": "#7CABB1",
+              "catalog": 5
+            },
+            {
+              "name": "甸子蓝",
+              "color": "#10AEC2",
+              "catalog": 5
+            },
+            {
+              "name": "晚波蓝",
+              "color": "#648E93",
+              "catalog": 5
+            }
+          ]
+        },
+        {
+          "catalog": 6,
+          "approxName": "紫 色系",
+          "count": 38,
+          "colors": [
+            {
+              "name": "暗玉紫",
+              "color": "#5C2223",
+              "catalog": 6
+            },
+            {
+              "name": "栗紫",
+              "color": "#5A191B",
+              "catalog": 6
+            },
+            {
+              "name": "葡萄紫",
+              "color": "#4C1F24",
+              "catalog": 6
+            },
+            {
+              "name": "茄皮紫",
+              "color": "#2D0C13",
+              "catalog": 6
+            },
+            {
+              "name": "卵石紫",
+              "color": "#30161C",
+              "catalog": 6
+            },
+            {
+              "name": "火鹅紫",
+              "color": "#33141E",
+              "catalog": 6
+            },
+            {
+              "name": "磨石紫",
+              "color": "#382129",
+              "catalog": 6
+            },
+            {
+              "name": "墨紫",
+              "color": "#310F1B",
+              "catalog": 6
+            },
+            {
+              "name": "檀紫",
+              "color": "#381924",
+              "catalog": 6
+            },
+            {
+              "name": "洋葱紫",
+              "color": "#A8456B",
+              "catalog": 6
+            },
+            {
+              "name": "绀紫",
+              "color": "#461629",
+              "catalog": 6
+            },
+            {
+              "name": "古铜紫",
+              "color": "#440E25",
+              "catalog": 6
+            },
+            {
+              "name": "樱草紫",
+              "color": "#C06F98",
+              "catalog": 6
+            },
+            {
+              "name": "玫瑰紫",
+              "color": "#BA2F7B",
+              "catalog": 6
+            },
+            {
+              "name": "苋菜紫",
+              "color": "#9B1E64",
+              "catalog": 6
+            },
+            {
+              "name": "紫灰",
+              "color": "#5D3F51",
+              "catalog": 6
+            },
+            {
+              "name": "荸荠紫",
+              "color": "#411C35",
+              "catalog": 6
+            },
+            {
+              "name": "豆蔻紫",
+              "color": "#AD6598",
+              "catalog": 6
+            },
+            {
+              "name": "扁豆紫",
+              "color": "#A35C8F",
+              "catalog": 6
+            },
+            {
+              "name": "牵牛紫",
+              "color": "#681752",
+              "catalog": 6
+            },
+            {
+              "name": "芓紫",
+              "color": "#894276",
+              "catalog": 6
+            },
+            {
+              "name": "葛巾紫",
+              "color": "#7E2065",
+              "catalog": 6
+            },
+            {
+              "name": "芥花紫",
+              "color": "#983680",
+              "catalog": 6
+            },
+            {
+              "name": "魏紫",
+              "color": "#7E1671",
+              "catalog": 6
+            },
+            {
+              "name": "桔梗紫",
+              "color": "#813C85",
+              "catalog": 6
+            },
+            {
+              "name": "剑锋紫",
+              "color": "#3E3841",
+              "catalog": 6
+            },
+            {
+              "name": "蕈紫",
+              "color": "#815C94",
+              "catalog": 6
+            },
+            {
+              "name": "槿紫",
+              "color": "#806D9E",
+              "catalog": 6
+            },
+            {
+              "name": "龙葵紫",
+              "color": "#322F3B",
+              "catalog": 6
+            },
+            {
+              "name": "藤萝紫",
+              "color": "#8076A3",
+              "catalog": 6
+            },
+            {
+              "name": "暗龙胆紫",
+              "color": "#22202E",
+              "catalog": 6
+            },
+            {
+              "name": "野葡萄紫",
+              "color": "#302F4B",
+              "catalog": 6
+            },
+            {
+              "name": "野菊紫",
+              "color": "#525288",
+              "catalog": 6
+            },
+            {
+              "name": "螺甸紫",
+              "color": "#74759B",
+              "catalog": 6
+            },
+            {
+              "name": "晶石紫",
+              "color": "#1F2040",
+              "catalog": 6
+            },
+            {
+              "name": "满天星紫",
+              "color": "#2E317C",
+              "catalog": 6
+            },
+            {
+              "name": "山梗紫",
+              "color": "#61649F",
+              "catalog": 6
+            },
+            {
+              "name": "貂紫",
+              "color": "#5D3131",
+              "catalog": 6
+            }
+          ]
+        },
+        {
+          "catalog": 7,
+          "approxName": "灰/褐 色系",
+          "count": 34,
+          "colors": [
+            {
+              "name": "锌灰",
+              "color": "#7A7374",
+              "catalog": 7
+            },
+            {
+              "name": "鼠背灰",
+              "color": "#73575C",
+              "catalog": 7
+            },
+            {
+              "name": "芦灰",
+              "color": "#856D72",
+              "catalog": 7
+            },
+            {
+              "name": "苍蝇灰",
+              "color": "#36282B",
+              "catalog": 7
+            },
+            {
+              "name": "斑鸠灰",
+              "color": "#482936",
+              "catalog": 7
+            },
+            {
+              "name": "古鼎灰",
+              "color": "#36292F",
+              "catalog": 7
+            },
+            {
+              "name": "沙鱼灰",
+              "color": "#35333C",
+              "catalog": 7
+            },
+            {
+              "name": "水牛灰",
+              "color": "#2F2F35",
+              "catalog": 7
+            },
+            {
+              "name": "牛角灰",
+              "color": "#2D2E36",
+              "catalog": 7
+            },
+            {
+              "name": "鱼尾灰",
+              "color": "#5E616D",
+              "catalog": 7
+            },
+            {
+              "name": "瓦罐灰",
+              "color": "#47484C",
+              "catalog": 7
+            },
+            {
+              "name": "鲸鱼灰",
+              "color": "#475164",
+              "catalog": 7
+            },
+            {
+              "name": "战舰灰",
+              "color": "#495C69",
+              "catalog": 7
+            },
+            {
+              "name": "垩灰",
+              "color": "#737C7B",
+              "catalog": 7
+            },
+            {
+              "name": "明灰",
+              "color": "#8A988E",
+              "catalog": 7
+            },
+            {
+              "name": "狼烟灰",
+              "color": "#5D655F",
+              "catalog": 7
+            },
+            {
+              "name": "月灰",
+              "color": "#B7AE8F",
+              "catalog": 7
+            },
+            {
+              "name": "银鼠灰",
+              "color": "#B5AA90",
+              "catalog": 7
+            },
+            {
+              "name": "蟹壳灰",
+              "color": "#695E45",
+              "catalog": 7
+            },
+            {
+              "name": "燕羽灰",
+              "color": "#685E48",
+              "catalog": 7
+            },
+            {
+              "name": "河豚灰",
+              "color": "#393733",
+              "catalog": 7
+            },
+            {
+              "name": "猴毛灰",
+              "color": "#97846C",
+              "catalog": 7
+            },
+            {
+              "name": "橄榄灰",
+              "color": "#503E2A",
+              "catalog": 7
+            },
+            {
+              "name": "鹤灰",
+              "color": "#4A4035",
+              "catalog": 7
+            },
+            {
+              "name": "夜灰",
+              "color": "#847C74",
+              "catalog": 7
+            },
+            {
+              "name": "松鼠灰",
+              "color": "#4F4032",
+              "catalog": 7
+            },
+            {
+              "name": "深灰",
+              "color": "#81776E",
+              "catalog": 7
+            },
+            {
+              "name": "雁灰",
+              "color": "#80766E",
+              "catalog": 7
+            },
+            {
+              "name": "长石灰",
+              "color": "#363433",
+              "catalog": 7
+            },
+            {
+              "name": "中灰驼",
+              "color": "#603D30",
+              "catalog": 7
+            },
+            {
+              "name": "淡铁灰",
+              "color": "#5B423A",
+              "catalog": 7
+            },
+            {
+              "name": "石板灰",
+              "color": "#624941",
+              "catalog": 7
+            },
+            {
+              "name": "海报灰",
+              "color": "#483332",
+              "catalog": 7
+            },
+            {
+              "name": "玫瑰灰",
+              "color": "#4B2E2B",
+              "catalog": 7
+            }
+          ]
+        }
+      ],
+      "pickerComposable": "FormItemKt.ShowColorPickerView",
+      "pickerEvidence": "jadx-src/sources/cn/jianyun/workplan/ui/component/form/FormItemKt.java (ShowColorPickerView 读取 assets/data/color.json; ColorSelectItemView 调用方: WidgetConfigViewKt.java:422-704, SchduleWorkEditViewKt.java:724)"
+    },
+    "themeModes": {
+      "options": [
+        {
+          "label": "亮白主题",
+          "value": "light"
+        },
+        {
+          "label": "暗黑主题",
+          "value": "dark"
+        },
+        {
+          "label": "追随系统",
+          "value": "auto"
+        }
+      ],
+      "evidence": "jadx-src/sources/cn/jianyun/workplan/util/SelectUtil.java:46 (THEMES)"
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "ui": "系统默认字体 (FontFamily.Default)",
+      "evidence": "jadx-src/sources/cn/jianyun/workplan/ui/theme/TypeKt.java:35",
+      "icon": "remixicon"
+    },
+    "material3Overrides": {
+      "bodyLarge": {
+        "fontSize": "16sp",
+        "fontWeight": "Normal(400)",
+        "lineHeight": "24sp",
+        "letterSpacing": "0.5sp",
+        "evidence": "jadx-src/sources/cn/jianyun/workplan/ui/theme/TypeKt.java:36 (bodyLarge = TextStyle(fontSize=16sp, fontWeight=Normal, fontFamily=FontFamily.Default, letterSpacing=0.5sp, lineHeight=24sp))"
+      }
+    },
+    "observedFontSizesSp": {
+      "12.0": 413,
+      "13.0": 296,
+      "15.0": 292,
+      "11.0": 133,
+      "14.0": 119,
+      "20.0": 104,
+      "16.0": 87,
+      "10.0": 78,
+      "30.0": 16,
+      "18.0": 12,
+      "22.0": 11,
+      "26.0": 8,
+      "8.0": 8,
+      "6.0": 7,
+      "32.0": 6,
+      "28.0": 6,
+      "80.0": 3,
+      "25.0": 1,
+      "35.0": 1,
+      "0.5": 1
+    },
+    "observedFontWeights": {
+      "Medium": 160,
+      "Normal": 80,
+      "Bold": 75
+    },
+    "note": "字号分布来自 App 代码中 TextUnitKt.getSp(N) 的字面量统计; 12/13/15sp 为最常用正文尺寸, 20sp 常用于标题。",
+    "widgetTextSizes": {
+      "date": "17sp",
+      "work": "11sp",
+      "time": "11sp",
+      "source": "WidgetConfig.dateFontSize/workFontSize/timeFontSize 默认值"
+    }
+  },
+  "radius": {
+    "observedDp": {
+      "12.0": 149,
+      "20.0": 81,
+      "10.0": 63,
+      "4.0": 62,
+      "6.0": 1,
+      "28.0": 1
+    },
+    "tokens": {
+      "xs": 4,
+      "sm": 6,
+      "md": 10,
+      "lg": 12,
+      "xl": 20,
+      "pill": 30
+    },
+    "note": "最常见的 Compose RoundedCornerShape: 12dp(149次)、20dp(81次)、10dp(63次)、4dp(62次)。6dp 用于小组件日期格边框(widget_today.xml corners=6dp)。30dp 仅见于三方库 shape, 不纳入 App 令牌。",
+    "evidence": "统计自 jadx-src/sources/cn/jianyun/** 中 RoundedCornerShape0680j_4(Dp...) 字面量"
+  },
+  "spacing": {
+    "unit": 4,
+    "scale": [
+      2,
+      4,
+      5,
+      6,
+      8,
+      10,
+      12,
+      15,
+      16,
+      20,
+      24,
+      30,
+      40,
+      50
+    ],
+    "observedDpAll": {
+      "0.0": 973,
+      "10.0": 871,
+      "5.0": 472,
+      "50.0": 307,
+      "2.0": 283,
+      "12.0": 223,
+      "1.0": 221,
+      "4.0": 218,
+      "30.0": 199,
+      "40.0": 185,
+      "8.0": 154,
+      "500.0": 142,
+      "3.0": 131,
+      "20.0": 125,
+      "15.0": 74,
+      "6.0": 61,
+      "80.0": 49,
+      "60.0": 45,
+      "38.0": 38,
+      "25.0": 34,
+      "200.0": 27,
+      "35.0": 23,
+      "16.0": 22,
+      "100.0": 22,
+      "48.0": 21
+    },
+    "observedPaddingDp": {
+      "5.0": 175,
+      "2.0": 157,
+      "10.0": 141,
+      "0.0": 123,
+      "8.0": 67,
+      "1.0": 63,
+      "12.0": 38,
+      "38.0": 37,
+      "4.0": 19,
+      "3.0": 18,
+      "20.0": 16,
+      "6.0": 12,
+      "80.0": 12,
+      "22.0": 7,
+      "18.0": 3
+    },
+    "observedSizeDp": {
+      "50.0": 215,
+      "40.0": 68,
+      "0.0": 62,
+      "12.0": 32,
+      "38.0": 31,
+      "200.0": 27,
+      "48.0": 18,
+      "22.0": 7,
+      "250.0": 4,
+      "300.0": 3,
+      "8.0": 3,
+      "90.0": 3,
+      "1.0": 3,
+      "6.0": 2,
+      "500.0": 2
+    },
+    "note": "统计自 App 代码中 Dp 字面量(含非间距用途); padding 高频值 10/5/12/4/8 可视为间距档位, 组件间常用 10dp、卡片内 12dp。",
+    "evidence": "jadx-src/sources/cn/jianyun/** 中 Dp.m6097constructorimpl(N) 统计",
+    "paddingSample": {
+      "note": "PaddingKt.*(Dp...) 近似统计(部分调用跨行未计入)",
+      "total": 901
+    }
+  },
+  "shadows": {
+    "note": "未发现自定义 shadow/elevation 常量; 使用 Material3 默认 elevation。小组件使用 RemoteViews 形状背景(圆角、描边), 阴影由启动器决定。"
+  },
+  "fonts": [
+    {
+      "name": "system",
+      "file": null,
+      "usage": "全部文本",
+      "evidence": "TypeKt.java:35 FontFamily.Default"
+    },
+    {
+      "name": "remixicon",
+      "file": "assets_extracted/fonts/remixicon.ttf",
+      "css": "assets_extracted/fonts/icon-font.css",
+      "map": "assets_extracted/fonts/icon-map.json",
+      "version": "Remix Icon v4.3 subset (87 codepoints)",
+      "usage": "全部图标 (IconView)",
+      "evidence": "TypeKt.java:37 R.font.remixicon; decoded/res/font/remixicon.ttf"
+    }
+  ],
+  "icons": {
+    "family": "remixicon",
+    "constantsCount": 79,
+    "uniqueCodepoints": 76,
+    "source": "jadx-src/sources/cn/jianyun/workplan/ui/component/nav/IconFont.java",
+    "css": "assets_extracted/fonts/icon-font.css",
+    "map": "assets_extracted/fonts/icon-map.json",
+    "sheet": "assets_extracted/fonts/icon-sheet.html",
+    "aliases": {
+      "apps": "catalog (同码点 0xEA42)",
+      "box_none": "product (同码点 0xF3A7)",
+      "list": "list_indefinite (同码点 0xF379)"
+    },
+    "notInIconFontButInFont": [
+      "U+EA0F add-box-line",
+      "U+EA48 archive-line",
+      "U+EB7F checkbox-blank-line",
+      "U+EB9F cloud-off-line",
+      "U+EF76 more-2-fill",
+      "U+F009 play-circle-line",
+      "U+F011 play-list-line",
+      "U+F3A1 prohibited-line",
+      "U+F3A9 inbox-2-line",
+      "U+F40B flower-line",
+      "U+F4DF function-add-line"
+    ],
+    "fontCmapCodepoints": 87,
+    "missingGlyphs": []
+  },
+  "assets": {
+    "root": "assets_extracted/",
+    "referenceConvention": "原型位于 prototype/ 目录时引用../assets_extracted/<category>/<file>; 位于仓库根时引用 assets_extracted/<category>/<file>",
+    "appIcon": "assets_extracted/app-icon/",
+    "widget": "assets_extracted/widget/",
+    "cloud": "assets_extracted/cloud/",
+    "layouts": "assets_extracted/layouts/",
+    "palette": "assets_extracted/palette/color.json",
+    "fonts": "assets_extracted/fonts/",
+    "manifest": "assets_extracted/manifest.md"
+  },
+  "evidence": {
+    "negativeFindings": [
+      "ColorKt 的 8 个 setter(m69xxsetLight/Dark*) 在 jadx-src 全工程中无调用方 — 推断: 3.5.0 中主题强调色固定为 ThemeColor, 运行时改主题色能力未接线/为遗留代码。",
+      "res/values/colors.xml 中无 App 主色; 主色全部在 Kotlin ColorKt.java。",
+      "drawable/minilogo.xml 是空 selector (原 APK 即如此), 即启动屏图标资源为空。",
+      "No 9-patch app assets found."
+    ],
+    "themeWiring": [
+      "AndroidManifest.xml:56 application android:theme=@style/Theme.App.Starting",
+      "decoded/res/values/styles.xml:2249-2254 Theme.App.Starting → postSplashScreenTheme=Theme.Subject_segmentation_compose, windowSplashScreenAnimatedIcon=@drawable/minilogo, windowSplashScreenBackground=@color/screen",
+      "decoded/res/values/styles.xml:2432 Theme.Subject_segmentation_compose parent Theme.AppCompat.Light.DarkActionBar (夜间: values-night/styles.xml:27 parent Theme.AppCompat.DayNight.DarkActionBar)",
+      "MainActivityKt.java / ThemeKt.java: Compose WorkplanTheme(darkTheme, dynamicColor) → MaterialTheme(colorScheme, typography)"
+    ]
+  }
+}

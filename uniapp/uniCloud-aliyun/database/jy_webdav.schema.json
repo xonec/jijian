@@ -1,0 +1,57 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_webdav",
+  "description": "WebDAV 云备份账号",
+  "fields": {
+    "user_id": {
+      "bsonType": "string",
+      "title": "所属用户"
+    },
+    "deviceId": {
+      "bsonType": "string",
+      "title": "设备ID"
+    },
+    "platform": {
+      "bsonType": "string",
+      "title": "jianguoyun/koofr/onedrive/googledrive/custom"
+    },
+    "name": {
+      "bsonType": "string",
+      "title": "账号备注名"
+    },
+    "baseUrl": {
+      "bsonType": "string",
+      "title": "WebDAV 地址"
+    },
+    "username": {
+      "bsonType": "string",
+      "title": "账号"
+    },
+    "password": {
+      "bsonType": "string",
+      "title": "应用密码（云端加密存储）"
+    },
+    "path": {
+      "bsonType": "string",
+      "title": "根路径"
+    },
+    "status": {
+      "bsonType": "string",
+      "title": "connected/disconnected"
+    },
+    "last_check": {
+      "bsonType": "timestamp",
+      "title": "最后检测时间"
+    },
+    "created_at": {
+      "bsonType": "timestamp",
+      "title": "创建时间"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "mock": true,
+  "plans": [
+    {
+      "id": "month",
+      "price": 3,
+      "unit": "每月",
+      "note": "每天1毛钱",
+      "days": 30
+    },
+    {
+      "id": "year",
+      "price": 12,
+      "unit": "每年",
+      "note": "每天3.3分钱",
+      "days": 365,
+      "best": true
+    },
+    {
+      "id": "forever",
+      "price": 18,
+      "unit": "永久",
+      "note": "一次性买断",
+      "days": 36500
+    }
+  ],
+  "rights": [
+    {
+      "icon": "lightbulb_flash",
+      "title": "支持开发",
+      "desc": "促使开发者砥砺前行，呈现更优质的App功能"
+    },
+    {
+      "icon": "user",
+      "title": "专属客服",
+      "desc": "会员用户优先响应"
+    },
+    {
+      "icon": "vip",
+      "title": "会员标识",
+      "desc": "个人主页展示会员徽章"
+    }
+  ],
+  "alipay": {
+    "appId": "",
+    "privateKey": "",
+    "alipayPublicKey": "",
+    "notifyUrl": "",
+    "gateway": "https://openapi.alipay.com/gateway.do"
+  }
+}

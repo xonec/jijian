@@ -1,0 +1,75 @@
+/* ============================================================
+   极简排班 3.5.0 — Design Tokens
+   来源: APK 反编译 cn.jianyun.workplan
+   - 颜色: ui/theme/ColorKt.java (Compose Color(0xFF...)) + ThemeKt.java (Material3 ColorScheme)
+   - 排版: ui/theme/TypeKt.java (仅覆盖 bodyLarge = 16sp/Normal/lineHeight 24sp；字体=系统默认)
+   - 图标: ui/theme/TypeKt.java remixicon + ui/component/nav/IconFont.java 码点表
+   - 主题色: 可换肤，默认 #55BB8A；预设 230 色见 assets/data/color.json
+   ============================================================ */
+:root {
+  --font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+          "Noto Sans SC", "Source Han Sans SC", "Microsoft YaHei", sans-serif;
+
+  /* 品牌/语义色（亮色方案常量） */
+  --theme-color: #55BB8A;   /* ThemeColor 固定品牌绿 */
+  --primary: #55BB8A;       /* 默认主色（可被用户主题色覆盖） */
+  --delete: #F87679;
+  --important: #EE3F4D;
+  --vip: #C5A874;
+  --private: #806D9E;
+  --link: #1974E8;
+
+  /* 班次示例色（来自官方商店截图采样，用户可自定义） */
+  --shift-early: #1BA784;
+  --shift-late: #303048;
+  --shift-rest: #F8723D;
+
+  /* 圆角 */
+  --r-card: 12px;
+  --r-btn: 12px;
+  --r-sheet: 16px;
+  --r-badge: 4px;
+  --r-pill: 999px;
+
+  /* 布局 */
+  --header-h: 48px;
+  --tabbar-h: 56px;
+  --safe-bottom: 22px;
+  --statusbar-h: 44px;
+  --page-x: 12px;
+
+  /* 字号（与 Compose sp 对齐） */
+  --fs-title: 17px;
+  --fs-body: 16px;   /* bodyLarge */
+  --fs-label: 14px;
+  --fs-small: 12px;
+  --fs-tiny: 10px;
+}
+
+/* 亮色：background=LightBg #F6F5F4 / surface=LightBg0 #FDFDFD / surfaceVariant=LightSelect #EEEEEE */
+:root[data-theme="light"] {
+  --bg: #F6F5F4;
+  --surface: #FDFDFD;
+  --surface-2: #EEEEEE;
+  --text-1: #000000;
+  --text-2: #222222;
+  --text-3: #999999;
+  --line: #E5E5E5;   /* ColorKt/colorDivider #FFE5E5E5 */
+  --scrim: rgba(0, 0, 0, 0.35);
+  --tip-bg: #FDFDFD;
+  --badge-text: #FFFFFF;
+}
+
+/* 暗色：background=DarkBg0 #111111 / surface=DarkBg #191919 / surfaceVariant=DarkSelect #222222 */
+:root[data-theme="dark"] {
+  --bg: #111111;
+  --surface: #191919;
+  --surface-2: #222222;
+  --text-1: #FFFFFF;
+  --text-2: #DDDDDD;
+  --text-3: #888888;
+  --line: rgba(255, 255, 255, 0.06);
+  --scrim: rgba(0, 0, 0, 0.6);
+  --tip-bg: #191919;
+  --badge-text: #FFFFFF;
+}

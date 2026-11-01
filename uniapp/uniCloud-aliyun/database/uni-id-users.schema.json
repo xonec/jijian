@@ -1,0 +1,86 @@
+{
+  "bsType": "collection",
+  "collectionName": "uni-id-users",
+  "description": "uni-id 用户表（仅云函数访问；字段与官方 uni-id 兼容）",
+  "fields": {
+    "username": {
+      "bsonType": "string",
+      "title": "用户名/手机号/邮箱"
+    },
+    "password": {
+      "bsonType": "string",
+      "title": "密码哈希（pbkdf2:sha256$salt$hash）"
+    },
+    "nickname": {
+      "bsonType": "string",
+      "title": "昵称"
+    },
+    "avatar": {
+      "bsonType": "string",
+      "title": "头像"
+    },
+    "status": {
+      "bsonType": "int",
+      "title": "0正常/1封禁/2审核中"
+    },
+    "role": {
+      "bsonType": "array",
+      "title": "角色",
+      "arrayType": "string"
+    },
+    "permission": {
+      "bsonType": "array",
+      "title": "权限",
+      "arrayType": "string"
+    },
+    "token": {
+      "bsonType": "array",
+      "title": "token 列表（单设备限制）",
+      "arrayType": "string"
+    },
+    "valid_token_date": {
+      "bsonType": "timestamp",
+      "title": "签发时间早于此值的 token 失效"
+    },
+    "register_date": {
+      "bsonType": "timestamp",
+      "title": "注册时间"
+    },
+    "last_login_date": {
+      "bsonType": "timestamp",
+      "title": "最后登录时间"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  },
+  "indexes": [
+    {
+      "IndexName": "uk_username",
+      "MgoKeySchema": {
+        "MgoIndexKeys": [
+          {
+            "Name": "username",
+            "Direction": "1"
+          }
+        ],
+        "MgoIsUnique": true
+      }
+    },
+    {
+      "IndexName": "idx_valid_token_date",
+      "MgoKeySchema": {
+        "MgoIndexKeys": [
+          {
+            "Name": "valid_token_date",
+            "Direction": "1"
+          }
+        ],
+        "MgoIsUnique": false
+      }
+    }
+  ]
+}

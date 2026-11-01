@@ -1,0 +1,541 @@
+[
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.timetable.widget.AppWidgetView"
+    },
+    "out": "xrefs-verify/cn.jianyun.timetable.widget.AppWidgetView.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.main.MainActivity"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.main.MainActivity.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.main.MainActivityKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.main.MainActivityKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.main.MainViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.main.MainViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.main.Router"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.main.Router.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.main.question.QuestionViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.main.question.QuestionViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.main.setting.cloud.jgy.JgyBindViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.main.setting.cloud.jgy.JgyBindViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.main.setting.local.LocalBackupViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.main.setting.local.LocalBackupViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.main.setting.notify.NotifySettingViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.main.setting.notify.NotifySettingViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.main.setting.user.UserDetailViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.main.setting.user.UserDetailViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.main.setting.vip.VipViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.main.setting.vip.VipViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.main.test.TestMainViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.main.test.TestMainViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.base.views.cloud.CommonCloudViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.base.views.cloud.CommonCloudViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.base.views.webdav.WebDAVUserDocViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.base.views.webdav.WebDAVUserDocViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.base.views.webdav.WebDAVUserEditViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.base.views.webdav.WebDAVUserEditViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.base.views.webdav.WebDAVUserManageViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.base.views.webdav.WebDAVUserManageViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.base.views.webdav.WebDavDataViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.base.views.webdav.WebDavDataViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.ScheduleMainViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.schedule.views.ScheduleMainViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.alarm.ScheduleAlarmEditViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.schedule.views.alarm.ScheduleAlarmEditViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.alarm.ScheduleAlarmManageViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.schedule.views.alarm.ScheduleAlarmManageViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.biz.ScheduleCalendarViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.schedule.views.biz.ScheduleCalendarViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.cloud.ScheduleCloudManageViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.schedule.views.cloud.ScheduleCloudManageViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.cloud.ScheduleCloudRecoveryViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.schedule.views.cloud.ScheduleCloudRecoveryViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.config.ScheduleConfigViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.schedule.views.config.ScheduleConfigViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.main.BottomProjectChooseViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.schedule.views.main.BottomProjectChooseViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.main.ScheduleHomeViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.schedule.views.main.ScheduleHomeViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.main.ScheduleOperViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.schedule.views.main.ScheduleOperViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.plan.PlanItemViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.schedule.views.plan.PlanItemViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.plan.SchdulePlanEditViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.schedule.views.plan.SchdulePlanEditViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.plan.SchedulePlanManageViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.schedule.views.plan.SchedulePlanManageViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.project.ScheduleProjectManagerViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.schedule.views.project.ScheduleProjectManagerViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.setting.ScheduleSettingViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.schedule.views.setting.ScheduleSettingViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.share.ScheduleShareViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.schedule.views.share.ScheduleShareViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.stat.ScheduleStatViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.schedule.views.stat.ScheduleStatViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.wechat.WechatViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.schedule.views.wechat.WechatViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.work.SchduleWorkEditViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.schedule.views.work.SchduleWorkEditViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.work.ScheduleWorkManageViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.schedule.views.work.ScheduleWorkManageViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.work.WorkItemViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.module.schedule.views.work.WorkItemViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.plugin.razerdp.widget.animatedpieview.AnimatedPieView"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.plugin.razerdp.widget.animatedpieview.AnimatedPieView.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.plugin.razerdp.widget.animatedpieview.BasePieLegendsView"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.plugin.razerdp.widget.animatedpieview.BasePieLegendsView.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.plugin.razerdp.widget.animatedpieview.DefaultCirclePieLegendsView"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.plugin.razerdp.widget.animatedpieview.DefaultCirclePieLegendsView.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.plugin.razerdp.widget.animatedpieview.DefaultPieLegendsView"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.plugin.razerdp.widget.animatedpieview.DefaultPieLegendsView.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.plugin.razerdp.widget.animatedpieview.IPieView"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.plugin.razerdp.widget.animatedpieview.IPieView.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.android.lunar.GregorianLunarCalendarView"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.android.lunar.GregorianLunarCalendarView.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.android.lunar.NumberPickerView"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.android.lunar.NumberPickerView.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.component.bottomdialog.BottomSheetDialogViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.component.bottomdialog.BottomSheetDialogViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.component.form.ButtonViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.component.form.ButtonViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.component.form.DialogViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.component.form.DialogViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.component.form.GroupViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.component.form.GroupViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.component.nav.BoxViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.component.nav.BoxViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.component.nav.HeaderViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.component.nav.HeaderViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.component.nav.IconViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.component.nav.IconViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.component.nav.MonthChooseViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.component.nav.MonthChooseViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.component.nav.NavItemViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.component.nav.NavItemViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.component.nav.PanelViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.component.nav.PanelViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.component.nav.PartTitleViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.component.nav.PartTitleViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.component.nav.SecretCheckViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.component.nav.SecretCheckViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.component.nav.SwipeRowViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.component.nav.SwipeRowViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.component.sort.TestSortViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.component.sort.TestSortViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.graph.GraphBarViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.graph.GraphBarViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.graph.GraphLineViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.graph.GraphLineViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.graph.GroupBarViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.graph.GroupBarViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.graph.GroupLineViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.graph.GroupLineViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.graph.test.Bar2ViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.graph.test.Bar2ViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.graph.test.Bar3ViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.graph.test.Bar3ViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.graph.test.Bar4ViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.graph.test.Bar4ViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.graph.test.Bar5ViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.graph.test.Bar5ViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.graph.test.Bar6ViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.graph.test.Bar6ViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.graph.test.Bar7ViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.graph.test.Bar7ViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.graph.test.Bar8ViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.graph.test.Bar8ViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.graph.test.Bar9ViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.graph.test.Bar9ViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.graph.test.BarTestViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.ui.graph.test.BarTestViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.widget.calendar.WidgetCalendarBodyViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.widget.calendar.WidgetCalendarBodyViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.widget.calendar.WidgetCalendarHeaderViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.widget.calendar.WidgetCalendarHeaderViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.widget.calendar.WidgetCalendarViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.widget.calendar.WidgetCalendarViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.widget.calendar.WidgetWorkItemViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.widget.calendar.WidgetWorkItemViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.widget.config.WidgetConfigViewKt"
+    },
+    "out": "xrefs-verify/cn.jianyun.workplan.widget.config.WidgetConfigViewKt.json"
+  }
+]

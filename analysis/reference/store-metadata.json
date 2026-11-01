@@ -1,0 +1,377 @@
+{
+  "generated_at": "2026-10-27T19:36:00+08:00",
+  "target": {
+    "name": "极简排班",
+    "package": "cn.jianyun.workplan",
+    "version_name": "3.5.0",
+    "version_code": 36,
+    "apk_md5": "3334b96094774662d9bf40f7e78563fd",
+    "apk_size_bytes": 44927974,
+    "developer": "杭州简蕴科技有限公司",
+    "icp": "浙ICP备2023038861号-5A",
+    "category": "工具"
+  },
+  "identity_verification": {
+    "local_apk_md5": "3334b96094774662d9bf40f7e78563fd",
+    "yybao_md5": "3334B96094774662D9BF40F7E78563FD",
+    "n962_page_md5": "3334b96094774662d9bf40f7e78563fd",
+    "yybao_size": "44927974",
+    "match": true
+  },
+  "sources": {
+    "yybao": {
+      "url": "https://sj.qq.com/appdetail/cn.jianyun.workplan",
+      "http_status": 200,
+      "app_id": "54430053",
+      "name": "极简排班",
+      "version_name": "3.5.0",
+      "update_time_epoch": 1787198658,
+      "update_time_local": "2026-08-20 12:04:18",
+      "screenshots_updated_epoch": 1787198639,
+      "apk_size": "44927974",
+      "md5": "3334B96094774662D9BF40F7E78563FD",
+      "download_num": "2055",
+      "average_rating": "1.00",
+      "comment_total": 2,
+      "tags": "其他",
+      "cate_name_new": "工具",
+      "privacy_url": "https://api.kotal.cn/privacy_workplan.html",
+      "description": "一个帮助用户排班APP\n支持桌面排班小组件\n\n极简排班包含以下核心功能：\n\n1.自定义班次管理\n2.周期排班管理\n3.根据班次自定义排班\n4.根据周期排班内容进行周期性排班\n5.支持班次提醒，避免遗忘\n6.支持按日期统计排班情况\n7.支持暗黑模式",
+      "icon_url": "http://pp.myapp.com/ma_icon/0/icon_54430053_1787198639/256",
+      "screenshot_urls": [
+        "http://pp.myapp.com/ma_pic2/0/shot_54430053_1_1787198639/0",
+        "http://pp.myapp.com/ma_pic2/0/shot_54430053_2_1787198639/0",
+        "http://pp.myapp.com/ma_pic2/0/shot_54430053_3_1787198639/0",
+        "http://pp.myapp.com/ma_pic2/0/shot_54430053_4_1787198639/0"
+      ],
+      "screenshot_local": [
+        "yj_qq_01.jpg",
+        "yj_qq_02.jpg",
+        "yj_qq_03.jpg",
+        "yj_qq_04.jpg"
+      ],
+      "screenshot_size": "1080x1920",
+      "screenshot_kind": "marketing_composite_dark",
+      "reviews": [
+        {
+          "user": "韩苗",
+          "date": "2026-01-18",
+          "score": 1,
+          "text": "这個应用开发方耍流氓，强制更新，否则不让使用，结果更新完发现就添加了個开屏广告，其他的什么都没变。"
+        },
+        {
+          "user": "鱼",
+          "date": "2025-10-11",
+          "score": 5,
+          "text": "好用 简单 明了"
+        }
+      ],
+      "sibling_apps_same_developer": [
+        {
+          "pkg": "cn.jianyun.wuji",
+          "name": "记物"
+        },
+        {
+          "pkg": "cn.jianyun.worktime",
+          "name": "极简记工时"
+        },
+        {
+          "pkg": "cn.jianyun.timetable",
+          "name": "极简课程表"
+        }
+      ]
+    },
+    "xiaomi": {
+      "url": "https://app.mi.com/details?id=cn.jianyun.workplan",
+      "http_status": 200,
+      "app_id": "1609469",
+      "version_name": "3.5.0",
+      "update_date": "2026-08-20",
+      "size_text": "42.85M",
+      "category": "效率办公",
+      "supports": "手机、平板",
+      "rating_count": 31,
+      "whats_new": "第一个版本",
+      "screenshot_local": [
+        "mi_store_01_statistics.jpg",
+        "mi_store_02_reminder.jpg",
+        "mi_store_03_shifts.jpg",
+        "mi_store_04_calendar.jpg"
+      ],
+      "screenshot_size": "607x1080",
+      "screenshot_kind": "same_assets_as_yybao",
+      "notable_permissions": [
+        "android.permission.SCHEDULE_EXACT_ALARM",
+        "android.permission.REQUEST_INSTALL_PACKAGES",
+        "运行前台服务",
+        "访问日历/添加修改日历",
+        "开机启动",
+        "精确/大概位置",
+        "读取手机状态和身份"
+      ]
+    },
+    "n962": {
+      "url": "http://www.962.net/azsoft/620257.html",
+      "http_status": 200,
+      "page_publish": "2025-11-17",
+      "page_updated": "2026-09-29",
+      "version_text": "v3.5.0",
+      "size_text": "14.1M",
+      "package": "cn.jianyun.workplan",
+      "md5": "3334b96094774662d9bf40f7e78563fd",
+      "screenshots_upload_date": "2025-11-17",
+      "video_url": "https://vd.tqqyun.com/962/620257.mp4",
+      "video_local": "video/n962_620257.mp4",
+      "video_meta": {
+        "duration_sec": 51.125,
+        "width": 720,
+        "height": 1280,
+        "fps": 24,
+        "bytes": 3225329,
+        "last_modified": "Sat, 29 Aug 2026 16:53:28 GMT"
+      },
+      "gallery_local": [
+        "n962_01_calendar_month.jpg",
+        "n962_02_project_sheet.jpg",
+        "n962_03_calendar_settings.jpg",
+        "n962_04_shift_empty.jpg",
+        "n962_05_shift_alarm_auth.jpg",
+        "n962_06_statistics_empty.jpg"
+      ],
+      "tutorial_local": [
+        "n962_07_tutorial_home.jpg",
+        "n962_08_tutorial_add_shift.jpg",
+        "n962_09_tutorial_shift_list.jpg",
+        "n962_10_tutorial_custom_schedule.jpg"
+      ],
+      "screenshot_size": "554x984",
+      "screenshot_kind": "full_screen_light_old_version",
+      "trust": "元数据可用；文章/更新日志为第三方SEO文案，不可信"
+    },
+    "ios_app_store": {
+      "url": "https://apps.apple.com/cn/app/id1607307427",
+      "http_status": 200,
+      "name": "极简排班·排班日历·排班闹钟",
+      "subtitle": "排班·倒班·闹钟·桌面小组件",
+      "developer": "Hangzhou Jianyun Technology Co., Ltd / 杭州简蕴科技有限公司",
+      "version": "5.6.0",
+      "release_note_date": "2026-08-21",
+      "rating": 4.8,
+      "rating_count": 6866,
+      "size": "89.1 MB",
+      "price": "免费 · App 内购买",
+      "features": [
+        "自定义班次管理",
+        "周期排班管理",
+        "根据班次自定义排班",
+        "根据周期排班内容进行周期性排班",
+        "支持班次闹钟提醒，避免遗忘",
+        "支持桌面小组件和锁屏小组件",
+        "支持本地备份及iCloud同步",
+        "支持按日期统计排班情况",
+        "支持暗黑模式",
+        "支持创建系统排班闹钟"
+      ],
+      "version_history": [
+        {
+          "version": "5.6.0",
+          "date": "8月21日(2026)",
+          "note": "1.优化分享和导入排班数据功能 2.淡化上下月文字，增加对比度"
+        },
+        {
+          "version": "5.5.5",
+          "date": "7月16日(2026)",
+          "note": "1.优化APP细节"
+        },
+        {
+          "version": "5.5.3",
+          "date": "7月5日(2026)",
+          "note": "1.优化APP细节"
+        },
+        {
+          "version": "5.5.1",
+          "date": "5月19日(2026)",
+          "note": "1.支持显示下班时间 2.兼容透明桌面小组件 3.优化闹钟提醒 4.优化其他若干细节"
+        },
+        {
+          "version": "5.5.0",
+          "date": "5月15日(2026)",
+          "note": "1.优化首页日历不能滚动问题"
+        },
+        {
+          "version": "5.3.2",
+          "date": "2025/12/07",
+          "note": "1. 优化APP细节"
+        },
+        {
+          "version": "5.3.1",
+          "date": "2025/11/03",
+          "note": "1.支持分享和导入排班 2.支持显示伴侣排班 3.支持自定义主题色"
+        },
+        {
+          "version": "5.2.0",
+          "date": "2025/04/18",
+          "note": "核心功能清单(10项)"
+        },
+        {
+          "version": "4.8.0",
+          "date": "2024/10/30",
+          "note": "周期排班/桌面小组件/排班闹钟自动生成/无广告秒开"
+        }
+      ]
+    },
+    "developer_privacy": {
+      "url": "https://api.kotal.cn/privacy_workplan.html",
+      "http_status": 200,
+      "app_name": "极简排班",
+      "developer": "杭州简蕴科技有限公司",
+      "effective": "2024-08-20",
+      "contact": "1009510944@qq.com",
+      "claims_third_party_sdk": "暂无",
+      "note": "与 APK 内含多套广告 SDK 的事实矛盾；文案混入工时/课程用语，属模板复用"
+    }
+  },
+  "android_3_5_0_changelog_source": {
+    "files": [
+      "jadx-src/sources/cn/jianyun/workplan/main/MainActivityKt.java:132",
+      "jadx-src/sources/cn/jianyun/workplan/module/schedule/views/setting/ScheduleSettingViewKt.java:817"
+    ],
+    "text": "亲爱的老用户，感谢你一直在使用极简排班。\n\n本次更新重点优化了这些内容：\n\n1. 首页日历支持左右滑动切换月份，浏览排班更顺手。\n2. 首页显示配置和小组件显示配置做了进一步拆分，调节更清晰。\n3. 统计页新增了时长统计、时长占比饼图，以及排班明细导出 Excel。\n4. 排班详情补充了休息时长、工作时长等信息，统计更准确。\n5. 小组件入口、暗黑模式、显示样式等细节都做了持续优化。\n6. 若小组件一直显示“正在加载”，可以先删除小组件，重新添加\n7. 没有班次也可以添加备注了\n\n如果你在使用过程中还有想继续优化的地方，也欢迎随时反馈。"
+  },
+  "decoys": [
+    {
+      "pkg": "com.dkais.cjdkeow",
+      "name": "极简排班表",
+      "developer": "长沙丰欧信息技术有限公司",
+      "version": "1.3.0",
+      "note": "不同 App"
+    },
+    {
+      "ios_id": "6758877946",
+      "name": "简单排班-极简排班日历值班倒班轮班助手",
+      "note": "非本开发者(仅Sensor Tower搜索片段)"
+    },
+    {
+      "ios_id": "1607307427",
+      "name": "极简排班·排班日历·排班闹钟",
+      "note": "本开发者的 iOS 产品，正确关联"
+    }
+  ],
+  "failed_sources": [
+    {
+      "url": "https://www.coolapk.com/apk/cn.jianyun.workplan",
+      "status": 404,
+      "note": "酷安应用页"
+    },
+    {
+      "url": "https://www.coolapk.com/search?q=极简排班",
+      "status": 404,
+      "note": "酷安搜索"
+    },
+    {
+      "url": "https://appgallery.huawei.com/search/极简排班",
+      "status": 200,
+      "note": "仅SPA壳3KB；接口403 rtnCode1002需签名"
+    },
+    {
+      "url": "https://www.wandoujia.com/apps/cn.jianyun.workplan",
+      "status": 404,
+      "note": "豌豆荚未收录"
+    },
+    {
+      "url": "https://apkpure.com/cn.jianyun.workplan/cn.jianyun.workplan",
+      "status": 403,
+      "note": "Cloudflare"
+    },
+    {
+      "url": "https://apkcombo.com/cn.jianyun.workplan/",
+      "status": 0,
+      "note": "连接失败"
+    },
+    {
+      "url": "https://apk.support/app/cn.jianyun.workplan",
+      "status": 0,
+      "note": "连接失败"
+    },
+    {
+      "url": "https://www.apkmonk.com/app/cn.jianyun.workplan/",
+      "status": 0,
+      "note": "连接失败"
+    },
+    {
+      "url": "https://apkfab.com/cn-jianyun-workplan/cn.jianyun.workplan",
+      "status": 404,
+      "note": "无页面"
+    },
+    {
+      "url": "https://cn.uptodown.com/android/search/极简排班",
+      "status": 404,
+      "note": "无页面"
+    },
+    {
+      "url": "http://www.appchina.com/app/cn.jianyun.workplan",
+      "status": 404,
+      "note": "应用汇未收录"
+    },
+    {
+      "url": "https://zhushou.360.cn/search/index/?kw=极简排班",
+      "status": 302,
+      "note": "跳首页无结果"
+    },
+    {
+      "url": "https://shouji.baidu.com/s?wd=极简排班",
+      "status": 200,
+      "note": "仅首页壳8.9KB需JS"
+    },
+    {
+      "url": "https://as.sogou.com/app/apkdetail?docid=3542465962774271456",
+      "status": 200,
+      "note": "指向其它App：倒班排班表"
+    },
+    {
+      "url": "https://www.qimai.cn/search/index/searchword/极简排班",
+      "status": 200,
+      "note": "SPA壳3.2KB需登录/JS"
+    },
+    {
+      "url": "https://www.liqucn.com/rj/9859965743542.shtml",
+      "status": 0,
+      "note": "连接失败"
+    },
+    {
+      "url": "https://www.9k9k.com/app/95698.html",
+      "status": 200,
+      "note": "反爬空壳"
+    },
+    {
+      "url": "https://www.962.net/tags/极简排班.html",
+      "status": 500,
+      "note": "标签页错误"
+    },
+    {
+      "url": "https://m.yyb.qq.com/appdetail/cn.jianyun.workplan",
+      "status": 404,
+      "note": "移动版错误页"
+    },
+    {
+      "url": "https://sj.qq.com/appdetail/cn.jianyun.workplan/history",
+      "status": 404,
+      "note": "无历史版本路由"
+    },
+    {
+      "url": "https://kotal.cn/",
+      "status": 403,
+      "note": "官网首页被拒"
+    },
+    {
+      "url": "https://store.oppomobile.com/app/detail?pkg=cn.jianyun.workplan",
+      "status": 404,
+      "note": "OPPO商店按包名未命中"
+    },
+    {
+      "url": "https://h5.appstore.vivo.com.cn/#/details?appId=cn.jianyun.workplan",
+      "status": 200,
+      "note": "SPA壳1.7KB无法定位"
+    }
+  ]
+}

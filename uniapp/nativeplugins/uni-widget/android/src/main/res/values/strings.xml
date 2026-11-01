@@ -1,0 +1,6 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_month_name">极简排班 · 月历</string>
+    <string name="widget_shift_name">极简排班 · 班次</string>
+</resources>

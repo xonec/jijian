@@ -1,0 +1,41 @@
+# 依赖与构建产物
+uniapp/node_modules/
+uniapp/dist/
+release/webview-apk/build/
+
+# 签名材料（务必勿提交）
+release/keystore/
+*.jks
+*.keystore
+password.txt
+
+# APK 产物（由 CI 产出/上传 artifact，或本地 release/）
+release/*.apk
+release/*.apk.sha256
+release/*.apk.idsig
+
+# 系统/编辑器
+.DS_Store
+.idea/
+.vscode/
+*.log
+
+
+# 大体积逆向中间产物（可由 APK 重新生成）
+/jadx-src/
+/decoded/
+/raw/
+/app.apk
+/jadx.log
+/decode.log
+
+# 工具二进制（体积大，按需自行下载）
+/tools/jadx-dist/
+/tools/jadx.zip
+/tools/jadx-cli.jar
+/tools/apktool-cli.jar
+/tools/rea/*.jar
+
+# APK 构建中间目录
+/release/webview-apk/build/
+release/*.apk.idsig

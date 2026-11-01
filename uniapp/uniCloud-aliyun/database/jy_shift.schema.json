@@ -1,0 +1,65 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_shift",
+  "description": "班次定义（早班/晚班/休息…）",
+  "fields": {
+    "deviceId": {
+      "bsonType": "string",
+      "title": "设备ID",
+      "required": true
+    },
+    "id": {
+      "bsonType": "string",
+      "title": "业务ID（early/late/rest）"
+    },
+    "name": {
+      "bsonType": "string",
+      "title": "班次名称",
+      "required": true
+    },
+    "color": {
+      "bsonType": "string",
+      "title": "颜色 #RRGGBB"
+    },
+    "start": {
+      "bsonType": "string",
+      "title": "开始时间 HH:mm"
+    },
+    "end": {
+      "bsonType": "string",
+      "title": "结束时间 HH:mm / 次日HH:mm"
+    },
+    "allDay": {
+      "bsonType": "bool",
+      "title": "是否全天"
+    },
+    "sort": {
+      "bsonType": "int",
+      "title": "排序"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  },
+  "indexes": [
+    {
+      "IndexName": "idx_device_sort",
+      "MgoKeySchema": {
+        "MgoIndexKeys": [
+          {
+            "Name": "deviceId",
+            "Direction": "1"
+          },
+          {
+            "Name": "sort",
+            "Direction": "1"
+          }
+        ],
+        "MgoIsUnique": false
+      }
+    }
+  ]
+}

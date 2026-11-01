@@ -1,0 +1,10 @@
+{
+  "name": "webdav",
+  "version": "1.0.0",
+  "description": "WebDAV 云备份：账号 CRUD、连接测试、网盘文件上传/下载/删除",
+  "main": "index.js",
+  "dependencies": {
+    "uni-id-common": "file:../common/uni-id-common",
+    "uni-config-center": "file:../common/uni-config-center"
+  }
+}

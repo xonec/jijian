@@ -1,0 +1,61 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_vip_order",
+  "description": "会员订单（支付宝 App 支付 / mock）",
+  "fields": {
+    "outTradeNo": {
+      "bsonType": "string",
+      "title": "商户订单号"
+    },
+    "uid": {
+      "bsonType": "string",
+      "title": "用户ID"
+    },
+    "planId": {
+      "bsonType": "string",
+      "title": "month / year / forever"
+    },
+    "planUnit": {
+      "bsonType": "string",
+      "title": "单位文案"
+    },
+    "amount": {
+      "bsonType": "double",
+      "title": "金额（元）"
+    },
+    "subject": {
+      "bsonType": "string",
+      "title": "标题"
+    },
+    "status": {
+      "bsonType": "string",
+      "title": "pending / paid / closed"
+    },
+    "payType": {
+      "bsonType": "string",
+      "title": "alipay / wxpay"
+    },
+    "tradeNo": {
+      "bsonType": "string",
+      "title": "支付宝交易号"
+    },
+    "createdAt": {
+      "bsonType": "timestamp",
+      "title": "创建时间"
+    },
+    "paidAt": {
+      "bsonType": "timestamp",
+      "title": "支付时间"
+    },
+    "updatedAt": {
+      "bsonType": "timestamp",
+      "title": "更新时间"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  }
+}

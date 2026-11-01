@@ -1,0 +1,55 @@
+.page-frame {
+  /* ===== 极简排班 3.5.0 设计令牌（来源：APK ui/theme/ColorKt.java + ThemeKt.java） ===== */
+  --font: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans SC',
+    'Source Han Sans SC', 'Microsoft YaHei', sans-serif;
+
+  --brand: #55BB8A;          /* ThemeColor 固定品牌绿 */
+  --primary: #55BB8A;        /* 强调色（3.5.0 无换肤） */
+  --delete: #F87679;         /* DeleteColor */
+  --important: #EE3F4D;      /* ImportantColor */
+  --vip: #C5A874;            /* VipColor */
+  --private: #806D9E;        /* PrivateColor 私密 */
+  --link: #1974E8;           /* PrimaryColor 补贴/链接 */
+
+  --r-card: 12px;
+  --r-btn: 12px;
+  --r-sheet: 16px;
+  --r-badge: 4px;
+  --r-pill: 999px;
+
+  --header-h: 48px;
+  --tabbar-h: 56px;
+  --page-x: 12px;
+
+  --fs-title: 17px;
+  --fs-body: 16px;
+  --fs-label: 14px;
+  --fs-small: 12px;
+  --fs-tiny: 10px;
+}
+
+/* 亮色：background #F6F5F4 / surface #FDFDFD / surfaceVariant #EEEEEE */
+.theme-light {
+  --bg: #F6F5F4;
+  --surface: #FDFDFD;
+  --surface-2: #EEEEEE;
+  --text-1: #000000;
+  --text-2: #222222;
+  --text-3: #999999;
+  --line: #E5E5E5;
+  --scrim: rgba(0, 0, 0, 0.35);
+  --badge-text: #FFFFFF;
+}
+
+/* 暗色：background #111111 / surface #191919 / surfaceVariant #222222 */
+.theme-dark {
+  --bg: #111111;
+  --surface: #191919;
+  --surface-2: #222222;
+  --text-1: #FFFFFF;
+  --text-2: #DDDDDD;
+  --text-3: #888888;
+  --line: rgba(255, 255, 255, 0.07);
+  --scrim: rgba(0, 0, 0, 0.6);
+  --badge-text: #FFFFFF;
+}

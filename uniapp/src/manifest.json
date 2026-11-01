@@ -1,0 +1,65 @@
+{
+  "name": "极简排班复刻",
+  "appid": "__UNI__JIANYUNREPLICA",
+  "description": "极简排班 3.5.0 界面复刻（uni-app Vue3）",
+  "versionName": "0.1.0",
+  "versionCode": "100",
+  "transformPx": false,
+  "app-plus": {
+    "usingComponents": true,
+    "nvueStyleCompiler": "uni-app",
+    "compilerVersion": 3,
+    "splashscreen": {
+      "alwaysShowBeforeRender": true,
+      "waiting": true,
+      "autoclose": true,
+      "delay": 0
+    },
+    "modules": {},
+    "distribute": {
+      "android": {
+        "permissions": []
+      },
+      "ios": {},
+      "sdkConfigs": {}
+    },
+    "nativePlugins": {
+      "uni-widget": {
+        "__plugin_info__": {
+          "name": "uni-widget",
+          "description": "极简排班桌面小组件（月历/班次）",
+          "platforms": "Android",
+          "url": "",
+          "android_package_name": "",
+          "ios_bundle_id": "",
+          "isCloud": false,
+          "bought": 1,
+          "pid": "",
+          "parameters": {}
+        }
+      }
+    }
+  },
+  "quickapp": {},
+  "mp-weixin": {
+    "appid": "",
+    "setting": {
+      "urlCheck": false,
+      "es6": true,
+      "minified": true,
+      "postcss": true
+    },
+    "usingComponents": true
+  },
+  "h5": {
+    "title": "极简排班 · uni-app 复刻",
+    "router": {
+      "mode": "hash",
+      "base": "./"
+    },
+    "devServer": {
+      "port": 5273
+    }
+  },
+  "vueVersion": "3"
+}

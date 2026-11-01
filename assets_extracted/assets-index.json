@@ -1,0 +1,202 @@
+[
+  {
+    "category": "app-icon",
+    "filename": "ic_launcher-mdpi.png",
+    "src": "decoded/res/mipmap-mdpi/ic_launcher.png",
+    "usage": "App launcher icon",
+    "evidence": "AndroidManifest.xml:56 android:icon=@mipmap/ic_launcher; res.txt mipmap/ic_launcher",
+    "note": ""
+  },
+  {
+    "category": "app-icon",
+    "filename": "ic_launcher_round-mdpi.png",
+    "src": "decoded/res/mipmap-mdpi/ic_launcher_round.png",
+    "usage": "Round launcher icon",
+    "evidence": "AndroidManifest.xml:56 android:roundIcon=@mipmap/ic_launcher_round",
+    "note": ""
+  },
+  {
+    "category": "app-icon",
+    "filename": "ic_launcher-hdpi.png",
+    "src": "decoded/res/mipmap-hdpi/ic_launcher.png",
+    "usage": "App launcher icon",
+    "evidence": "AndroidManifest.xml:56 android:icon=@mipmap/ic_launcher; res.txt mipmap/ic_launcher",
+    "note": ""
+  },
+  {
+    "category": "app-icon",
+    "filename": "ic_launcher_round-hdpi.png",
+    "src": "decoded/res/mipmap-hdpi/ic_launcher_round.png",
+    "usage": "Round launcher icon",
+    "evidence": "AndroidManifest.xml:56 android:roundIcon=@mipmap/ic_launcher_round",
+    "note": ""
+  },
+  {
+    "category": "app-icon",
+    "filename": "ic_launcher-xhdpi.png",
+    "src": "decoded/res/mipmap-xhdpi/ic_launcher.png",
+    "usage": "App launcher icon",
+    "evidence": "AndroidManifest.xml:56 android:icon=@mipmap/ic_launcher; res.txt mipmap/ic_launcher",
+    "note": ""
+  },
+  {
+    "category": "app-icon",
+    "filename": "ic_launcher_round-xhdpi.png",
+    "src": "decoded/res/mipmap-xhdpi/ic_launcher_round.png",
+    "usage": "Round launcher icon",
+    "evidence": "AndroidManifest.xml:56 android:roundIcon=@mipmap/ic_launcher_round",
+    "note": ""
+  },
+  {
+    "category": "app-icon",
+    "filename": "ic_launcher-xxhdpi.png",
+    "src": "decoded/res/mipmap-xxhdpi/ic_launcher.png",
+    "usage": "App launcher icon",
+    "evidence": "AndroidManifest.xml:56 android:icon=@mipmap/ic_launcher; res.txt mipmap/ic_launcher",
+    "note": ""
+  },
+  {
+    "category": "app-icon",
+    "filename": "ic_launcher_round-xxhdpi.png",
+    "src": "decoded/res/mipmap-xxhdpi/ic_launcher_round.png",
+    "usage": "Round launcher icon",
+    "evidence": "AndroidManifest.xml:56 android:roundIcon=@mipmap/ic_launcher_round",
+    "note": ""
+  },
+  {
+    "category": "app-icon",
+    "filename": "ic_launcher-xxxhdpi.png",
+    "src": "decoded/res/mipmap-xxxhdpi/ic_launcher.png",
+    "usage": "App launcher icon",
+    "evidence": "AndroidManifest.xml:56 android:icon=@mipmap/ic_launcher; res.txt mipmap/ic_launcher",
+    "note": ""
+  },
+  {
+    "category": "app-icon",
+    "filename": "ic_launcher_round-xxxhdpi.png",
+    "src": "decoded/res/mipmap-xxxhdpi/ic_launcher_round.png",
+    "usage": "Round launcher icon",
+    "evidence": "AndroidManifest.xml:56 android:roundIcon=@mipmap/ic_launcher_round",
+    "note": ""
+  },
+  {
+    "category": "app-icon",
+    "filename": "logo.png",
+    "src": "decoded/res/drawable/logo.png",
+    "usage": "Splash logo bitmap (used by splash_background layer-list)",
+    "evidence": "decoded/res/drawable/splash_background.xml (@drawable/logo); res.txt drawable/logo -> res/zu.png",
+    "note": ""
+  },
+  {
+    "category": "app-icon",
+    "filename": "minilogo.xml",
+    "src": "decoded/res/drawable/minilogo.xml",
+    "usage": "Splash animated icon (windowSplashScreenAnimatedIcon)",
+    "evidence": "decoded/res/values/styles.xml:2249-2254 Theme.App.Starting; 注意: 实际内容为空 selector(原 APK 中即如此, raw/res/il.xml)",
+    "note": ""
+  },
+  {
+    "category": "app-icon",
+    "filename": "splash_background.xml",
+    "src": "decoded/res/drawable/splash_background.xml",
+    "usage": "Splash window background layer-list",
+    "evidence": "res.txt drawable/splash_background -> res/5w.xml; 引用 @color/screen + @drawable/logo",
+    "note": ""
+  },
+  {
+    "category": "widget",
+    "filename": "quick.png",
+    "src": "decoded/res/drawable/quick.png",
+    "usage": "桌面小组件预览图 appwidget previewImage (452x466)",
+    "evidence": "decoded/res/xml/app_widget.xml previewImage=@drawable/quick; res.txt drawable/quick -> res/1e.png",
+    "note": ""
+  },
+  {
+    "category": "widget",
+    "filename": "app_widget.xml",
+    "src": "decoded/res/xml/app_widget.xml",
+    "usage": "AppWidgetProviderInfo (min 320x180dp, resize h+v, update 30min)",
+    "evidence": "AndroidManifest.xml:63-68 MyAppWidgetReceiver; res.txt xml/app_widget -> res/Ic.xml",
+    "note": ""
+  },
+  {
+    "category": "widget",
+    "filename": "widget_today.xml",
+    "src": "decoded/res/drawable/widget_today.xml",
+    "usage": "今日日期格边框 shape 2dp #EE4863 radius 6dp",
+    "evidence": "WidgetCalendarBodyViewKt.java:301 R.drawable.widget_today; res.txt -> res/L-1.xml",
+    "note": ""
+  },
+  {
+    "category": "widget",
+    "filename": "widget_otherday.xml",
+    "src": "decoded/res/drawable/widget_otherday.xml",
+    "usage": "非今日日期格边框 shape 2dp 透明 radius 6dp",
+    "evidence": "WidgetCalendarBodyViewKt.java:301 R.drawable.widget_otherday; res.txt -> res/hk.xml",
+    "note": ""
+  },
+  {
+    "category": "cloud",
+    "filename": "cloud.png",
+    "src": "decoded/res/mipmap-hdpi/cloud.png",
+    "usage": "WebDAV 云备份默认图标 (GoogleDrive/通用)",
+    "evidence": "MyWebdavTool.java:334-342 R.mipmap.cloud; platform GoogleDrive",
+    "note": ""
+  },
+  {
+    "category": "cloud",
+    "filename": "jgy.png",
+    "src": "decoded/res/mipmap-hdpi/jgy.png",
+    "usage": "坚果云 WebDAV 图标",
+    "evidence": "MyWebdavTool.java:334-342 R.mipmap.jgy; platform 坚果云",
+    "note": ""
+  },
+  {
+    "category": "cloud",
+    "filename": "koofr.png",
+    "src": "decoded/res/mipmap-hdpi/koofr.png",
+    "usage": "Koofr WebDAV 图标",
+    "evidence": "MyWebdavTool.java:334-342 R.mipmap.koofr; platform Koofr",
+    "note": ""
+  },
+  {
+    "category": "layouts",
+    "filename": "main.xml",
+    "src": "decoded/res/layout/main.xml",
+    "usage": "MainActivity 布局: ComposeView(container) + ads1/ads2 FrameLayout",
+    "evidence": "res.txt layout/main -> res/01.xml",
+    "note": ""
+  },
+  {
+    "category": "layouts",
+    "filename": "view_gregorian_lunar_calendar.xml",
+    "src": "decoded/res/layout/view_gregorian_lunar_calendar.xml",
+    "usage": "公历+农历年月日选择器 (NumberPickerView x3)",
+    "evidence": "res.txt layout/view_gregorian_lunar_calendar -> res/lO.xml",
+    "note": ""
+  },
+  {
+    "category": "layouts",
+    "filename": "widget_circle_pie_legends.xml",
+    "src": "decoded/res/layout/widget_circle_pie_legends.xml",
+    "usage": "饼图图例布局 (15dp 色块 + 14sp #767676 文字)",
+    "evidence": "res.txt layout/widget_circle_pie_legends -> res/aS.xml",
+    "note": ""
+  },
+  {
+    "category": "layouts",
+    "filename": "widget_default_pie_legends.xml",
+    "src": "decoded/res/layout/widget_default_pie_legends.xml",
+    "usage": "饼图图例布局",
+    "evidence": "res.txt layout/widget_default_pie_legends -> res/ff.xml",
+    "note": ""
+  },
+  {
+    "category": "palette",
+    "filename": "color.json",
+    "src": "decoded/assets/data/color.json",
+    "usage": "230 个中国色预设 (name/color/catalog), 用于班次颜色与小组件取色",
+    "evidence": "FormItemKt ShowColorPickerView 读取 assets/data/color.json",
+    "note": ""
+  }
+]

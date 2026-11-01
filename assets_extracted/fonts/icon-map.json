@@ -1,0 +1,462 @@
+{
+  "family": "remixicon",
+  "fontFile": "fonts/remixicon.ttf",
+  "fontVersion": "Remix Icon v4.3 (subset)",
+  "source": {
+    "font": "/Users/hogar/.dsh/ungrouped/jianyun/decoded/res/font/remixicon.ttf",
+    "codepointDefinitions": "jadx-src/sources/cn/jianyun/workplan/ui/component/nav/IconFont.java",
+    "kotlinFamily": "cn.jianyun.workplan.ui.theme.TypeKt#remixicon"
+  },
+  "count": 79,
+  "glyphsPresent": 79,
+  "glyphsMissing": [],
+  "icons": {
+    "add": {
+      "codepoint": 59923,
+      "hex": "EA13",
+      "glyphName": "add-line"
+    },
+    "add2": {
+      "codepoint": 60762,
+      "hex": "ED5A",
+      "glyphName": "folder-add-line"
+    },
+    "adjust": {
+      "codepoint": 60002,
+      "hex": "EA62",
+      "glyphName": "arrow-left-right-line"
+    },
+    "alarm": {
+      "codepoint": 59931,
+      "hex": "EA1B",
+      "glyphName": "alarm-line"
+    },
+    "alert": {
+      "codepoint": 62341,
+      "hex": "F385",
+      "glyphName": "megaphone-line"
+    },
+    "apps": {
+      "codepoint": 59970,
+      "hex": "EA42",
+      "glyphName": "apps-2-line"
+    },
+    "arrow_right": {
+      "codepoint": 60012,
+      "hex": "EA6C",
+      "glyphName": "arrow-right-line"
+    },
+    "award": {
+      "codepoint": 60042,
+      "hex": "EA8A",
+      "glyphName": "award-line"
+    },
+    "back": {
+      "codepoint": 60000,
+      "hex": "EA60",
+      "glyphName": "arrow-left-line"
+    },
+    "back2": {
+      "codepoint": 59992,
+      "hex": "EA58",
+      "glyphName": "arrow-go-back-line"
+    },
+    "batchAdd": {
+      "codepoint": 62662,
+      "hex": "F4C6",
+      "glyphName": "apps-2-add-line"
+    },
+    "box_none": {
+      "codepoint": 62375,
+      "hex": "F3A7",
+      "glyphName": "archive-2-line"
+    },
+    "calendar": {
+      "codepoint": 60193,
+      "hex": "EB21",
+      "glyphName": "calendar-2-line"
+    },
+    "catalog": {
+      "codepoint": 59970,
+      "hex": "EA42",
+      "glyphName": "apps-2-line"
+    },
+    "change": {
+      "codepoint": 62583,
+      "hex": "F477",
+      "glyphName": "exchange-2-line"
+    },
+    "chart": {
+      "codepoint": 60054,
+      "hex": "EA96",
+      "glyphName": "bar-chart-2-line"
+    },
+    "check": {
+      "codepoint": 60283,
+      "hex": "EB7B",
+      "glyphName": "check-line"
+    },
+    "clear": {
+      "codepoint": 60313,
+      "hex": "EB99",
+      "glyphName": "close-line"
+    },
+    "cloud": {
+      "codepoint": 60317,
+      "hex": "EB9D",
+      "glyphName": "cloud-line"
+    },
+    "cloud2": {
+      "codepoint": 62030,
+      "hex": "F24E",
+      "glyphName": "upload-cloud-line"
+    },
+    "cloud3": {
+      "codepoint": 62530,
+      "hex": "F442",
+      "glyphName": "folder-cloud-line"
+    },
+    "computer": {
+      "codepoint": 60362,
+      "hex": "EBCA",
+      "glyphName": "computer-line"
+    },
+    "copy": {
+      "codepoint": 60629,
+      "hex": "ECD5",
+      "glyphName": "file-copy-line"
+    },
+    "delete_bin": {
+      "codepoint": 60458,
+      "hex": "EC2A",
+      "glyphName": "delete-bin-line"
+    },
+    "doc": {
+      "codepoint": 61849,
+      "hex": "F199",
+      "glyphName": "sticky-note-2-line"
+    },
+    "down": {
+      "codepoint": 59982,
+      "hex": "EA4E",
+      "glyphName": "arrow-down-s-line"
+    },
+    "down2": {
+      "codepoint": 59984,
+      "hex": "EA50",
+      "glyphName": "arrow-drop-down-line"
+    },
+    "down3": {
+      "codepoint": 59983,
+      "hex": "EA4F",
+      "glyphName": "arrow-drop-down-fill"
+    },
+    "download": {
+      "codepoint": 60500,
+      "hex": "EC54",
+      "glyphName": "download-2-line"
+    },
+    "file": {
+      "codepoint": 60613,
+      "hex": "ECC5",
+      "glyphName": "file-3-line"
+    },
+    "file_download": {
+      "codepoint": 60633,
+      "hex": "ECD9",
+      "glyphName": "file-download-line"
+    },
+    "file_image": {
+      "codepoint": 62405,
+      "hex": "F3C5",
+      "glyphName": "file-image-line"
+    },
+    "file_zip": {
+      "codepoint": 60703,
+      "hex": "ED1F",
+      "glyphName": "file-zip-line"
+    },
+    "filter": {
+      "codepoint": 60711,
+      "hex": "ED27",
+      "glyphName": "filter-line"
+    },
+    "flashlight": {
+      "codepoint": 60733,
+      "hex": "ED3D",
+      "glyphName": "flashlight-line"
+    },
+    "folder": {
+      "codepoint": 60778,
+      "hex": "ED6A",
+      "glyphName": "folder-line"
+    },
+    "folder_download": {
+      "codepoint": 60768,
+      "hex": "ED60",
+      "glyphName": "folder-download-line"
+    },
+    "gift": {
+      "codepoint": 60857,
+      "hex": "EDB9",
+      "glyphName": "gift-2-line"
+    },
+    "home": {
+      "codepoint": 60959,
+      "hex": "EE1F",
+      "glyphName": "home-5-line"
+    },
+    "image": {
+      "codepoint": 61003,
+      "hex": "EE4B",
+      "glyphName": "image-line"
+    },
+    "infinite": {
+      "codepoint": 62393,
+      "hex": "F3B9",
+      "glyphName": "infinity-line"
+    },
+    "info": {
+      "codepoint": 61017,
+      "hex": "EE59",
+      "glyphName": "information-line"
+    },
+    "info2": {
+      "codepoint": 61801,
+      "hex": "F169",
+      "glyphName": "spam-2-line"
+    },
+    "lightbulb_flash": {
+      "codepoint": 61096,
+      "hex": "EEA8",
+      "glyphName": "lightbulb-flash-line"
+    },
+    "list": {
+      "codepoint": 62361,
+      "hex": "F399",
+      "glyphName": "list-indefinite"
+    },
+    "list_indefinite": {
+      "codepoint": 62361,
+      "hex": "F399",
+      "glyphName": "list-indefinite"
+    },
+    "mobile": {
+      "codepoint": 61786,
+      "hex": "F15A",
+      "glyphName": "smartphone-line"
+    },
+    "money": {
+      "codepoint": 61281,
+      "hex": "EF61",
+      "glyphName": "money-cny-circle-line"
+    },
+    "more1": {
+      "codepoint": 61303,
+      "hex": "EF77",
+      "glyphName": "more-2-line"
+    },
+    "more2": {
+      "codepoint": 61305,
+      "hex": "EF79",
+      "glyphName": "more-line"
+    },
+    "move": {
+      "codepoint": 60016,
+      "hex": "EA70",
+      "glyphName": "arrow-right-up-line"
+    },
+    "notification": {
+      "codepoint": 61332,
+      "hex": "EF94",
+      "glyphName": "notification-3-line"
+    },
+    "palette": {
+      "codepoint": 61381,
+      "hex": "EFC5",
+      "glyphName": "palette-line"
+    },
+    "password": {
+      "codepoint": 61134,
+      "hex": "EECE",
+      "glyphName": "lock-line"
+    },
+    "paste": {
+      "codepoint": 60655,
+      "hex": "ECEF",
+      "glyphName": "file-list-3-line"
+    },
+    "pencil": {
+      "codepoint": 61408,
+      "hex": "EFE0",
+      "glyphName": "pencil-line"
+    },
+    "product": {
+      "codepoint": 62375,
+      "hex": "F3A7",
+      "glyphName": "archive-2-line"
+    },
+    "questionnaire": {
+      "codepoint": 61512,
+      "hex": "F048",
+      "glyphName": "questionnaire-line"
+    },
+    "random": {
+      "codepoint": 62461,
+      "hex": "F3FD",
+      "glyphName": "dice-5-line"
+    },
+    "refresh": {
+      "codepoint": 61540,
+      "hex": "F064",
+      "glyphName": "refresh-line"
+    },
+    "remove": {
+      "codepoint": 60442,
+      "hex": "EC1A",
+      "glyphName": "delete-back-2-line"
+    },
+    "resize": {
+      "codepoint": 60812,
+      "hex": "ED8C",
+      "glyphName": "font-size-2"
+    },
+    "right": {
+      "codepoint": 60014,
+      "hex": "EA6E",
+      "glyphName": "arrow-right-s-line"
+    },
+    "right2": {
+      "codepoint": 59988,
+      "hex": "EA54",
+      "glyphName": "arrow-drop-right-line"
+    },
+    "right3": {
+      "codepoint": 59987,
+      "hex": "EA53",
+      "glyphName": "arrow-drop-right-fill"
+    },
+    "school": {
+      "codepoint": 62298,
+      "hex": "F35A",
+      "glyphName": "school-line"
+    },
+    "search": {
+      "codepoint": 62417,
+      "hex": "F3D1",
+      "glyphName": "menu-search-line"
+    },
+    "search2": {
+      "codepoint": 61649,
+      "hex": "F0D1",
+      "glyphName": "search-line"
+    },
+    "settings": {
+      "codepoint": 61668,
+      "hex": "F0E4",
+      "glyphName": "settings-2-line"
+    },
+    "share": {
+      "codepoint": 61694,
+      "hex": "F0FE",
+      "glyphName": "share-line"
+    },
+    "shear": {
+      "codepoint": 61631,
+      "hex": "F0BF",
+      "glyphName": "scissors-2-line"
+    },
+    "stat": {
+      "codepoint": 60062,
+      "hex": "EA9E",
+      "glyphName": "bar-chart-line"
+    },
+    "sub": {
+      "codepoint": 61871,
+      "hex": "F1AF",
+      "glyphName": "subtract-line"
+    },
+    "sun": {
+      "codepoint": 61887,
+      "hex": "F1BF",
+      "glyphName": "sun-line"
+    },
+    "thumb": {
+      "codepoint": 61959,
+      "hex": "F207",
+      "glyphName": "thumb-up-line"
+    },
+    "time": {
+      "codepoint": 61967,
+      "hex": "F20F",
+      "glyphName": "time-line"
+    },
+    "todo": {
+      "codepoint": 60195,
+      "hex": "EB23",
+      "glyphName": "calendar-check-line"
+    },
+    "user": {
+      "codepoint": 62038,
+      "hex": "F256",
+      "glyphName": "user-3-line"
+    },
+    "vip": {
+      "codepoint": 62096,
+      "hex": "F290",
+      "glyphName": "vip-diamond-line"
+    }
+  },
+  "fontCodepointsNotInIconFont": [
+    {
+      "codepoint": "EA0F",
+      "glyphName": "add-box-line"
+    },
+    {
+      "codepoint": "EA48",
+      "glyphName": "archive-line"
+    },
+    {
+      "codepoint": "EB7F",
+      "glyphName": "checkbox-blank-line"
+    },
+    {
+      "codepoint": "EB9F",
+      "glyphName": "cloud-off-line"
+    },
+    {
+      "codepoint": "EF76",
+      "glyphName": "more-2-fill"
+    },
+    {
+      "codepoint": "F009",
+      "glyphName": "play-circle-line"
+    },
+    {
+      "codepoint": "F011",
+      "glyphName": "play-list-line"
+    },
+    {
+      "codepoint": "F3A1",
+      "glyphName": "prohibited-line"
+    },
+    {
+      "codepoint": "F3A9",
+      "glyphName": "inbox-2-line"
+    },
+    {
+      "codepoint": "F40B",
+      "glyphName": "flower-line"
+    },
+    {
+      "codepoint": "F4DF",
+      "glyphName": "function-add-line"
+    }
+  ],
+  "uniqueCodepoints": 76,
+  "aliases": {
+    "apps": "catalog",
+    "box_none": "product",
+    "list": "list_indefinite"
+  }
+}

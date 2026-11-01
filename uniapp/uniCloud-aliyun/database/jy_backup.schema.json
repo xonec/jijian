@@ -1,0 +1,59 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_backup",
+  "description": "云备份快照（本地备份仅存客户端；云备份写此集合）",
+  "fields": {
+    "user_id": {
+      "bsonType": "string",
+      "title": "所属用户/设备"
+    },
+    "deviceId": {
+      "bsonType": "string",
+      "title": "设备ID（未登录时使用）"
+    },
+    "name": {
+      "bsonType": "string",
+      "title": "备份名称"
+    },
+    "scope": {
+      "bsonType": "string",
+      "title": "cloud / local"
+    },
+    "snapshot": {
+      "bsonType": "object",
+      "title": "数据快照（shifts/schedule/alarms/projects/config）"
+    },
+    "size": {
+      "bsonType": "int",
+      "title": "记录条数"
+    },
+    "created_at": {
+      "bsonType": "timestamp",
+      "title": "创建时间"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  },
+  "indexes": [
+    {
+      "IndexName": "idx_owner_created",
+      "MgoKeySchema": {
+        "MgoIndexKeys": [
+          {
+            "Name": "user_id",
+            "Direction": "1"
+          },
+          {
+            "Name": "created_at",
+            "Direction": "-1"
+          }
+        ],
+        "MgoIsUnique": false
+      }
+    }
+  ]
+}

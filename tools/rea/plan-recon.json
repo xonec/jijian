@@ -1,0 +1,32 @@
+[
+  {
+    "tool": "status",
+    "out": "status.json"
+  },
+  {
+    "tool": "get_app_info",
+    "out": "app-info.json"
+  },
+  {
+    "tool": "get_main_activity_class",
+    "out": "main-activity.txt"
+  },
+  {
+    "tool": "get_main_application_classes_names",
+    "out": "app-classes.json"
+  },
+  {
+    "tool": "list_classes",
+    "args": {
+      "limit": 10
+    },
+    "out": "classes-sample.json"
+  },
+  {
+    "tool": "get_android_manifest",
+    "args": {
+      "max_bytes": 400000
+    },
+    "out": "AndroidManifest.xml"
+  }
+]

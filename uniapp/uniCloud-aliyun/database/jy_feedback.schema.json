@@ -1,0 +1,45 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_feedback",
+  "description": "用户在线反馈",
+  "fields": {
+    "user_id": {
+      "bsonType": "string",
+      "title": "所属用户（可空）"
+    },
+    "deviceId": {
+      "bsonType": "string",
+      "title": "设备ID"
+    },
+    "type": {
+      "bsonType": "string",
+      "title": "feedback / feature / bug"
+    },
+    "content": {
+      "bsonType": "string",
+      "title": "反馈内容"
+    },
+    "contact": {
+      "bsonType": "string",
+      "title": "联系方式"
+    },
+    "status": {
+      "bsonType": "int",
+      "title": "0待处理/1已回复"
+    },
+    "reply": {
+      "bsonType": "string",
+      "title": "官方回复"
+    },
+    "created_at": {
+      "bsonType": "timestamp",
+      "title": "提交时间"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  }
+}

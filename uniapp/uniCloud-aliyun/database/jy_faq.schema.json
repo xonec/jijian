@@ -1,0 +1,34 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_faq",
+  "description": "常见问题（云端下发）",
+  "fields": {
+    "deviceId": {
+      "bsonType": "string",
+      "title": "设备ID",
+      "required": true
+    },
+    "cat": {
+      "bsonType": "string",
+      "title": "分类"
+    },
+    "q": {
+      "bsonType": "string",
+      "title": "问题"
+    },
+    "a": {
+      "bsonType": "string",
+      "title": "答案"
+    },
+    "sort": {
+      "bsonType": "int",
+      "title": "排序"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  }
+}

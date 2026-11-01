@@ -1,0 +1,91 @@
+/* Remix Icon subset extracted from cn.jianyun.workplan 3.5.0
+ * font: decoded/res/font/remixicon.ttf (Remix Icon v4.3 subset, 87 glyphs)
+ * codepoints: IconFont.java (cn.jianyun.workplan.ui.component.nav) */
+@font-face {
+  font-family: "remixicon";
+  src: url("./remixicon.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+.ri { font-family: "remixicon" !important; font-style: normal; -webkit-font-smoothing: antialiased; }
+
+.ri-add::before { content: "\ea13"; } /* U+EA13 add-line */
+.ri-add2::before { content: "\ed5a"; } /* U+ED5A folder-add-line */
+.ri-adjust::before { content: "\ea62"; } /* U+EA62 arrow-left-right-line */
+.ri-alarm::before { content: "\ea1b"; } /* U+EA1B alarm-line */
+.ri-alert::before { content: "\f385"; } /* U+F385 megaphone-line */
+.ri-apps::before { content: "\ea42"; } /* U+EA42 apps-2-line */
+.ri-arrow_right::before { content: "\ea6c"; } /* U+EA6C arrow-right-line */
+.ri-award::before { content: "\ea8a"; } /* U+EA8A award-line */
+.ri-back::before { content: "\ea60"; } /* U+EA60 arrow-left-line */
+.ri-back2::before { content: "\ea58"; } /* U+EA58 arrow-go-back-line */
+.ri-batchAdd::before { content: "\f4c6"; } /* U+F4C6 apps-2-add-line */
+.ri-box_none::before { content: "\f3a7"; } /* U+F3A7 archive-2-line */
+.ri-calendar::before { content: "\eb21"; } /* U+EB21 calendar-2-line */
+.ri-catalog::before { content: "\ea42"; } /* U+EA42 apps-2-line */
+.ri-change::before { content: "\f477"; } /* U+F477 exchange-2-line */
+.ri-chart::before { content: "\ea96"; } /* U+EA96 bar-chart-2-line */
+.ri-check::before { content: "\eb7b"; } /* U+EB7B check-line */
+.ri-clear::before { content: "\eb99"; } /* U+EB99 close-line */
+.ri-cloud::before { content: "\eb9d"; } /* U+EB9D cloud-line */
+.ri-cloud2::before { content: "\f24e"; } /* U+F24E upload-cloud-line */
+.ri-cloud3::before { content: "\f442"; } /* U+F442 folder-cloud-line */
+.ri-computer::before { content: "\ebca"; } /* U+EBCA computer-line */
+.ri-copy::before { content: "\ecd5"; } /* U+ECD5 file-copy-line */
+.ri-delete_bin::before { content: "\ec2a"; } /* U+EC2A delete-bin-line */
+.ri-doc::before { content: "\f199"; } /* U+F199 sticky-note-2-line */
+.ri-down::before { content: "\ea4e"; } /* U+EA4E arrow-down-s-line */
+.ri-down2::before { content: "\ea50"; } /* U+EA50 arrow-drop-down-line */
+.ri-down3::before { content: "\ea4f"; } /* U+EA4F arrow-drop-down-fill */
+.ri-download::before { content: "\ec54"; } /* U+EC54 download-2-line */
+.ri-file::before { content: "\ecc5"; } /* U+ECC5 file-3-line */
+.ri-file_download::before { content: "\ecd9"; } /* U+ECD9 file-download-line */
+.ri-file_image::before { content: "\f3c5"; } /* U+F3C5 file-image-line */
+.ri-file_zip::before { content: "\ed1f"; } /* U+ED1F file-zip-line */
+.ri-filter::before { content: "\ed27"; } /* U+ED27 filter-line */
+.ri-flashlight::before { content: "\ed3d"; } /* U+ED3D flashlight-line */
+.ri-folder::before { content: "\ed6a"; } /* U+ED6A folder-line */
+.ri-folder_download::before { content: "\ed60"; } /* U+ED60 folder-download-line */
+.ri-gift::before { content: "\edb9"; } /* U+EDB9 gift-2-line */
+.ri-home::before { content: "\ee1f"; } /* U+EE1F home-5-line */
+.ri-image::before { content: "\ee4b"; } /* U+EE4B image-line */
+.ri-infinite::before { content: "\f3b9"; } /* U+F3B9 infinity-line */
+.ri-info::before { content: "\ee59"; } /* U+EE59 information-line */
+.ri-info2::before { content: "\f169"; } /* U+F169 spam-2-line */
+.ri-lightbulb_flash::before { content: "\eea8"; } /* U+EEA8 lightbulb-flash-line */
+.ri-list::before { content: "\f399"; } /* U+F399 list-indefinite */
+.ri-list_indefinite::before { content: "\f399"; } /* U+F399 list-indefinite */
+.ri-mobile::before { content: "\f15a"; } /* U+F15A smartphone-line */
+.ri-money::before { content: "\ef61"; } /* U+EF61 money-cny-circle-line */
+.ri-more1::before { content: "\ef77"; } /* U+EF77 more-2-line */
+.ri-more2::before { content: "\ef79"; } /* U+EF79 more-line */
+.ri-move::before { content: "\ea70"; } /* U+EA70 arrow-right-up-line */
+.ri-notification::before { content: "\ef94"; } /* U+EF94 notification-3-line */
+.ri-palette::before { content: "\efc5"; } /* U+EFC5 palette-line */
+.ri-password::before { content: "\eece"; } /* U+EECE lock-line */
+.ri-paste::before { content: "\ecef"; } /* U+ECEF file-list-3-line */
+.ri-pencil::before { content: "\efe0"; } /* U+EFE0 pencil-line */
+.ri-product::before { content: "\f3a7"; } /* U+F3A7 archive-2-line */
+.ri-questionnaire::before { content: "\f048"; } /* U+F048 questionnaire-line */
+.ri-random::before { content: "\f3fd"; } /* U+F3FD dice-5-line */
+.ri-refresh::before { content: "\f064"; } /* U+F064 refresh-line */
+.ri-remove::before { content: "\ec1a"; } /* U+EC1A delete-back-2-line */
+.ri-resize::before { content: "\ed8c"; } /* U+ED8C font-size-2 */
+.ri-right::before { content: "\ea6e"; } /* U+EA6E arrow-right-s-line */
+.ri-right2::before { content: "\ea54"; } /* U+EA54 arrow-drop-right-line */
+.ri-right3::before { content: "\ea53"; } /* U+EA53 arrow-drop-right-fill */
+.ri-school::before { content: "\f35a"; } /* U+F35A school-line */
+.ri-search::before { content: "\f3d1"; } /* U+F3D1 menu-search-line */
+.ri-search2::before { content: "\f0d1"; } /* U+F0D1 search-line */
+.ri-settings::before { content: "\f0e4"; } /* U+F0E4 settings-2-line */
+.ri-share::before { content: "\f0fe"; } /* U+F0FE share-line */
+.ri-shear::before { content: "\f0bf"; } /* U+F0BF scissors-2-line */
+.ri-stat::before { content: "\ea9e"; } /* U+EA9E bar-chart-line */
+.ri-sub::before { content: "\f1af"; } /* U+F1AF subtract-line */
+.ri-sun::before { content: "\f1bf"; } /* U+F1BF sun-line */
+.ri-thumb::before { content: "\f207"; } /* U+F207 thumb-up-line */
+.ri-time::before { content: "\f20f"; } /* U+F20F time-line */
+.ri-todo::before { content: "\eb23"; } /* U+EB23 calendar-check-line */
+.ri-user::before { content: "\f256"; } /* U+F256 user-3-line */
+.ri-vip::before { content: "\f290"; } /* U+F290 vip-diamond-line */

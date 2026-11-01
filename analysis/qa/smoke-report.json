@@ -1,0 +1,193 @@
+{
+  "generatedAt": "2026-11-01T09:33:43.062Z",
+  "base": "http://127.0.0.1:5280",
+  "total": 23,
+  "passed": 23,
+  "failed": 0,
+  "pages": [
+    {
+      "route": "pages/home/index",
+      "ok": true,
+      "errors": [],
+      "len": 595,
+      "text": "2024年9月\n\n\n\n早班(14)\n晚班(12)\n休息(4)\n九月\n周日\n周一\n周二\n周三\n周四\n周五\n周六\n1\n廿九\n早班\n09:00\n2\n三十\n早班\n09:00\n3\n八月\n早班\n09:00\n4\n初一\n晚班\n20:00\n5\n初二\n晚",
+      "title": "排班"
+    },
+    {
+      "route": "pages/work/index",
+      "ok": true,
+      "errors": [],
+      "len": 78,
+      "text": "班次\n轮班\n早班\n09:00~18:00\n晚班\n20:00~次日08:00\n休息\n全天\n添加班次\n班次排序\n\n排班\n\n班次\n\n提醒\n\n统计\n\n我的",
+      "title": "班次"
+    },
+    {
+      "route": "pages/alarm/index",
+      "ok": true,
+      "errors": [],
+      "len": 209,
+      "text": "班次提醒\n\n授权极简排班操作您的日历（更新数据）\n授权极简排班查询您的日历（查询数据）\n\n关于班次提醒？\n\n\n检查班次提醒是否生效？\n\n我的提醒\n07:55\n晚班\n20:00~次日08:00\n普通提醒\n第二天\n后天 07:55提醒",
+      "title": "提醒"
+    },
+    {
+      "route": "pages/stat/index",
+      "ok": true,
+      "errors": [],
+      "len": 1061,
+      "text": "排班统计\n导出数据\n2024-09-01 至 2024-09-30\n\n早班 47%\n晚班 40%\n休息 13%\n早班\n14次 47%\n晚班\n12次 40%\n休息\n4次 13%\n时长统计\n270 小时\n总工作时长\n9 小时\n平均每班\n26 ",
+      "title": "统计"
+    },
+    {
+      "route": "pages/setting/index",
+      "ok": true,
+      "errors": [],
+      "len": 247,
+      "text": "排班设置\n\n登录或注册账号\n未登录 · 普通用户\n\n\n购买会员，支持独立开发，获取专属客服与会员标识\n去开通\n\n我的排班项目\n默认班表\n\n\n本地备份设置\n\n\n分享与导入排班\n\n\n本地备份与恢复\n\n\nAPP风格\n亮白主",
+      "title": "我的"
+    },
+    {
+      "route": "pages/sub/work-edit/index",
+      "ok": true,
+      "errors": [],
+      "len": 184,
+      "text": "\n添加班次\n普通班次\n组合班次\n基本信息\n班次名称\n是否全天\n开始时间\n09:00\n\n结束时间\n18:00\n\n休息时长\n60 分钟\n\n备注\n选填\n班次颜色\n样式预览\n早班\n09:00~18:00\n首页日历效果\n保存\n提示：班次颜色会",
+      "title": "极简排班 · uni-app 复刻"
+    },
+    {
+      "route": "pages/sub/alarm-edit/index",
+      "ok": true,
+      "errors": [],
+      "len": 215,
+      "text": "\n添加提醒\n保存\n基本信息\n选择班次\n晚班\n\n什么时候提醒\n上班前30分钟\n\n是否强提醒\n同步到系统日历\n开启强提醒后，系统日程提醒会有铃声提醒（部分安卓机型支持）。开启「同步到系统日历」后，提醒会写入系统日历，由系统在设定时间准时通",
+      "title": "极简排班 · uni-app 复刻"
+    },
+    {
+      "route": "pages/sub/share/index",
+      "ok": true,
+      "errors": [],
+      "len": 171,
+      "text": "\n分享与导入排班\n分享\n导入\n排班数据默认只保存在当前手机本地。换手机、换系统，或想把当前排班给家人同事使用时，可以先在这里分享当前项目，生成一个 6 位秘钥。\n拿到秘钥后，可以在 Android 或 iOS 端的「导入」里恢复成一个新的",
+      "title": "极简排班 · uni-app 复刻"
+    },
+    {
+      "route": "pages/sub/vip/index",
+      "ok": true,
+      "errors": [],
+      "len": 205,
+      "text": "\n会员\n\n极简排班 · 会员\n支持独立开发，解锁专属客服\n3元\n每月\n每天1毛钱\n最划算\n12元\n每年\n每天3.3分钱\n18元\n永久\n一次性买断\n会员权益\n\n支持开发\n促使开发者砥砺前行，呈现更优质的App功能\n\n专属客服\n会员用户",
+      "title": "极简排班 · uni-app 复刻"
+    },
+    {
+      "route": "pages/sub/widget/index",
+      "ok": true,
+      "errors": [],
+      "len": 457,
+      "text": "\n桌面小组件\n保存\n2024年9月\n\n本月\n\n周日\n周一\n周二\n周三\n周四\n周五\n周六\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n2",
+      "title": "极简排班 · uni-app 复刻"
+    },
+    {
+      "route": "pages/sub/project/index",
+      "ok": true,
+      "errors": [],
+      "len": 81,
+      "text": "\n项目管理\n\n默认班表\n当前\n\n夜班小组\n12 天\n\n门诊排班\n8 天\n\n添加项目\n项目排序\n删除项目，会把项目下所有排班数据级联删除，确定还要继续吗？",
+      "title": "极简排班 · uni-app 复刻"
+    },
+    {
+      "route": "pages/sub/faq/index",
+      "ok": true,
+      "errors": [],
+      "len": 466,
+      "text": "\n常见问题解答\n入门\n极简排班如何使用？\n第一步：添加自定义班次，如早班、晚班，并设置好上下班时间。\n第二步：添加周期排班，如果你的班次在以某一个周期循环排班，只要建立这一周期的排班情况，就可以通过首页周期排班功能循环设置。\n第三步：首页",
+      "title": "极简排班 · uni-app 复刻"
+    },
+    {
+      "route": "pages/sub/user-detail/index",
+      "ok": true,
+      "errors": [],
+      "len": 122,
+      "text": "\n我的信息\n\n未登录\n登录后可同步会员状态与反馈记录\n未登录\n\n会员有效期\n未开通\n\n其他信息\n昵称\n请输入昵称\n微信\n选填\n城市\n选填\n登录或注册\n登录账号仅用于记录用户付费状态，如果需要对数据进行云备份，请自行绑定第三方云备份账",
+      "title": "极简排班 · uni-app 复刻"
+    },
+    {
+      "route": "pages/sub/login/index",
+      "ok": true,
+      "errors": [],
+      "len": 136,
+      "text": "\n登录\n\n登录极简排班\n账号仅用于绑定付费状态与反馈\n登录\n注册\n账号\n请输入账号\n密码\n请输入密码（至少 6 位）\n登录\n还没有账号？立即注册\n账号仅用于绑定付费状态与反馈意见，不会上传您的排班数据；排班数据默认保存在本机，换机请使用",
+      "title": "极简排班 · uni-app 复刻"
+    },
+    {
+      "route": "pages/sub/backup/index",
+      "ok": true,
+      "errors": [],
+      "len": 133,
+      "text": "\n本地备份与恢复\n本地备份目录\n默认目录\n\n点击设置本地备份目录\n设置独立目录后，卸载 App 也能从该目录找回数据\n\n\n一键备份\n\n云备份 · 多设备同步\n备份列表\n暂无本地备份数据\n本地备份保存在应用私有目录，卸载 App 会",
+      "title": "极简排班 · uni-app 复刻"
+    },
+    {
+      "route": "pages/sub/cloud/index",
+      "ok": true,
+      "errors": [],
+      "len": 135,
+      "text": "\n云备份\n\n登录后使用云备份\n登录账号后，排班快照会保存在 uniCloud 数据库，换设备登录同一账号即可恢复全部数据\n去登录\n\n全量备份\n云备份列表\n暂无云备份数据\n云端快照存于 uniCloud 数据库 jy_backup 集合",
+      "title": "极简排班 · uni-app 复刻"
+    },
+    {
+      "route": "pages/sub/webdav/index",
+      "ok": true,
+      "errors": [],
+      "len": 53,
+      "text": "\n云备份账号\n\n添加\n\n暂无云备份账号\n添加云备份账号\n推荐使用坚果云，注册后在安全选项添加应用密码",
+      "title": "极简排班 · uni-app 复刻"
+    },
+    {
+      "route": "pages/sub/webdav-edit/index",
+      "ok": true,
+      "errors": [],
+      "len": 180,
+      "text": "\n添加云备份\n选择云备份平台\n坚果云\nKoofr\nOneDrive\nGoogle Drive\n自定义\n账号信息\n账号备注\n选填\n地址\n用户名\nWebDAV 账号\n密码\n应用密码\n根路径\n测试连接\n保存\n平台提示：账号 → 安全选项 → 添",
+      "title": "极简排班 · uni-app 复刻"
+    },
+    {
+      "route": "pages/sub/webdav-files/index",
+      "ok": true,
+      "errors": [],
+      "len": 75,
+      "text": "\n我的文件\n\n\n根目录\n缺少云备份账号\n上传当前排班备份\nWebDAV 文件保存在你自己的网盘，不占用 uniCloud 空间\n\n缺少云备份账号",
+      "title": "极简排班 · uni-app 复刻"
+    },
+    {
+      "route": "pages/sub/permission/index",
+      "ok": true,
+      "errors": [],
+      "len": 434,
+      "text": "\n通知权限设置\n\n关于 APP 通知\n由于安卓手机品牌众多，不同厂商定制的系统对第三方应用的限制各有差异。应用被完全退出或设备锁屏后，本地通知大概率不会触发；而系统日历提醒受系统保护，可以准时触发。因此极简排班的所有提醒都通过系统日历实",
+      "title": "极简排班 · uni-app 复刻"
+    },
+    {
+      "route": "pages/sub/agreement/index",
+      "ok": true,
+      "errors": [],
+      "len": 1163,
+      "text": "\n用户使用协议\n欢迎下载并使用极简排班APP，请您（用户）仔细阅读以下全部内容。如用户已勾选同意极简排班用户使用协议，即表示用户与杭州简蕴科技有限公司已达成协议，并同意接受本协议各项协议的约束。\n1、版权归属\n杭州简蕴科技有限公司拥有极简",
+      "title": "极简排班 · uni-app 复刻"
+    },
+    {
+      "route": "pages/sub/feedback/index",
+      "ok": true,
+      "errors": [],
+      "len": 160,
+      "text": "\n用户在线反馈\n功能建议\n问题反馈\n其他\n反馈内容\n请描述你遇到的问题或建议，至少 5 个字\n请尽量描述具体场景，便于我们定位问题\n0/500\n联系方式（选填）\n联系方式\n手机号 / 微信号 / 邮箱\n提交反馈\n我们会认真阅读每一条反馈。",
+      "title": "极简排班 · uni-app 复刻"
+    },
+    {
+      "route": "pages/sub/wechat/index",
+      "ok": true,
+      "errors": [],
+      "len": 218,
+      "text": "\n导入小程序排班\n\n从微信小程序导入\n如果你之前使用过「极简排班」微信小程序，只要在下方输入排班小程序「我的」页面头像下的用户 ID（8 位字母数字串），即可快速把小程序排班导入本 App。\n排班小程序用户 ID\n用户 ID\n8 位字母",
+      "title": "极简排班 · uni-app 复刻"
+    }
+  ]
+}

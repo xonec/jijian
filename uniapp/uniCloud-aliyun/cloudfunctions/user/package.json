@@ -1,0 +1,9 @@
+{
+  "name": "user",
+  "version": "1.0.0",
+  "description": "uni-id 登录/注册/会话管理（依赖官方 uni-id-common 公共模块）",
+  "main": "index.js",
+  "dependencies": {
+    "uni-id-common": "file:../common/uni-id-common"
+  }
+}

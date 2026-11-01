@@ -1,0 +1,9 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/shift_root" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="12dp" android:background="#FFFFFF">
+    <TextView android:id="@+id/shift_title" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="今日排班" android:textSize="12sp" android:textColor="#999999" />
+    <TextView android:id="@+id/shift_name" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="—" android:textSize="20sp" android:textStyle="bold" android:textColor="#222222" />
+    <TextView android:id="@+id/shift_time" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="" android:textSize="13sp" android:textColor="#666666" />
+    <TextView android:id="@+id/shift_remark" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="" android:textSize="12sp" android:textColor="#999999" />
+    <TextView android:id="@+id/shift_alarm" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="" android:textSize="12sp" android:textColor="#55BB8A" />
+</LinearLayout>

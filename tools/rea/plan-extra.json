@@ -1,0 +1,83 @@
+[
+  {
+    "tool": "list_classes",
+    "args": {
+      "prefix": "cn.jianyun",
+      "limit": 2000
+    },
+    "out": "classes-cn.json"
+  },
+  {
+    "tool": "get_class_summary",
+    "args": {
+      "class_name": "cn.jianyun.timetable.widget.AppWidgetView"
+    },
+    "out": "inv-AppWidgetView.json"
+  },
+  {
+    "tool": "get_class_source",
+    "args": {
+      "class_name": "cn.jianyun.timetable.widget.AppWidgetView",
+      "max_bytes": 400000
+    },
+    "out": "src-AppWidgetView.java"
+  },
+  {
+    "tool": "get_class_summary",
+    "args": {
+      "class_name": "cn.jianyun.timetable.widget.WidgetRefreshCallback"
+    },
+    "out": "inv-WidgetRefreshCallback.json"
+  },
+  {
+    "tool": "get_class_source",
+    "args": {
+      "class_name": "cn.jianyun.timetable.widget.WidgetRefreshCallback",
+      "max_bytes": 400000
+    },
+    "out": "src-WidgetRefreshCallback.java"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.component.form.FormItemKt"
+    },
+    "out": "xrefs/FormItemKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.biz.ScheduleCalendarViewKt"
+    },
+    "out": "xrefs/ScheduleCalendarViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.setting.ScheduleSettingViewKt"
+    },
+    "out": "xrefs/ScheduleSettingViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.stat.ScheduleStatViewKt"
+    },
+    "out": "xrefs/ScheduleStatViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_class",
+    "args": {
+      "class_name": "cn.jianyun.workplan.module.schedule.views.alarm.ScheduleAlarmManageViewKt"
+    },
+    "out": "xrefs/ScheduleAlarmManageViewKt.json"
+  },
+  {
+    "tool": "get_xrefs_to_method",
+    "args": {
+      "class_name": "cn.jianyun.workplan.ui.component.form.FormItemKt",
+      "method_name": "SegmentPickerView"
+    },
+    "out": "xrefs/SegmentPickerView.json"
+  }
+]

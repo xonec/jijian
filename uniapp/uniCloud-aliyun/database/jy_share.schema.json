@@ -1,0 +1,49 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_share",
+  "description": "分享秘钥（快照）",
+  "fields": {
+    "deviceId": {
+      "bsonType": "string",
+      "title": "分享方设备ID",
+      "required": true
+    },
+    "key": {
+      "bsonType": "string",
+      "title": "6 位秘钥",
+      "required": true
+    },
+    "projectId": {
+      "bsonType": "string",
+      "title": "项目 ID"
+    },
+    "snapshot": {
+      "bsonType": "object",
+      "title": "数据快照"
+    },
+    "createdAt": {
+      "bsonType": "timestamp",
+      "title": "创建时间"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  },
+  "indexes": [
+    {
+      "IndexName": "uk_key",
+      "MgoKeySchema": {
+        "MgoIndexKeys": [
+          {
+            "Name": "key",
+            "Direction": "1"
+          }
+        ],
+        "MgoIsUnique": true
+      }
+    }
+  ]
+}

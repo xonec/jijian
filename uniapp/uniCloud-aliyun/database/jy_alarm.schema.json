@@ -1,0 +1,61 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_alarm",
+  "description": "班次提醒",
+  "fields": {
+    "deviceId": {
+      "bsonType": "string",
+      "title": "设备ID",
+      "required": true
+    },
+    "id": {
+      "bsonType": "string",
+      "title": "业务ID"
+    },
+    "time": {
+      "bsonType": "string",
+      "title": "提醒时间 HH:mm"
+    },
+    "shift": {
+      "bsonType": "string",
+      "title": "班次 ID"
+    },
+    "range": {
+      "bsonType": "string",
+      "title": "班次时段文案"
+    },
+    "tags": {
+      "bsonType": "array",
+      "title": "标签",
+      "arrayType": "string"
+    },
+    "next": {
+      "bsonType": "string",
+      "title": "下次提醒文案"
+    },
+    "on": {
+      "bsonType": "bool",
+      "title": "是否开启"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  },
+  "indexes": [
+    {
+      "IndexName": "idx_device",
+      "MgoKeySchema": {
+        "MgoIndexKeys": [
+          {
+            "Name": "deviceId",
+            "Direction": "1"
+          }
+        ],
+        "MgoIsUnique": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_config",
+  "description": "日历显示配置 / 主题模式（键名与 APK 显示设置一致）",
+  "fields": {
+    "deviceId": {
+      "bsonType": "string",
+      "title": "设备ID",
+      "required": true
+    },
+    "一周开始日": {
+      "bsonType": "string",
+      "title": "周日 / 周一"
+    },
+    "日期字号": {
+      "bsonType": "string",
+      "title": "日期字号"
+    },
+    "班次字号": {
+      "bsonType": "string",
+      "title": "班次字号"
+    },
+    "时间字号": {
+      "bsonType": "string",
+      "title": "时间字号"
+    },
+    "班次圆角": {
+      "bsonType": "string",
+      "title": "班次圆角"
+    },
+    "显示中国农历": {
+      "bsonType": "bool",
+      "title": "显示农历"
+    },
+    "显示中国节假日": {
+      "bsonType": "bool",
+      "title": "显示节假日"
+    },
+    "显示上班时间": {
+      "bsonType": "bool",
+      "title": "显示上班时间"
+    },
+    "显示下班时间": {
+      "bsonType": "bool",
+      "title": "显示下班时间"
+    },
+    "显示备注": {
+      "bsonType": "bool",
+      "title": "显示备注"
+    },
+    "显示统计指标": {
+      "bsonType": "bool",
+      "title": "显示统计指标"
+    },
+    "显示分割线": {
+      "bsonType": "bool",
+      "title": "显示分割线"
+    },
+    "currentProjectId": {
+      "bsonType": "string",
+      "title": "当前项目 ID"
+    },
+    "themeMode": {
+      "bsonType": "string",
+      "title": "light / dark / system"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  },
+  "indexes": [
+    {
+      "IndexName": "uk_device",
+      "MgoKeySchema": {
+        "MgoIndexKeys": [
+          {
+            "Name": "deviceId",
+            "Direction": "1"
+          }
+        ],
+        "MgoIsUnique": true
+      }
+    }
+  ]
+}

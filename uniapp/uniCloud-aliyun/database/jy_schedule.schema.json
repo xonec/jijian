@@ -1,0 +1,57 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_schedule",
+  "description": "按天排班（一天最多两个班次 + 备注）",
+  "fields": {
+    "deviceId": {
+      "bsonType": "string",
+      "title": "设备ID",
+      "required": true
+    },
+    "projectId": {
+      "bsonType": "string",
+      "title": "所属项目（可选）"
+    },
+    "date": {
+      "bsonType": "string",
+      "title": "日期 yyyy-MM-dd",
+      "required": true
+    },
+    "workId": {
+      "bsonType": "string",
+      "title": "第一班次 ID"
+    },
+    "secondWorkId": {
+      "bsonType": "string",
+      "title": "第二班次 ID"
+    },
+    "remark": {
+      "bsonType": "string",
+      "title": "备注"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  },
+  "indexes": [
+    {
+      "IndexName": "uk_device_date",
+      "MgoKeySchema": {
+        "MgoIndexKeys": [
+          {
+            "Name": "deviceId",
+            "Direction": "1"
+          },
+          {
+            "Name": "date",
+            "Direction": "1"
+          }
+        ],
+        "MgoIsUnique": true
+      }
+    }
+  ]
+}

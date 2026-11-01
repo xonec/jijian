@@ -1,0 +1,19 @@
+{
+  "tokenSecret": "e96f17c9a07f61f48f656b2bed4439540dea0a6653786347",
+  "tokenExpiresIn": 7200,
+  "tokenExpiresThreshold": 1200,
+  "maxTokenLength": 10,
+  "passwordStrength": "medium",
+  "passwordErrorLimit": 6,
+  "passwordErrorRetryTime": 1200,
+  "app": {
+    "tokenExpiresIn": 604800,
+    "tokenExpiresThreshold": 3600
+  },
+  "mp-weixin": {
+    "oauth": {
+      "weixin": {}
+    }
+  },
+  "_comment": "uni-id-common 配置：生产环境请替换 tokenSecret；app 端 token 有效期更长"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "vip",
+  "version": "1.0.0",
+  "description": "会员（赞助）订单 + 支付宝 App 支付 + 会员状态（依赖 uni-id-common / uni-config-center）",
+  "main": "index.js",
+  "dependencies": {
+    "uni-id-common": "file:../common/uni-id-common",
+    "uni-config-center": "file:../common/uni-config-center"
+  }
+}

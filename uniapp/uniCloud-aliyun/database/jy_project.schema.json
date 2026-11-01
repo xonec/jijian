@@ -1,0 +1,35 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_project",
+  "description": "排班项目（班组）",
+  "fields": {
+    "deviceId": {
+      "bsonType": "string",
+      "title": "设备ID",
+      "required": true
+    },
+    "id": {
+      "bsonType": "string",
+      "title": "业务ID"
+    },
+    "name": {
+      "bsonType": "string",
+      "title": "项目名称",
+      "required": true
+    },
+    "current": {
+      "bsonType": "bool",
+      "title": "是否当前项目"
+    },
+    "count": {
+      "bsonType": "int",
+      "title": "排班天数"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  }
+}

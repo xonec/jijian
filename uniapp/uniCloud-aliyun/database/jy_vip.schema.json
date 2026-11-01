@@ -1,0 +1,37 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_vip",
+  "description": "会员（赞助）状态：每个登录用户一条",
+  "fields": {
+    "uid": {
+      "bsonType": "string",
+      "title": "用户ID（uni-id uid）"
+    },
+    "planId": {
+      "bsonType": "string",
+      "title": "month / year / forever"
+    },
+    "expireAt": {
+      "bsonType": "timestamp",
+      "title": "到期时间（毫秒时间戳）"
+    },
+    "lastOrderId": {
+      "bsonType": "string",
+      "title": "最近订单号"
+    },
+    "createdAt": {
+      "bsonType": "timestamp",
+      "title": "创建时间"
+    },
+    "updatedAt": {
+      "bsonType": "timestamp",
+      "title": "更新时间"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  }
+}

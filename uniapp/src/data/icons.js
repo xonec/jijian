@@ -1,0 +1,90 @@
+// 图标码点来自 APK 图标字体子集（res/font/remixicon.ttf + IconFont.java），勿手改
+const ICONS = {
+  add: 59923, // U+EA13
+  add2: 60762, // U+ED5A
+  adjust: 60002, // U+EA62
+  alarm: 59931, // U+EA1B
+  alert: 62341, // U+F385
+  apps: 59970, // U+EA42
+  arrow_right: 60012, // U+EA6C
+  award: 60042, // U+EA8A
+  back: 60000, // U+EA60
+  back2: 59992, // U+EA58
+  batchAdd: 62662, // U+F4C6
+  box_none: 62375, // U+F3A7
+  calendar: 60193, // U+EB21
+  catalog: 59970, // U+EA42
+  change: 62583, // U+F477
+  chart: 60054, // U+EA96
+  check: 60283, // U+EB7B
+  clear: 60313, // U+EB99
+  cloud: 60317, // U+EB9D
+  cloud2: 62030, // U+F24E
+  cloud3: 62530, // U+F442
+  computer: 60362, // U+EBCA
+  copy: 60629, // U+ECD5
+  delete_bin: 60458, // U+EC2A
+  doc: 61849, // U+F199
+  down: 59982, // U+EA4E
+  down2: 59984, // U+EA50
+  down3: 59983, // U+EA4F
+  download: 60500, // U+EC54
+  file: 60613, // U+ECC5
+  file_download: 60633, // U+ECD9
+  file_image: 62405, // U+F3C5
+  file_zip: 60703, // U+ED1F
+  filter: 60711, // U+ED27
+  flashlight: 60733, // U+ED3D
+  folder: 60778, // U+ED6A
+  folder_download: 60768, // U+ED60
+  gift: 60857, // U+EDB9
+  home: 60959, // U+EE1F
+  image: 61003, // U+EE4B
+  infinite: 62393, // U+F3B9
+  info: 61017, // U+EE59
+  info2: 61801, // U+F169
+  lightbulb_flash: 61096, // U+EEA8
+  list: 62361, // U+F399
+  list_indefinite: 62361, // U+F399
+  mobile: 61786, // U+F15A
+  money: 61281, // U+EF61
+  more1: 61303, // U+EF77
+  more2: 61305, // U+EF79
+  move: 60016, // U+EA70
+  notification: 61332, // U+EF94
+  palette: 61381, // U+EFC5
+  password: 61134, // U+EECE
+  paste: 60655, // U+ECEF
+  pencil: 61408, // U+EFE0
+  product: 62375, // U+F3A7
+  questionnaire: 61512, // U+F048
+  random: 62461, // U+F3FD
+  refresh: 61540, // U+F064
+  remove: 60442, // U+EC1A
+  resize: 60812, // U+ED8C
+  right: 60014, // U+EA6E
+  right2: 59988, // U+EA54
+  right3: 59987, // U+EA53
+  school: 62298, // U+F35A
+  search: 62417, // U+F3D1
+  search2: 61649, // U+F0D1
+  settings: 61668, // U+F0E4
+  share: 61694, // U+F0FE
+  shear: 61631, // U+F0BF
+  stat: 60062, // U+EA9E
+  sub: 61871, // U+F1AF
+  sun: 61887, // U+F1BF
+  thumb: 61959, // U+F207
+  time: 61967, // U+F20F
+  todo: 60195, // U+EB23
+  user: 62038, // U+F256
+  vip: 62096, // U+F290
+}
+
+export function iconChar(name) {
+  const cp = ICONS[name]
+  return cp ? String.fromCharCode(cp) : ''
+}
+
+export default ICONS
+

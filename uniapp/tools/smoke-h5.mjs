@@ -12,6 +12,11 @@ function arg(name, def) {
   const i = args.indexOf('--' + name)
   return i >= 0 ? args[i + 1] : def
 }
+if (typeof WebSocket === 'undefined') {
+  console.log('::error::当前 Node 缺少全局 WebSocket（需要 Node 22+；CI 请用 node-version: 22）')
+  process.exit(2)
+}
+
 const OUT = path.resolve(process.cwd(), arg('out', '../analysis/qa/smoke-report.json'))
 const BASE = arg('base', 'http://127.0.0.1:5280')
 const CDP = arg('cdp', 'http://127.0.0.1:9222')

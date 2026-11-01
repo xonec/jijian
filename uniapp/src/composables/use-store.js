@@ -102,6 +102,7 @@ export function rebuildDays() {
     list.push({
       d,
       lunar: lunar.label,
+      festivalShort: lunar.festivalShort,
       lunarDay: lunar.lunarDay,
       monthLabel: lunar.monthLabel,
       holiday: lunar.holiday,

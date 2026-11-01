@@ -16,7 +16,6 @@
           <view class="cal-date">
             <text class="cal-num">{{ cell.day }}</text>
             <text v-if="cell.lunar" class="cal-lunar" :class="cell.lunarClass">{{ cell.lunar }}</text>
-            <text v-if="cell.swap" class="cal-lunar cal-lunar--swap">调班</text>
           </view>
           <shift-badge v-if="cell.shift" :shift="cell.shift" :show-time="showTime" />
         </template>
@@ -67,13 +66,22 @@ export default {
       for (let i = 0; i < first; i++) list.push({ day: 0 })
       for (let d = 1; d <= total; d++) {
         const info = this.days[d] || { d, lunar: '' }
+        // 同一位置只显示一条，优先级：调班 > 节假日 > 节气 > 农历日期
         let lunar = ''
         let lunarClass = ''
-        if (this.showLunar) {
-          // 正常显示农历/节气/节日；仅在“关闭节假日”时把节日换成农历日名
-          lunar = (info.holiday && !this.showHoliday ? info.lunarDay || '' : info.lunar || '').slice(0, 2)
-          if (info.holiday && this.showHoliday) lunarClass = 'cal-lunar--holiday'
-          else if (info.swap) lunarClass = 'cal-lunar--swap'
+        if (info.swap) {
+          lunar = '调班'
+          lunarClass = 'cal-lunar--swap'
+        } else if (this.showLunar) {
+          const showFestival = !!info.holiday && this.showHoliday
+          if (showFestival) {
+            lunar = info.festivalShort || info.lunar || ''
+            lunarClass = 'cal-lunar--holiday'
+          } else if (info.jieqi) {
+            lunar = info.jieqi
+          } else {
+            lunar = info.lunarDay === '初一' ? info.monthLabel || '' : info.lunarDay || info.lunar || ''
+          }
         }
         const isToday =
           this.year === this.today.y && this.month === this.today.m && d === this.today.d

@@ -61,7 +61,7 @@ export function getLunarInfo(y, m, d) {
   }
   const lunarDay = lunar.getDayInChinese()
   const monthInChinese = lunar.getMonthInChinese()
-  const monthLabel = monthInChinese + '月'
+  const monthLabel = /^闰/.test(monthInChinese) ? monthInChinese : monthInChinese + '月'
   const jieqi = lunar.getJieQi() || ''
   const lunarFest = (lunar.getFestivals() || [])[0] || ''
   const solarFest = (solar.getFestivals() || [])[0] || ''
@@ -88,6 +88,6 @@ export function getLunarInfo(y, m, d) {
   } else {
     label = lunarDay
   }
-  return { label: String(label).slice(0, 2), lunarDay, monthLabel: String(monthLabel).slice(0, 2), holiday, jieqi, festival }
+  return { label, festivalShort: holiday ? label : '', lunarDay, monthLabel, holiday, jieqi, festival }
 }
 

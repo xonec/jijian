@@ -19,13 +19,22 @@
         <text class="perm-row__v" :class="stateClass(diag.calendarRead && diag.calendarWrite)">{{ stateText(diag.calendarRead && diag.calendarWrite) }}</text>
       </view>
       <view class="perm-row">
+        <text class="perm-row__k">位置权限</text>
+        <text class="perm-row__v" :class="stateClass(diag.location)">{{ stateText(diag.location) }}</text>
+      </view>
+      <view class="perm-row">
+        <text class="perm-row__k">网络权限</text>
+        <text class="perm-row__v" :class="stateClass(diag.network)">{{ stateText(diag.network) }}</text>
+      </view>
+      <view class="perm-row">
         <text class="perm-row__k">精确闹钟（Android 12+）</text>
         <text class="perm-row__v" :class="stateClass(diag.canExactAlarm)">{{ stateText(diag.canExactAlarm) }}</text>
       </view>
       <view v-if="!diag.supported" class="hint perm-hint">H5 / 小程序无法检测系统权限，请在 App 中查看与操作。</view>
     </view>
 
-    <view class="btn btn--soft mt14" @click="verifyReminder">验证日历提醒（1 分钟后）</view>
+    <view class="btn btn--primary mt14" @click="requestAll">申请全部权限（网络 / 日历 / 通知 / 位置）</view>
+    <view class="btn btn--soft mt10" @click="verifyReminder">验证日历提醒（1 分钟后）</view>
     <view class="btn btn--primary mt10" @click="enableNotify">开启通知</view>
     <view class="btn btn--soft auth-btn mt10" @click="requestCalendar">授权极简排班访问日历（读 + 写）</view>
     <view class="btn btn--soft mt10" @click="openSettings('notification')">打开通知设置</view>
@@ -62,6 +71,8 @@ import {
   isSupported, diagnose, requestPermissions, testCalendarAlarm, notifyNow, openSettings as openNativeSettings
 } from '@/services/reminder.js'
 
+const bridge = typeof window !== 'undefined' && window.AndroidBridge ? window.AndroidBridge : null
+
 const brands = ['华为', '小米', '荣耀']
 const brand = ref('华为')
 
@@ -74,12 +85,14 @@ const BRAND_HINTS = {
 const brandHint = computed(() => BRAND_HINTS[brand.value] || '设置 → 应用管理 → 极简排班 → 权限 → 日历')
 
 const diag = ref({
-  supported: isSupported(),
+  supported: isSupported() || !!bridge,
   notification: false,
   calendarRead: false,
   calendarWrite: false,
+  location: false,
+  network: false,
   canExactAlarm: false,
-  platform: ''
+  platform: bridge ? 'android-webview' : ''
 })
 
 function stateText(v) {
@@ -92,10 +105,26 @@ function stateClass(v) {
 }
 
 async function refresh() {
+  if (bridge) {
+    try {
+      const s = JSON.parse(bridge.status() || '{}')
+      diag.value = {
+        supported: true,
+        notification: !!s.notification,
+        calendarRead: !!s.calendar,
+        calendarWrite: !!s.calendar,
+        location: !!s.location,
+        network: s.network !== false,
+        canExactAlarm: true,
+        platform: 'android-webview'
+      }
+      return
+    } catch (e) {}
+  }
   try {
     diag.value = await diagnose()
   } catch (e) {
-    diag.value = { supported: false, notification: false, calendarRead: false, calendarWrite: false, canExactAlarm: false }
+    diag.value = { supported: false, notification: false, calendarRead: false, calendarWrite: false, location: false, network: false, canExactAlarm: false }
   }
 }
 
@@ -105,6 +134,11 @@ onMounted(() => {
     if (brands.indexOf(saved) >= 0) brand.value = saved
   } catch (e) {}
   refresh()
+  if (bridge) {
+    window.addEventListener('andpermchange', () => {
+      refresh()
+    })
+  }
 })
 
 function pickBrand(name) {
@@ -114,7 +148,31 @@ function pickBrand(name) {
   } catch (e) {}
 }
 
+async function requestAll() {
+  if (bridge) {
+    bridge.request()
+    toast('请在系统弹窗中允许权限')
+    setTimeout(refresh, 800)
+    setTimeout(refresh, 2000)
+    return
+  }
+  if (!diag.value.supported) {
+    toast('H5 预览无法申请系统权限，请在 App 中操作')
+    return
+  }
+  try {
+    await requestPermissions('notification')
+    await requestPermissions('calendar')
+  } catch (e) {}
+  await refresh()
+  toast('已发起权限申请')
+}
+
 async function verifyReminder() {
+  if (bridge) {
+    toast('WebView 壳暂不支持写入系统日历，请授权日历权限后使用完整 App')
+    return
+  }
   if (!diag.value.supported) {
     toast('H5 预览暂不支持验证系统日历提醒，请在 App 中操作')
     return
@@ -145,6 +203,12 @@ async function verifyReminder() {
 }
 
 async function enableNotify() {
+  if (bridge) {
+    bridge.request()
+    toast('请在系统弹窗中允许通知权限')
+    setTimeout(refresh, 1200)
+    return
+  }
   if (!diag.value.supported) {
     toast('H5 预览暂不支持系统通知，请在 App 中开启')
     return
@@ -164,6 +228,12 @@ async function enableNotify() {
 }
 
 async function requestCalendar() {
+  if (bridge) {
+    bridge.request()
+    toast('请在系统弹窗中允许日历权限')
+    setTimeout(refresh, 1200)
+    return
+  }
   if (!diag.value.supported) {
     toast('H5 预览暂不支持日历授权，请在 App 中操作')
     return
@@ -176,6 +246,10 @@ async function requestCalendar() {
 }
 
 async function openSettings(kind) {
+  if (bridge) {
+    bridge.openSettings()
+    return
+  }
   if (!diag.value.supported) {
     toast('H5 预览无法打开系统设置，请在 App 中操作')
     return

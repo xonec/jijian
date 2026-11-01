@@ -59,9 +59,6 @@
             <text class="detail-td detail-td--shift">班次</text>
             <text class="detail-td detail-td--time">上班</text>
             <text class="detail-td detail-td--end">下班</text>
-            <text class="detail-td detail-td--rest">休息</text>
-            <text class="detail-td detail-td--dur">时长</text>
-            <text class="detail-td detail-td--remark">备注</text>
           </view>
           <view v-for="d in stat.details || []" :key="d.d" class="detail-tr">
             <text class="detail-td detail-td--date">{{ d.d }}</text>
@@ -71,9 +68,6 @@
             </view>
             <text class="detail-td detail-td--time">{{ d.start }}</text>
             <text class="detail-td detail-td--end">{{ d.end }}</text>
-            <text class="detail-td detail-td--rest">{{ d.restText || '--' }}</text>
-            <text class="detail-td detail-td--dur">{{ d.dur }}</text>
-            <text class="detail-td detail-td--remark">{{ d.remark }}</text>
           </view>
         </view>
       </view>
@@ -260,34 +254,23 @@ export default {
   white-space: nowrap;
 }
 .detail-td--date {
-  width: 56px;
+  width: 22%;
   font-variant-numeric: tabular-nums;
 }
 .detail-td--week {
-  width: 40px;
+  width: 14%;
 }
 .detail-td--shift {
-  width: 64px;
+  width: 24%;
 }
 .detail-td--time {
-  width: 48px;
+  width: 18%;
   font-variant-numeric: tabular-nums;
 }
 .detail-td--end {
-  width: 66px;
+  width: 22%;
   font-size: 11px;
   font-variant-numeric: tabular-nums;
-}
-.detail-td--rest {
-  width: 38px;
-}
-.detail-td--dur {
-  width: 42px;
-}
-.detail-td--remark {
-  width: 120px;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .detail-chip {
   display: inline-flex;

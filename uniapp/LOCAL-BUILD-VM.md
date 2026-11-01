@@ -43,6 +43,24 @@ app/src/main/assets/apps/__UNI__11376C4/www
 ./gradlew assembleRelease
 ```
 
+## 快捷脚本
+
+虚拟机内已提供：
+
+```bash
+/root/build-resources.sh      # 只生成 dist/build/app
+/root/build-shell-apk.sh      # 构建 WebView 壳 APK
+/root/build-offline-apk.sh    # 生成资源 + 离线原生 APK（需先放 DCloud SDK）
+```
+
+## 签名证书
+
+虚拟机内已放置（仅本地，不提交仓库）：
+
+- `/root/keystores/replica-release.jks`：演示证书，alias `replica`
+- `/root/keystores/dcloud-__UNI__11376C4.jks`：DCloud 云端证书，alias `__uni__11376c4`
+- 密码：`/root/keystores/password.txt`
+
 ## 验证记录
 
 - `pnpm build:app` 已成功，生成 `dist/build/app`（约 2.1MB）

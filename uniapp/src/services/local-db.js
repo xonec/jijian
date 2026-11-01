@@ -5,7 +5,7 @@
 import { SHIFTS, DAYS, REMARKS, ALARMS, PROJECTS, DISPLAY_CONFIG, FAQ } from '@/data/mock.js'
 
 const KEY = 'jy_db_v1'
-const SEED_VERSION = 4
+const SEED_VERSION = 5
 
 function seed() {
   const shifts = SHIFTS.map((s, i) => ({ _id: s.id, ...s, sort: i }))
@@ -74,7 +74,11 @@ function load() {
     if (db.config && db.config['一周开始日'] === '周日') db.config['一周开始日'] = '周一'
     if (Array.isArray(db.shifts)) {
       db.shifts.forEach((s) => {
-        if (s.rest === undefined || s.rest === '') s.rest = s.allDay ? '0' : '60'
+        if (s.allDay) {
+          if (s.rest === undefined || s.rest === '') s.rest = '0'
+        } else if (s.rest === undefined || s.rest === '' || Number(s.rest) === 0) {
+          s.rest = '60'
+        }
       })
     }
     db._seedVersion = SEED_VERSION
@@ -240,7 +244,8 @@ export async function computeStat(start, end) {
     if (s) {
       counts[s.name] = (counts[s.name] || 0) + 1
       totalHours += hours
-      restHours += s.allDay ? 0 : (Number(s.rest) || 0) / 60
+      const restMin = s && (s.rest === undefined || s.rest === '') ? (s.allDay ? 0 : 60) : Number(s.rest) || 0
+      restHours += s.allDay ? 0 : restMin / 60
     }
     if (d.workId) {
       details.push({

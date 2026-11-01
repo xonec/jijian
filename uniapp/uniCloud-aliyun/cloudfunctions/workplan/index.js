@@ -391,6 +391,16 @@ exports.main = async (event, context) => {
     if (action === 'shift.delete') {
       await getOwnedDoc(ctx, C.shift, event.id)
       await db.collection(C.shift).doc(event.id).remove()
+      // 级联：清空排班中对该班次的引用
+      const schedules = await getList(ctx, C.schedule)
+      for (const s of schedules) {
+        if (s.workId === event.id || s.secondWorkId === event.id) {
+          await db.collection(C.schedule).doc(s._id).update({
+            workId: s.workId === event.id ? '' : s.workId,
+            secondWorkId: s.secondWorkId === event.id ? '' : s.secondWorkId
+          })
+        }
+      }
       return ok(true)
     }
 

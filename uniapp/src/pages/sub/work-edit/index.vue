@@ -82,6 +82,7 @@
     </view>
 
     <view class="btn btn--primary mt14" @click="save">保存</view>
+    <view v-if="editId" class="btn btn--danger-text mt10" @click="removeShift">删除班次</view>
     <view class="hint">提示：班次颜色会用于首页日历色块、统计图表与桌面小组件。休息类班次可开启「是否全天」。组合班次由两个普通班次组成，可一次在某天设置 2 个班次。</view>
 
     <app-sheet :visible="!!sheet" :title="sheetTitle" @close="sheet = ''">
@@ -281,6 +282,35 @@ async function save() {
   } catch (e) {
     toast('保存失败，请重试')
   }
+}
+
+function removeShift() {
+  const key = editId.value
+  if (!key) return
+  uni.showModal({
+    title: '删除班次',
+    content: '删除后，使用该班次的日期会变为未排班，确定删除？',
+    confirmText: '删除',
+    cancelText: '取消',
+    success: async (res) => {
+      if (!res.confirm) return
+      try {
+        await api.deleteShift(key)
+        const idx = store.shifts.findIndex((s) => {
+          const sid = s.id || s._id
+          return sid === key || s._id === key || s.id === key
+        })
+        if (idx >= 0) store.shifts.splice(idx, 1)
+        ;(store.days || []).forEach((d) => {
+          if (d.work === key) d.work = ''
+        })
+        toast('已删除班次')
+        setTimeout(() => back(), 400)
+      } catch (e) {
+        toast('删除失败，请重试')
+      }
+    }
+  })
 }
 
 /* 同步到共享 store，首页/提醒页可立即使用新班次；编辑时按 id/_id 合并，避免重复 */

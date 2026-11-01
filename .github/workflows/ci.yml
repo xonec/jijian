@@ -106,6 +106,15 @@ jobs:
           fi
           node tools/smoke-h5.mjs --out ../analysis/qa/smoke-report.json
 
+      - name: 班次添加/编辑/删除回归
+        working-directory: uniapp
+        run: |
+          if ! curl -sf -o /dev/null http://127.0.0.1:9222/json/version; then
+            echo "CDP 不可用，跳过班次回归"
+            exit 0
+          fi
+          node tools/test-shift-flow.mjs
+
       - name: 上传冒烟报告
         uses: actions/upload-artifact@v4
         if: always()

@@ -45,9 +45,13 @@ async function waitText(needle, timeout = 8000) {
 const results = []
 function check(name, ok, detail) { results.push({ name, ok: !!ok, detail }); console.log((ok ? 'PASS ' : 'FAIL ') + name + (detail ? ' | ' + detail : '')) }
 
+// 清空本地数据，保证测试可重复
+await send('Page.navigate', { url: BASE + '/' })
+await sleep(800)
+await evaluate('localStorage.clear()')
+await evaluate("localStorage.setItem('jy_privacy_agreed','true');localStorage.setItem('jy_theme_mode','light')")
 await send('Page.navigate', { url: BASE + '/?theme=light#/pages/work/index' })
-await sleep(1500)
-await evaluate("localStorage.setItem('jy_privacy_agreed','true')")
+await sleep(1800)
 
 // 1. 进入添加班次
 await evaluate(`(() => { const els=[...document.querySelectorAll('*')]; const el=els.find(n=>n.textContent.trim()==='添加班次'); if(el){el.click();return true} return false })()`)
@@ -92,6 +96,20 @@ await send('Page.navigate', { url: BASE + '/?theme=light#/pages/work/index' })
 await sleep(1600)
 const persisted = await evaluate('document.body.innerText')
 check('刷新后数据持久化', persisted.includes('测试班次2'))
+
+// 7. 删除班次（编辑页删除按钮 + 确认弹窗 + 级联）
+await evaluate("(() => { const rows=[...document.querySelectorAll('.shift-row')]; const row=rows.find(r=>r.textContent.indexOf('测试班次2')>=0); if(row){row.click();return true} return false })()")
+await sleep(1000)
+await evaluate("(() => { const els=[...document.querySelectorAll('*')]; const el=els.find(n=>n.textContent.trim()==='删除班次'); if(el){el.click();return true} return false })()")
+await sleep(600)
+const modalShown = await evaluate("(() => !!document.querySelector('.uni-modal'))()")
+await evaluate("(() => { const b=document.querySelector('.uni-modal__btn_primary'); if(b){b.click();return true} return false })()")
+await sleep(1200)
+const listText3 = await evaluate('document.body.innerText')
+const rows3 = await evaluate("document.querySelectorAll('.shift-row').length")
+check('删除确认弹窗出现', modalShown)
+check('删除后列表不含该班次', !listText3.includes('测试班次2'), 'rows=' + rows3)
+check('删除后行数=3', rows3 === 3, 'actual=' + rows3)
 
 const failed = results.filter((r) => !r.ok)
 console.log('\n结果: ' + (results.length - failed.length) + '/' + results.length + ' 通过')

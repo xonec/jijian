@@ -82,7 +82,13 @@ export async function saveShift(shift) {
 
 export async function deleteShift(id) {
   const db = load()
-  db.shifts = db.shifts.filter((s) => s._id !== id)
+  db.shifts = db.shifts.filter((s) => s._id !== id && s.id !== id)
+  // 级联：清空排班中对该班次的引用
+  db.schedule = db.schedule.map((d) => ({
+    ...d,
+    workId: d.workId === id ? '' : d.workId,
+    secondWorkId: d.secondWorkId === id ? '' : d.secondWorkId
+  }))
   save(db)
   return true
 }

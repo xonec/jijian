@@ -501,6 +501,7 @@ export default {
       delete store.remarks[store.selected]
       store.secondWorks[store.selected] = ''
       rebuildDays()
+      moveSelected(1)
       try {
         await api.setDay({ date, workId: '', secondWorkId: '', remark: '' })
       } catch (e) {}

@@ -35,7 +35,10 @@
           @click="openPlanEdit(plan)"
           @longpress="onPlanLongPress(plan)"
         >
-          <text class="plan-card__name">{{ plan.name }}</text>
+          <view class="plan-card__head">
+            <text class="plan-card__name">{{ plan.name }}</text>
+            <text class="plan-card__del" @click.stop="onPlanDelete(plan)">删除</text>
+          </view>
           <view class="plan-card__seq">
             <view
               v-for="(item, idx) in planChips(plan)"
@@ -49,7 +52,7 @@
       <view v-else class="empty">暂无轮班</view>
       <view class="add-row" @click="openPlanAdd">添加轮班</view>
       <view class="sort-link" @click="openPlanSort">轮班排序</view>
-      <view class="hint center">长按轮班可删除</view>
+      <view class="hint center">点方案右上角「删除」可移除</view>
 
       <view v-if="planSortVisible" class="sort-mask" @click.self="planSortVisible = false">
         <view class="sort-sheet">
@@ -134,6 +137,19 @@ export default {
         return sh ? { name: sh.name, color: sh.color } : { name: '空', color: '#999999' }
       })
     },
+    onPlanDelete(plan) {
+      if (!plan) return
+      uni.showModal({
+        title: '删除轮班',
+        content: '确定删除「' + plan.name + '」？',
+        confirmText: '删除',
+        success: (res) => {
+          if (!res.confirm) return
+          removePlan(plan.id)
+          toast('已删除轮班')
+        }
+      })
+    },
     onPlanLongPress(plan) {
       if (!plan) return
       uni.showModal({
@@ -214,11 +230,21 @@ export default {
   border-radius: var(--r-card);
   padding: 10px 12px;
 }
+.plan-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
 .plan-card__name {
   display: block;
   font-size: 14px;
   color: var(--text-1);
-  margin-bottom: 8px;
+}
+.plan-card__del {
+  font-size: 12px;
+  color: var(--delete);
+  padding: 2px 4px;
 }
 .plan-card__seq {
   display: flex;

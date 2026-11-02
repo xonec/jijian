@@ -254,7 +254,7 @@ function dedupePlans(list) {
   const map = {}
   ;(Array.isArray(list) ? list : []).forEach((p) => {
     if (!p) return
-    const key = p.id || p._id || p.name
+    const key = (p.name || '') + '|' + JSON.stringify(p.sequence || [])
     if (!key) return
     const prev = map[key]
     if (!prev || Number(p.updatedAt || 0) >= Number(prev.updatedAt || 0)) map[key] = p
@@ -294,7 +294,7 @@ export async function syncPlans() {
       const unique = []
       const extras = []
       mapped.forEach((p) => {
-        const key = p.id || p.name
+        const key = (p.name || '') + '|' + JSON.stringify(p.sequence || [])
         if (seen[key]) extras.push(p)
         else {
           seen[key] = true

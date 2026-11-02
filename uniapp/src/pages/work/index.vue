@@ -37,7 +37,7 @@
         >
           <view class="plan-card__head">
             <text class="plan-card__name">{{ plan.name }}</text>
-            <text class="plan-card__del" @click.stop="onPlanDelete(plan)">删除</text>
+            <view class="plan-card__del" @click.stop="onPlanDelete(plan)">删除</view>
           </view>
           <view class="plan-card__seq">
             <view

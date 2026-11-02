@@ -17,7 +17,7 @@ function nativePlugin() {
 
 export function isSupported() {
   const p = nativePlugin()
-  return !!(p && typeof p.chooseDirectory === 'function' && typeof p.writeBackup === 'function')
+  return !!(p && typeof p.exportBackup === 'function' && typeof p.getExportResult === 'function')
 }
 
 export function getDirUri() {
@@ -85,4 +85,19 @@ export async function writeBackupFile(item) {
   const name = '极简排班备份-' + new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19) + '.json'
   const res = await call('writeBackup', uri, name, JSON.stringify(item, null, 2))
   return (res && res.name) || name
+}
+
+/** 每次备份时弹出 Android 系统保存文件选择器，并写入 JSON */
+export async function exportBackupFile(item) {
+  if (!isSupported()) throw new Error('仅 Android App 支持系统文件保存')
+  const name = '极简排班备份-' + new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19) + '.json'
+  await call('exportBackup', name, JSON.stringify(item, null, 2))
+  for (let i = 0; i < 240; i += 1) {
+    await new Promise((r) => setTimeout(r, 500))
+    const res = await call('getExportResult')
+    if (res && res.status === 'success') return { status: 'success', name: res.name || name }
+    if (res && res.status === 'canceled') return { status: 'canceled' }
+    if (res && res.status === 'error') throw new Error(res.error || '系统文件保存失败')
+  }
+  throw new Error('系统文件保存超时')
 }

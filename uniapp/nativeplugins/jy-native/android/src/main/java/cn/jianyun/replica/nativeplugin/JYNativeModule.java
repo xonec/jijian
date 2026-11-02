@@ -278,6 +278,39 @@ public class JYNativeModule extends UniModule {
     }
 
     @UniJSMethod(uiThread = true)
+    public void exportBackup(String fileName, String content, UniJSCallback callback) {
+        try {
+            Context c = ctx();
+            if (c == null) { reply(callback, error("NO_CONTEXT", "无法获取 Context")); return; }
+            c.getSharedPreferences(SafExportActivity.PREFS, Context.MODE_PRIVATE).edit().clear().apply();
+            Intent intent = new Intent(c, SafExportActivity.class);
+            intent.putExtra("fileName", fileName == null || fileName.isEmpty() ? "backup.json" : fileName);
+            intent.putExtra("content", content == null ? "" : content);
+            if (!(c instanceof Activity)) intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            c.startActivity(intent);
+            reply(callback, ok());
+        } catch (Throwable e) {
+            reply(callback, error("EXPORT_BACKUP_FAILED", String.valueOf(e.getMessage())));
+        }
+    }
+
+    @UniJSMethod(uiThread = true)
+    public void getExportResult(UniJSCallback callback) {
+        try {
+            Context c = ctx();
+            if (c == null) { reply(callback, error("NO_CONTEXT", "无法获取 Context")); return; }
+            SharedPreferences sp = c.getSharedPreferences(SafExportActivity.PREFS, Context.MODE_PRIVATE);
+            Map<String, Object> r = ok();
+            r.put("status", sp.getString(SafExportActivity.KEY_STATUS, ""));
+            r.put("name", sp.getString(SafExportActivity.KEY_NAME, ""));
+            r.put("error", sp.getString(SafExportActivity.KEY_ERROR, ""));
+            reply(callback, r);
+        } catch (Throwable e) {
+            reply(callback, error("GET_EXPORT_FAILED", String.valueOf(e.getMessage())));
+        }
+    }
+
+    @UniJSMethod(uiThread = true)
     public void getStatus(UniJSCallback callback) {
         try {
             Context c = ctx();

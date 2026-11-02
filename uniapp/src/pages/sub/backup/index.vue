@@ -2,20 +2,18 @@
   <page-frame title="本地备份与恢复" back>
     <view class="card mt10">
       <view class="form-row">
-        <text class="form-row__k">本地备份目录</text>
-        <text class="form-row__v form-row__v--muted">{{ dirUri ? '系统目录' : '默认目录' }}</text>
+        <text class="form-row__k">保存方式</text>
+        <text class="form-row__v form-row__v--muted">应用私有 + 系统文件</text>
       </view>
-      <view class="dir-row" @click="onSetDir">
+      <view class="dir-row">
         <view class="dir-row__ico">
           <ri-icon name="folder" :size="18" />
         </view>
         <view class="dir-row__main">
-          <text class="dir-row__t">{{ dirUri ? '更换系统备份目录' : '选择系统备份目录' }}</text>
-          <text class="dir-row__s">{{ dirUri ? dirName : '选择后备份会同时写入系统目录，卸载 App 也能找回文件。仅 Android App 支持。' }}</text>
+          <text class="dir-row__t">系统文件保存</text>
+          <text class="dir-row__s">每次一键备份后会弹出系统保存位置，可选择 Download、网盘或文件管理器中的目录。仅 Android App 支持。</text>
         </view>
-        <ri-icon name="arrow_right" :size="15" class="dir-row__chev" />
       </view>
-      <view v-if="dirUri" class="dir-clear" @click="clearSystemDir">不再使用系统目录</view>
     </view>
 
     <view class="btn btn--primary mt14" @click="openCreate">
@@ -61,7 +59,7 @@
       </view>
     </view>
 
-    <view class="hint">{{ dirUri ? '备份会同时保存到应用私有目录和所选系统目录；系统目录文件可在文件管理器中查看。' : '本地备份保存在应用私有目录，卸载 App 会丢失，建议同时使用云备份。' }}</view>
+    <view class="hint">本地备份保存在应用私有目录；一键备份成功后可选择系统文件位置，卸载 App 也能找回导出的 JSON 文件。</view>
 
     <app-dialog
       :visible="createVisible"
@@ -90,7 +88,7 @@ import { ref, computed } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import api from '@/services/api.js'
 import { goPage, goTab, toast } from '@/composables/use-nav.js'
-import { chooseDir, clearDir, dirLabel, getDirUri, isSupported, writeBackupFile } from '@/services/backup-dir.js'
+import { exportBackupFile, isSupported } from '@/services/backup-dir.js'
 import { useTheme } from '@/composables/use-theme.js'
 
 const { theme } = useTheme()
@@ -99,8 +97,6 @@ const list = ref([])
 const loading = ref(true)
 const createVisible = ref(false)
 const backupName = ref('')
-const dirUri = ref('')
-const dirName = ref('')
 
 function pad2(n) {
   return n < 10 ? '0' + n : String(n)
@@ -191,13 +187,12 @@ async function doCreate() {
   try {
     const item = await api.backup.create({ name, scope: 'local' })
     let extra = ''
-    if (dirUri.value) {
+    if (isSupported()) {
       try {
-        await writeBackupFile(item)
-        extra = '，已写入系统目录'
+        const r = await exportBackupFile(item)
+        if (r && r.status === 'success') extra = '，已保存到系统文件'
       } catch (e) {
-        console.error('[backup-dir] write failed', e)
-        extra = '，系统目录写入失败：' + ((e && (e.message || e.errMsg)) || '未知错误')
+        extra = '，系统文件保存未完成'
       }
     }
     await loadList()
@@ -207,27 +202,6 @@ async function doCreate() {
     hideLoadingSafe()
     toast((e && e.message) || '备份失败，请重试')
   }
-}
-async function onSetDir() {
-  if (!isSupported()) {
-    toast('H5/演示环境不支持系统目录，请在 Android App 中操作')
-    return
-  }
-  try {
-    const uri = await chooseDir()
-    if (!uri) return
-    dirUri.value = uri
-    dirName.value = dirLabel()
-    toast('系统目录已设置')
-  } catch (e) {
-    toast((e && e.message) || '选择目录失败')
-  }
-}
-function clearSystemDir() {
-  clearDir()
-  dirUri.value = ''
-  dirName.value = ''
-  toast('已取消系统目录')
 }
 
 function goCloud() {
@@ -280,8 +254,6 @@ async function onRemove(item) {
 }
 
 onLoad(() => {
-  dirUri.value = getDirUri()
-  dirName.value = dirLabel()
   loadList()
 })
 </script>

@@ -125,16 +125,14 @@
         <view class="oper-body">
           <template v-if="operTab === '自定义排班'">
             <view v-if="!store.shifts.length" class="oper-empty">你还没有设置班次喔</view>
-            <view v-else class="oper-shift-list">
+            <view v-else class="oper-shift-grid">
               <view
                 v-for="sh in store.shifts"
                 :key="sh.id"
-                class="oper-shift"
-                :style="{ background: sh.color }"
-                @click="pickOperShift(sh.id)"
+                class="oper-shift-cell"
+                @click.stop="pickOperShift(sh.id)"
               >
-                <text class="oper-shift__name">{{ sh.name }}</text>
-                <text class="oper-shift__time">{{ fmtTime(sh) }}</text>
+                <shift-badge :shift="sh" :show-begin="showBeginTime" :show-end="showEndTime" />
               </view>
             </view>
           </template>
@@ -486,13 +484,18 @@ export default {
         return
       }
       lastPickAt = now
+      const date = selectedDateText.value
+      const prev = store.scheduleRaw[date] || { date }
+      const payload = { ...prev, date, workId: id, secondWorkId: '', remark: prev.remark || '' }
+      store.scheduleRaw[date] = payload
+      store.secondWorks[store.selected] = ''
+      rebuildDays()
+      const sh = store.shifts.find((x) => x.id === id)
+      toast('已排班：' + (sh ? sh.name : ''))
       try {
-        await setDayWork(store.selected, id)
-        store.secondWorks[store.selected] = ''
-        const sh = store.shifts.find((x) => x.id === id)
-        toast('已排班：' + (sh ? sh.name : ''))
+        await api.setDay(payload)
       } catch (e) {
-        toast((e && (e.message || e.errMsg)) || '排班失败')
+        // 本地已经生效，云端失败时保留本机结果
       }
     }
     async function clearSelectedDay() {
@@ -737,28 +740,17 @@ export default {
   font-size: 13px;
   color: var(--text-3);
 }
-.oper-shift-list {
+.oper-shift-grid {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 6px;
 }
-.oper-shift {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 8px;
-  padding: 9px 12px;
-  color: #ffffff;
-  font-size: 13px;
+.oper-shift-cell {
+  width: calc((100% - 12px) / 3);
+  min-width: 0;
   &:active {
-    opacity: 0.85;
+    opacity: 0.8;
   }
-}
-.oper-shift__name {
-  font-weight: 500;
-}
-.oper-shift__time {
-  font-size: 12px;
 }
 .oper-plan {
   padding-top: 4px;

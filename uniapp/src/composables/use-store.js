@@ -150,8 +150,12 @@ export async function setDayWork(day, workId, reply) {
   const remark = store.remarks[day] || ''
   const payload = { date, workId, secondWorkId: '', remark }
   store.scheduleRaw[date] = payload
-  await api.setDay(payload)
   rebuildDays()
+  try {
+    await api.setDay(payload)
+  } catch (e) {
+    // 本地先生效；云端失败不阻塞界面
+  }
   if (reply) reply()
 }
 

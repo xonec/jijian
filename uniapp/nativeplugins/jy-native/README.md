@@ -21,3 +21,9 @@ native.getStatus(callback)
 编译依赖 DCloud 离线 SDK 的 `uniapp-v8-release.aar`（`UniModule` / `UniJSMethod`）。
 
 预编译产物：`android/jy-native.aar`。
+
+## 真机验证
+
+- ZTE A2022：日历事件写入成功（系统日历可查）
+- ZTE A2022：本地通知成功（通知栏可见）
+- 自定义基座：本地注入 classes3.dex + dcloud_uniplugins.json 后运行

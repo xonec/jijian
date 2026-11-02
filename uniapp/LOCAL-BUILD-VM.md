@@ -96,3 +96,23 @@ app/src/main/assets/apps/__UNI__11376C4/www
 - `pnpm build:app` 已成功，生成 `dist/build/app`（约 2.1MB）
 - `pnpm build:h5` 已成功
 - Android SDK / Gradle / JDK / Node 全部可用
+
+## 真机验证结果（ZTE A2022，仅真机）
+
+- jy-native 原生插件已编入自定义基座并在真机运行
+- 日历：原生 CalendarContract 写入成功，系统日历中可查到事件「极简排班 · 日历提醒测试」
+- 通知：原生 NotificationManager 本地通知成功，通知栏可见「极简排班提醒 / 通知已开启…」
+- 验证时不再依赖 plus.android 的 ContentValues / Notification.Builder 桥接
+
+### 本地自定义基座说明
+
+DCloud 离线 SDK 文档要求 debug-server-release.aar + dcloud_control.xml 的 debug="true" syncDebug="true"。
+但纯离线基座仍需 DCloud AppKey，否则会提示「未配置 appkey 或配置错误」。
+
+在没有云端打包等待的情况下，采用本地注入方式验证：
+1. 取出已有的云端自定义基座 APK；
+2. 把 jy-native 的 classes 编译成 classes3.dex（保留原 classes.dex / classes2.dex）；
+3. 写入 assets/dcloud_uniplugins.json 注册模块；
+4. 用原证书重新签名并安装。
+
+该方式不新增云打包，仅本地改动 APK；正式发布仍建议走云打包或补上 DCloud AppKey 后本地离线打包。

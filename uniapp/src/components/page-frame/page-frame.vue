@@ -1,5 +1,5 @@
 <template>
-  <view class="page-frame" :class="themeClass">
+  <view class="page-frame" :class="themeClass" :style="frameStyle">
     <slot name="header">
       <view class="header">
         <view class="header__side">
@@ -36,12 +36,24 @@ export default {
     tab: { type: String, default: '' }
   },
   data() {
+    let frameStyle = ''
+    // #ifdef MP-WEIXIN
+    try {
+      const sys = uni.getSystemInfoSync()
+      const menu = uni.getMenuButtonBoundingClientRect()
+      const status = Number(sys.statusBarHeight) || 0
+      const navH = menu && menu.height ? (menu.top - status) * 2 + menu.height : 44
+      const capsuleRight = menu && menu.left ? (sys.windowWidth - menu.left) + 8 : 0
+      frameStyle = '--status-bar-height:' + status + 'px;--nav-h:' + navH + 'px;--capsule-right:' + capsuleRight + 'px;'
+    } catch (e) {}
+    // #endif
     let agreed = false
     try {
       agreed = !!uni.getStorageSync('jy_privacy_agreed')
     } catch (e) {}
     return {
-      privacyVisible: !agreed
+      privacyVisible: !agreed,
+      frameStyle
     }
   },
   setup() {

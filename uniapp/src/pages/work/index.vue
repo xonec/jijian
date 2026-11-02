@@ -218,7 +218,9 @@ export default {
 .work-header {
   display: flex;
   justify-content: center;
-  padding: 18px 0 14px;
+  min-height: var(--nav-h, 44px);
+  padding: 8px var(--capsule-right, 0) 8px var(--page-x);
+  box-sizing: border-box;
 }
 .plan-list {
   display: flex;

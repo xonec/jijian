@@ -36,12 +36,13 @@ view, text, button, input, textarea, scroll-view, swiper, image {
 
 /* ---------- 顶栏 ---------- */
 .header {
-  height: var(--header-h);
+  height: var(--nav-h, var(--header-h));
   flex: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--page-x);
+  padding: 0 var(--capsule-right, var(--page-x));
+  padding-left: var(--page-x);
   position: sticky;
   top: 0;
   z-index: 20;
@@ -64,7 +65,7 @@ view, text, button, input, textarea, scroll-view, swiper, image {
   font-size: var(--fs-title);
   font-weight: 600;
   letter-spacing: 0.2px;
-  max-width: 60%;
+  max-width: calc(100% - var(--capsule-right, 0px) - 96px);
   text-align: center;
   white-space: nowrap;
   overflow: hidden;

@@ -162,6 +162,7 @@
               </view>
               <view class="oper-plan__btn" @click="clearPlanDays">清空从 {{ selectedDateText }} 开始的 {{ planDays }} 天排班</view>
               <view class="oper-plan__btn oper-plan__btn--primary" @click="addPlan">添加周期轮班</view>
+              <view class="oper-plan__manage" @click="goManagePlans">管理轮班（删除 / 排序）</view>
             </view>
           </template>
         </view>
@@ -285,7 +286,7 @@ import {
   saveRemark, WEEK, applyBootstrap, setWeekStart, setDayWork, shiftById, rebuildDays, loadPlans, syncPlans
 } from '@/composables/use-store.js'
 import { useTheme } from '@/composables/use-theme.js'
-import { goPage, toast } from '@/composables/use-nav.js'
+import { goPage, goTab, toast } from '@/composables/use-nav.js'
 import api, { isCloud } from '@/services/api.js'
 import config from '@/config.js'
 
@@ -559,6 +560,11 @@ export default {
     function addPlan() {
       goPage('plan-edit')
     }
+    function goManagePlans() {
+      store.editMode = false
+      store.workTab = 'plan'
+      goTab('work')
+    }
     function onOper(label) {
       if (label === '关闭') return closeOper()
       if (label === '上一天') return moveSelected(-1)
@@ -635,6 +641,7 @@ export default {
       clearSelectedDay,
       clearPlanDays,
       addPlan,
+      goManagePlans,
       onOper
     }
   },
@@ -788,6 +795,12 @@ export default {
 .oper-plan__btn--primary {
   background: var(--primary);
   color: #ffffff;
+}
+.oper-plan__manage {
+  padding: 10px 0 4px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-3);
 }
 .oper-clear {
   height: 42px;

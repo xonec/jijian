@@ -405,7 +405,7 @@ exports.main = async (event, context) => {
       return ok(Object.assign({}, next, { _id: addRes.id }))
     }
 
-    if (action === 'plan.list') return ok(await getList(ctx, C.plan))
+    if (action === 'plan.list') return ok(await getList(ctx, C.plan, 'sort'))
     if (action === 'plan.save') return ok(await upsert(ctx, C.plan, event.plan || {}))
     if (action === 'plan.delete') {
       await getOwnedDoc(ctx, C.plan, event.id)

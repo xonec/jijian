@@ -22,6 +22,10 @@
     "sequence": {
       "bsonType": "array",
       "title": "班次序列（空字符串表示空档）"
+    },
+    "sort": {
+      "bsonType": "int",
+      "title": "排序"
     }
   },
   "permission": {

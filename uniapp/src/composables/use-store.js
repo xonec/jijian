@@ -271,8 +271,10 @@ export async function syncPlans() {
         cloudId: p._id,
         name: p.name,
         sequence: Array.isArray(p.sequence) ? p.sequence : [],
+        sort: Number(p.sort) || 0,
         updatedAt: p.updatedAt || 0
       }))
+      store.plans.sort((a, b) => (a.sort || 0) - (b.sort || 0))
       persistPlans()
     }
   } catch (e) {}
@@ -285,6 +287,7 @@ export async function savePlan(plan) {
     cloudId: plan.cloudId || '',
     name: String(plan.name || '').trim() || '未命名轮班',
     sequence: Array.isArray(plan.sequence) ? plan.sequence.slice() : [],
+    sort: Number.isFinite(plan.sort) ? plan.sort : store.plans.length,
     updatedAt: Date.now()
   }
   const idx = store.plans.findIndex((x) => x.id === item.id)
@@ -317,8 +320,12 @@ export async function removePlan(id) {
 }
 
 export function reorderPlans(list) {
-  if (Array.isArray(list)) store.plans = list.slice()
+  if (!Array.isArray(list)) return
+  store.plans = list.map((p, i) => ({ ...p, sort: i }))
   persistPlans()
+  store.plans.forEach((p) => {
+    api.savePlan({ ...p, _id: p.cloudId || undefined }).catch(() => {})
+  })
 }
 
 export function planShiftName(plan, index) {

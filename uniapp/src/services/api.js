@@ -270,6 +270,10 @@ export const api = {
       if (isCloud()) return callCloud('backup.restore', { id }, 'backup')
       return local.backupRestore(id)
     },
+    async importBackup(payload) {
+      if (isCloud()) return callCloud('backup.import', payload, 'backup')
+      return local.backupImport(payload.name, payload.snapshot)
+    },
     async remove(id) {
       if (isCloud()) return callCloud('backup.delete', { id }, 'backup')
       return local.backupDelete(id)

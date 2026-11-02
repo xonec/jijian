@@ -20,6 +20,10 @@
       <ri-icon name="download" :size="18" />
       <text>一键备份</text>
     </view>
+    <view class="btn btn--accent-text mt6" @click="onImport">
+      <ri-icon name="download" :size="16" />
+      <text>从系统文件恢复</text>
+    </view>
     <view class="btn btn--accent-text mt6" @click="goCloud">
       <ri-icon name="cloud3" :size="16" />
       <text>云备份 · 多设备同步</text>
@@ -88,7 +92,7 @@ import { ref, computed } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import api from '@/services/api.js'
 import { goPage, goTab, toast } from '@/composables/use-nav.js'
-import { exportBackupFile, isSupported } from '@/services/backup-dir.js'
+import { exportBackupFile, importBackupFile, isSupported } from '@/services/backup-dir.js'
 import { useTheme } from '@/composables/use-theme.js'
 
 const { theme } = useTheme()
@@ -201,6 +205,32 @@ async function doCreate() {
   } catch (e) {
     hideLoadingSafe()
     toast((e && e.message) || '备份失败，请重试')
+  }
+}
+
+async function onImport() {
+  if (!isSupported()) {
+    toast('H5/演示环境不支持系统文件导入，请在 Android App 中操作')
+    return
+  }
+  try {
+    const data = await importBackupFile()
+    if (!data) return
+    const ok = await confirmModal({
+      title: '恢复系统备份',
+      content: '将用「' + data.name + '」覆盖当前排班数据，确定恢复吗？',
+      confirmText: '恢复'
+    })
+    if (!ok) return
+    uni.showLoading({ title: '恢复中…', mask: true })
+    const item = await api.backup.importBackup({ name: data.name, snapshot: data.snapshot })
+    await api.backup.restore(item._id)
+    await loadList()
+    hideLoadingSafe()
+    toast('系统备份已恢复')
+  } catch (e) {
+    hideLoadingSafe()
+    toast((e && (e.message || e.errMsg)) || '恢复失败')
   }
 }
 

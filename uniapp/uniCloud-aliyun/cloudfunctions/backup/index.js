@@ -168,6 +168,29 @@ async function createBackup(event, ctx) {
   return Object.assign({ _id: res.id }, doc)
 }
 
+async function importBackup(event, ctx) {
+  const input = event.snapshot || {}
+  const clean = {}
+  for (const key of ['shifts', 'schedule', 'alarms', 'projects', 'faq']) {
+    if (Array.isArray(input[key])) clean[key] = input[key].slice(0, 5000)
+  }
+  if (input.config && typeof input.config === 'object') clean.config = input.config
+  const size = countItems(clean)
+  if (!size) throw new Error('备份文件没有可恢复数据')
+  const name = (String(event.name || '').trim() || '系统文件备份').slice(0, 60)
+  const doc = {
+    user_id: ctx.owner,
+    deviceId: ctx.deviceId,
+    name,
+    scope: 'local',
+    snapshot: clean,
+    size,
+    created_at: Date.now()
+  }
+  const res = await db.collection(C.backup).add(doc)
+  return Object.assign({ _id: res.id }, doc)
+}
+
 async function clearOwned(col, owner) {
   await db.collection(col).where(ownerQuery(owner)).remove()
 }
@@ -237,6 +260,7 @@ exports.main = async (event) => {
     const ctx = await resolveOwner(ev)
     if (verb === 'list') return ok(await listBackups(ev, ctx))
     if (verb === 'create') return ok(await createBackup(ev, ctx))
+    if (verb === 'import') return ok(await importBackup(ev, ctx))
     if (verb === 'restore') return ok(await restoreBackup(ev, ctx))
     if (verb === 'delete' || verb === 'remove') return ok(await deleteBackup(ev, ctx))
     return fail('未知 action: ' + ev.action)

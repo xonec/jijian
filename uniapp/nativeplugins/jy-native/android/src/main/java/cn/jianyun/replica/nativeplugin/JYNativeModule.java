@@ -311,6 +311,38 @@ public class JYNativeModule extends UniModule {
     }
 
     @UniJSMethod(uiThread = true)
+    public void importBackup(UniJSCallback callback) {
+        try {
+            Context c = ctx();
+            if (c == null) { reply(callback, error("NO_CONTEXT", "无法获取 Context")); return; }
+            c.getSharedPreferences(SafImportActivity.PREFS, Context.MODE_PRIVATE).edit().clear().apply();
+            Intent intent = new Intent(c, SafImportActivity.class);
+            if (!(c instanceof Activity)) intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            c.startActivity(intent);
+            reply(callback, ok());
+        } catch (Throwable e) {
+            reply(callback, error("IMPORT_BACKUP_FAILED", String.valueOf(e.getMessage())));
+        }
+    }
+
+    @UniJSMethod(uiThread = true)
+    public void getImportResult(UniJSCallback callback) {
+        try {
+            Context c = ctx();
+            if (c == null) { reply(callback, error("NO_CONTEXT", "无法获取 Context")); return; }
+            SharedPreferences sp = c.getSharedPreferences(SafImportActivity.PREFS, Context.MODE_PRIVATE);
+            Map<String, Object> r = ok();
+            r.put("status", sp.getString(SafImportActivity.KEY_STATUS, ""));
+            r.put("name", sp.getString(SafImportActivity.KEY_NAME, ""));
+            r.put("content", sp.getString(SafImportActivity.KEY_CONTENT, ""));
+            r.put("error", sp.getString(SafImportActivity.KEY_ERROR, ""));
+            reply(callback, r);
+        } catch (Throwable e) {
+            reply(callback, error("GET_IMPORT_FAILED", String.valueOf(e.getMessage())));
+        }
+    }
+
+    @UniJSMethod(uiThread = true)
     public void getStatus(UniJSCallback callback) {
         try {
             Context c = ctx();

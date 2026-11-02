@@ -101,3 +101,25 @@ export async function exportBackupFile(item) {
   }
   throw new Error('系统文件保存超时')
 }
+
+/** 从 Android 系统文件选择器读取 JSON 备份 */
+export async function importBackupFile() {
+  const p = nativePlugin()
+  if (!p || typeof p.importBackup !== 'function') throw new Error('当前版本不支持系统文件导入')
+  await call('importBackup')
+  for (let i = 0; i < 120; i += 1) {
+    await new Promise((r) => setTimeout(r, 500))
+    const res = await call('getImportResult')
+    if (!res || !res.status) continue
+    if (res.status === 'canceled') return null
+    if (res.status === 'error') throw new Error(res.error || '读取备份文件失败')
+    if (res.status === 'success') {
+      let data
+      try { data = JSON.parse(res.content || '{}') } catch (e) { throw new Error('备份文件不是有效 JSON') }
+      const snapshot = data && data.snapshot ? data.snapshot : data
+      if (!snapshot || typeof snapshot !== 'object') throw new Error('备份文件格式不正确')
+      return { name: (data && data.name) || res.name || '系统文件备份', snapshot }
+    }
+  }
+  throw new Error('读取系统文件超时')
+}

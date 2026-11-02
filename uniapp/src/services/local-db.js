@@ -455,6 +455,28 @@ export async function backupCreate(payload) {
   return item
 }
 
+export async function backupImport(name, snapshot) {
+  const clean = {}
+  for (const key of ['shifts', 'schedule', 'alarms', 'projects', 'faq']) {
+    if (Array.isArray(snapshot && snapshot[key])) clean[key] = snapshot[key].slice(0, 5000)
+  }
+  if (snapshot && snapshot.config && typeof snapshot.config === 'object') clean.config = snapshot.config
+  const size = countItems(clean)
+  if (!size) throw new Error('备份文件没有可恢复数据')
+  const item = {
+    _id: 'b' + Date.now().toString(36),
+    name: String(name || '').slice(0, 60) || '系统文件备份',
+    scope: 'local',
+    created_at: Date.now(),
+    size,
+    snapshot: clean
+  }
+  const list = uni.getStorageSync(LOCAL_BACKUP_KEY) || []
+  list.unshift(item)
+  uni.setStorageSync(LOCAL_BACKUP_KEY, list)
+  return item
+}
+
 export async function backupRestore(id) {
   const all = (uni.getStorageSync(LOCAL_BACKUP_KEY) || []).concat(uni.getStorageSync(CLOUD_BACKUP_KEY) || [])
   const item = all.find((x) => x._id === id)

@@ -43,8 +43,8 @@
       </view>
 
       <view class="team-links">
-        <view class="team-link" @click="toast('团队班次管理开发中')">团队班次</view>
-        <view class="team-link" @click="toast('团队排班开发中')">团队排班</view>
+        <view class="team-link" @click="openShifts">团队班次</view>
+        <view class="team-link" @click="openSchedule">团队排班</view>
       </view>
     </template>
   </page-frame>
@@ -54,7 +54,7 @@
 import { computed, ref } from 'vue'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import api from '@/services/api.js'
-import { toast } from '@/composables/use-nav.js'
+import { goPage, toast } from '@/composables/use-nav.js'
 
 const teamId = ref('')
 const team = ref(null)
@@ -114,6 +114,8 @@ async function reject(req) {
   }
 }
 
+function openShifts() { goPage('team-shifts', { id: teamId.value }) }
+function openSchedule() { goPage('team-schedule', { id: teamId.value }) }
 function copyCode() {
   if (!team.value || !team.value.inviteCode) return
   uni.setClipboardData({ data: team.value.inviteCode })

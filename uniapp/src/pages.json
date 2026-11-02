@@ -63,6 +63,18 @@
       }
     },
     {
+      "path": "pages/sub/team-shifts/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/sub/team-schedule/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/sub/alarm-edit/index",
       "style": {
         "navigationStyle": "custom"

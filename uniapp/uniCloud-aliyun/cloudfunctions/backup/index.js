@@ -75,7 +75,7 @@ async function resolveOwner(event) {
  *  - 后续扩展：user_id 字段存 uid
  */
 function ownerQuery(owner) {
-  return dbCmd.or([{ deviceId: owner }, { user_id: owner }])
+  return dbCmd.or([{ owner: owner }, { deviceId: owner }, { user_id: owner }])
 }
 
 async function queryOwned(col, owner, orderField) {
@@ -161,10 +161,7 @@ async function createBackup(event, ctx) {
 }
 
 async function clearOwned(col, owner) {
-  await db.collection(col).where({ deviceId: owner }).remove()
-  try {
-    await db.collection(col).where({ user_id: owner }).remove()
-  } catch (e) {}
+  await db.collection(col).where(ownerQuery(owner)).remove()
 }
 
 /* 快照里的数据保留业务字段，归属字段统一重写为当前 owner */
@@ -172,8 +169,9 @@ function ownedDoc(item, ctx) {
   const payload = Object.assign({}, item || {})
   delete payload._id
   delete payload.user_id
-  payload.deviceId = ctx.owner
-  if (ctx.uid) payload.user_id = ctx.uid
+  delete payload.owner
+  payload.owner = ctx.owner
+  if (!ctx.uid) payload.deviceId = ctx.deviceId
   return payload
 }
 

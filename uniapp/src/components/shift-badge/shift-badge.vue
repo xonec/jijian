@@ -4,7 +4,11 @@
   </view>
   <view v-else class="shift-badge" :style="{ background: shift.color, borderRadius: radius + 'px' }">
     <text class="shift-badge__n" :style="{ fontSize: nameSize + 'px' }">{{ shift.name }}</text>
-    <text v-if="timeText" class="shift-badge__t" :style="{ fontSize: timeSize + 'px' }">{{ timeText }}</text>
+    <template v-if="showBegin && showEnd">
+      <text class="shift-badge__t" :style="{ fontSize: timeSize + 'px' }">{{ shift.allDay ? '全天' : shift.start }}</text>
+      <text v-if="!shift.allDay" class="shift-badge__t" :style="{ fontSize: timeSize + 'px' }">{{ shift.end }}</text>
+    </template>
+    <text v-else-if="timeText" class="shift-badge__t" :style="{ fontSize: timeSize + 'px' }">{{ timeText }}</text>
   </view>
 </template>
 
@@ -55,7 +59,8 @@ export default {
   white-space: nowrap;
 }
 .shift-badge__t {
-  font-size: 9.5px;
+  font-size: 9px;
+  line-height: 1.05;
   color: rgba(255, 255, 255, 0.95);
   white-space: nowrap;
 }

@@ -54,6 +54,7 @@
 
     <view v-if="isLogin" class="btn btn--primary mt14" @click="saveInfo">保存</view>
     <view v-else class="btn btn--primary mt14" @click="goLogin">登录或注册</view>
+    <view v-if="isLogin" class="btn btn--accent-text mt6" @click="goWxBind">微信小程序绑定</view>
     <view v-if="isLogin" class="btn btn--danger-text mt6" @click="logout">退出登录</view>
     <view v-if="isLogin" class="btn btn--danger-text mt6" @click="goDelete">注销账号并删除数据</view>
     <view class="hint">登录账号仅用于记录用户付费状态，如果需要对数据进行云备份，请自行绑定第三方云备份账号。</view>
@@ -92,6 +93,10 @@ async function refresh() {
     // 未登录或 token 失效：回到未登录态
     userInfo.value = null
   }
+}
+
+function goWxBind() {
+  goPage('wx-bind-code')
 }
 
 function goDelete() {

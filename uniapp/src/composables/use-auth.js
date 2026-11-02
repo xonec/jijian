@@ -95,10 +95,38 @@ export async function login(payload) {
   return persist(data)
 }
 
-/** 微信一键登录（小程序） */
+/** 微信一键登录（小程序）；未绑定时返回 needBind */
 export async function wxLogin(payload) {
   const data = await api.auth.wxLogin(payload || {})
-  return persist(data)
+  if (data && data.token) persist(data)
+  return data
+}
+
+export async function createWxAccount(payload) {
+  const data = await api.auth.createWxAccount(payload || {})
+  if (data && data.token) persist(data)
+  return data
+}
+
+export async function bindWxByPassword(payload) {
+  const data = await api.auth.bindWxByPassword(payload || {})
+  if (data && data.token) persist(data)
+  return data
+}
+
+export async function bindWxByCode(payload) {
+  const data = await api.auth.bindWxByCode(payload || {})
+  if (data && data.token) persist(data)
+  return data
+}
+
+/** 安卓 App 生成微信绑定码 */
+export async function createBindCode() {
+  return api.auth.createBindCode()
+}
+
+export async function unbindWx(payload) {
+  return api.auth.unbindWx(payload || {})
 }
 
 /** 注册（注册成功即登录，返回结构与登录一致） */

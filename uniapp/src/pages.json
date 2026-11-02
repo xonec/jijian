@@ -190,6 +190,18 @@
       "style": {
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/sub/wx-bind/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/sub/wx-bind-code/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
     }
   ],
   "globalStyle": {

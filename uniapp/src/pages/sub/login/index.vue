@@ -120,7 +120,7 @@
 import { reactive, ref, computed, watch, onUnmounted } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { useAuth } from '@/composables/use-auth.js'
-import { back, toast } from '@/composables/use-nav.js'
+import { back, goPage, toast } from '@/composables/use-nav.js'
 import { useTheme } from '@/composables/use-theme.js'
 
 const { auth, syncFromStorage, login, register, logout, wxLogin } = useAuth()
@@ -217,7 +217,12 @@ async function onWxLoginSuccess(e) {
   loading.value = true
   try {
     const profile = d.userInfo || d
-    await wxLogin({ code, nickname: profile.nickName || profile.nickname || '', avatar: profile.avatarUrl || '' })
+    const data = await wxLogin({ code, nickname: profile.nickName || profile.nickname || '', avatar: profile.avatarUrl || '' })
+    if (data && data.needBind) {
+      uni.setStorageSync('jy_wx_bind_ticket', data.bindTicket)
+      goPage('wx-bind')
+      return
+    }
     toast('登录成功')
     backTimer = setTimeout(() => back(), 350)
   } catch (err) {

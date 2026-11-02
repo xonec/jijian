@@ -228,6 +228,26 @@ export const api = {
       if (isCloud()) return callCloud('auth.wxLogin', payload, 'user')
       throw new Error('本地模式不支持微信登录')
     },
+    async createWxAccount(payload) {
+      if (isCloud()) return callCloud('auth.createWxAccount', payload, 'user')
+      throw new Error('本地模式不支持微信登录')
+    },
+    async bindWxByPassword(payload) {
+      if (isCloud()) return callCloud('auth.bindWxByPassword', payload, 'user')
+      throw new Error('本地模式不支持微信绑定')
+    },
+    async bindWxByCode(payload) {
+      if (isCloud()) return callCloud('auth.bindWxByCode', payload, 'user')
+      throw new Error('本地模式不支持微信绑定')
+    },
+    async createBindCode() {
+      if (isCloud()) return callCloud('auth.createBindCode', {}, 'user')
+      throw new Error('本地模式不支持账号绑定')
+    },
+    async unbindWx(payload) {
+      if (isCloud()) return callCloud('auth.unbindWx', payload, 'user')
+      throw new Error('本地模式不支持账号绑定')
+    },
     async deleteAccount(payload) {
       if (isCloud()) return callCloud('auth.deleteAccount', payload, 'user')
       throw new Error('本地模式不支持注销账号')

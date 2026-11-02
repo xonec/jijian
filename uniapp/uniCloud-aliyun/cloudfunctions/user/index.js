@@ -487,14 +487,28 @@ async function deleteAccount(event, context) {
   const uid = ctx.user._id
   const deleted = {}
 
-  // 创建者如果团队还有其他成员，必须先转让/解散
+  // 创建者注销：有成员则自动移交给最早加入的管理员/成员；无成员则删除团队
   const owned = await db.collection('jy_team').where({ ownerId: uid, status: 'active' }).get()
+  const teamsToDelete = []
   for (const team of owned.data || []) {
     const others = await db.collection('jy_team_member')
-      .where({ teamId: team._id, status: 'active', uid: _.neq(uid) }).count()
-    if ((others.total || 0) > 0) {
-      return fail('你是团队「' + team.name + '」的创建者，请先转让或解散团队后再注销')
+      .where({ teamId: team._id, status: 'active', uid: _.neq(uid) })
+      .orderBy('joinedAt', 'asc').get()
+    const list = others.data || []
+    if (!list.length) {
+      teamsToDelete.push(team._id)
+      continue
     }
+    const next = list.find((m) => m.role === 'admin') || list[0]
+    await db.collection('jy_team').doc(team._id).update({ ownerId: next.uid, updatedAt: Date.now() })
+    await db.collection('jy_team_member').doc(next._id).update({ role: 'owner', updatedAt: Date.now() })
+    try {
+      await db.collection('jy_team_notification').add({
+        teamId: team._id, targetUid: next.uid, type: 'owner_transferred',
+        title: '团队创建者已注销', content: '你已成为团队「' + team.name + '」的新创建者',
+        payload: { teamId: team._id }, read: false, createdAt: Date.now()
+      })
+    } catch (e) {}
   }
 
   // 个人数据
@@ -516,12 +530,12 @@ async function deleteAccount(event, context) {
     } catch (e) { deleted[col] = 0 }
   }
 
-  // 自己的团队数据
-  for (const team of owned.data || []) {
+  // 无其他成员的团队整体删除；已移交的团队保留
+  for (const teamId of teamsToDelete) {
     for (const col of ['jy_team_shift', 'jy_team_schedule', 'jy_team_audit', 'jy_team_notification', 'jy_team_join_request', 'jy_team_member']) {
-      try { await db.collection(col).where({ teamId: team._id }).remove() } catch (e) {}
+      try { await db.collection(col).where({ teamId }).remove() } catch (e) {}
     }
-    try { await db.collection('jy_team').doc(team._id).remove() } catch (e) {}
+    try { await db.collection('jy_team').doc(teamId).remove() } catch (e) {}
   }
 
   // 作为普通成员的关联数据

@@ -110,7 +110,7 @@
     </view>
 
     <!-- 排班操作面板（原版 ScheduleOperView 的底部弹窗） -->
-    <view v-if="store.editMode" class="oper-mask" @click.self="closeOper" @touchmove.stop.prevent="noop">
+    <view v-if="store.editMode" class="oper-mask" @click.self="closeOper">
       <view class="oper-sheet" @touchmove.stop.prevent="noop">
         <view class="oper-handle" />
         <view class="oper-tabs">
@@ -465,6 +465,9 @@ export default {
       }
       operTab.value = '自定义排班'
       store.editMode = true
+      setTimeout(() => {
+        try { uni.pageScrollTo({ scrollTop: 0, duration: 0 }) } catch (e) {}
+      }, 30)
     }
     function closeOper() {
       store.editMode = false

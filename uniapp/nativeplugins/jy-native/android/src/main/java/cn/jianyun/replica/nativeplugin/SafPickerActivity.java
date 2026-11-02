@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
 /** 透明 Activity：系统目录选择 + 持久授权，结果写入 SharedPreferences。 */
 public class SafPickerActivity extends Activity {
@@ -35,12 +36,14 @@ public class SafPickerActivity extends Activity {
         }
         if (resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri uri = data.getData();
+            int flags = data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             try {
-                int flags = data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 getContentResolver().takePersistableUriPermission(uri, flags);
                 SharedPreferences sp = getSharedPreferences(PREFS, MODE_PRIVATE);
                 sp.edit().putString(KEY_URI, uri.toString()).apply();
-            } catch (Throwable ignore) {
+                Log.i("JYSAF", "picked uri=" + uri + " flags=" + flags);
+            } catch (Throwable e) {
+                Log.e("JYSAF", "takePersistable failed uri=" + uri + " flags=" + flags, e);
             }
             setResult(RESULT_OK);
         } else {

@@ -57,6 +57,12 @@
       }
     },
     {
+      "path": "pages/sub/team-join/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/sub/team-detail/index",
       "style": {
         "navigationStyle": "custom"

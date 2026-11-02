@@ -91,24 +91,7 @@ function createTeam() {
 }
 
 function joinTeam() {
-  uni.showModal({
-    title: '加入团队',
-    editable: true,
-    placeholderText: '请输入邀请码',
-    success: async (r) => {
-      if (!r.confirm || !r.content || !r.content.trim()) return
-      try {
-        const profile = user.value || {}
-        const displayName = profile.nickname || profile.username || ''
-        const res = await api.team.join({ inviteCode: r.content.trim(), nickname: displayName })
-        if (res && res.status === 'pending') toast('申请已提交，等待管理员审批')
-        else if (res && res.status === 'active') toast(res.restored ? '已恢复成员身份' : '已加入团队')
-        load()
-      } catch (e) {
-        toast((e && (e.message || e.errMsg)) || '加入失败')
-      }
-    }
-  })
+  goPage('team-join')
 }
 
 onShow(load)

@@ -209,7 +209,11 @@ const handlers = {
     }
     const pending = await db.collection(C.request).where({ teamId: t._id, uid, status: 'pending' }).limit(1).get()
     if ((pending.data || []).length) return { status: 'pending', teamId: t._id }
-    await db.collection(C.request).add({ teamId: t._id, uid, nickname: trim(e.nickname, 20), realName: trim(e.realName, 30), phone: trim(e.phone, 20), employeeNo: trim(e.employeeNo, 40), message: trim(e.message, 200), status: 'pending', createdAt: now() })
+    const realName = trim(e.realName, 30)
+    const employeeNo = trim(e.employeeNo, 40)
+    if (!realName) throw new Error('请填写真实姓名')
+    if (!employeeNo) throw new Error('请填写工号')
+    await db.collection(C.request).add({ teamId: t._id, uid, nickname: trim(e.nickname, 20), realName, phone: trim(e.phone, 20), employeeNo, message: trim(e.message, 200), status: 'pending', createdAt: now() })
     return { status: 'pending', teamId: t._id }
   },
   async 'teamJoin.listPending'(e, c, uid) {

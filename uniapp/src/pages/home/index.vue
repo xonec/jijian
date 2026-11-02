@@ -109,65 +109,6 @@
       <view class="home-action" @click="openSheet('shift', 'second')">第二班次</view>
     </view>
 
-    <!-- 排班操作面板（原版 ScheduleOperView 的底部弹窗） -->
-    <view v-if="store.editMode" class="oper-mask" @click.self="closeOper">
-      <view class="oper-sheet">
-        <view class="oper-handle" />
-        <view class="oper-tabs">
-          <view
-            v-for="op in operItems"
-            :key="op.label"
-            class="oper-tab"
-            :class="{ 'oper-tab--on': operTab === op.label }"
-            @click="onOper(op.label)"
-          >{{ op.label }}</view>
-        </view>
-        <view class="oper-body">
-          <template v-if="operTab === '自定义排班'">
-            <view v-if="!store.shifts.length" class="oper-empty">你还没有设置班次喔</view>
-            <view v-else class="oper-shift-grid">
-              <view
-                v-for="sh in store.shifts"
-                :key="sh.id"
-                class="oper-shift-cell"
-                @click.stop="pickOperShift(sh.id)"
-              >
-                <shift-badge :shift="sh" :show-begin="showBeginTime" :show-end="showEndTime" />
-              </view>
-            </view>
-          </template>
-
-          <template v-else-if="operTab === '周期轮班'">
-            <view v-if="!store.plans.length" class="oper-empty">你还没有设置周期排班喔</view>
-            <view v-else class="oper-plan-list">
-              <view v-for="plan in store.plans" :key="plan.id" class="oper-plan-item">
-                <view class="oper-plan-item__head">
-                  <text class="oper-plan-item__name">{{ plan.name }}</text>
-                  <text class="oper-plan-item__use" @click="applyOperPlan(plan)">使用此轮班</text>
-                </view>
-                <view class="oper-plan-seq">
-                  <view
-                    v-for="(item, idx) in planItems(plan)"
-                    :key="idx"
-                    class="oper-seq-chip"
-                    :style="{ background: item.color }"
-                  >{{ item.name }}</view>
-                </view>
-              </view>
-            </view>
-            <view class="oper-plan">
-              <view class="oper-plan__row">
-                <text>周期轮班天数</text>
-                <input v-model="planDays" class="oper-input" type="number" />
-              </view>
-              <view class="oper-plan__btn" @click="clearPlanDays">清空从 {{ selectedDateText }} 开始的 {{ planDays }} 天排班</view>
-              <view class="oper-plan__btn oper-plan__btn--primary" @click="addPlan">添加周期轮班</view>
-            </view>
-          </template>
-        </view>
-      </view>
-    </view>
-
     <!-- 月份选择 -->
     <app-sheet :visible="store.sheet === 'month'" title="选择月份" @close="closeSheet">
       <view class="month-bar">
@@ -274,6 +215,67 @@
         <view class="btn btn--primary" @click="saveRemarkAction">确定</view>
       </template>
     </app-dialog>
+
+    <template #overlay>
+    <!-- 排班操作面板（原版 ScheduleOperView 的底部弹窗） -->
+    <view v-if="store.editMode" class="oper-mask" @click.self="closeOper" @touchmove.stop.prevent="noop">
+      <view class="oper-sheet" @touchmove.stop.prevent="noop">
+        <view class="oper-handle" />
+        <view class="oper-tabs">
+          <view
+            v-for="op in operItems"
+            :key="op.label"
+            class="oper-tab"
+            :class="{ 'oper-tab--on': operTab === op.label }"
+            @click="onOper(op.label)"
+          >{{ op.label }}</view>
+        </view>
+        <view class="oper-body">
+          <template v-if="operTab === '自定义排班'">
+            <view v-if="!store.shifts.length" class="oper-empty">你还没有设置班次喔</view>
+            <view v-else class="oper-shift-grid">
+              <view
+                v-for="sh in store.shifts"
+                :key="sh.id"
+                class="oper-shift-cell"
+                @click.stop="pickOperShift(sh.id)"
+              >
+                <shift-badge :shift="sh" :show-begin="showBeginTime" :show-end="showEndTime" />
+              </view>
+            </view>
+          </template>
+
+          <template v-else-if="operTab === '周期轮班'">
+            <view v-if="!store.plans.length" class="oper-empty">你还没有设置周期排班喔</view>
+            <view v-else class="oper-plan-list">
+              <view v-for="plan in store.plans" :key="plan.id" class="oper-plan-item">
+                <view class="oper-plan-item__head">
+                  <text class="oper-plan-item__name">{{ plan.name }}</text>
+                  <text class="oper-plan-item__use" @click="applyOperPlan(plan)">使用此轮班</text>
+                </view>
+                <view class="oper-plan-seq">
+                  <view
+                    v-for="(item, idx) in planItems(plan)"
+                    :key="idx"
+                    class="oper-seq-chip"
+                    :style="{ background: item.color }"
+                  >{{ item.name }}</view>
+                </view>
+              </view>
+            </view>
+            <view class="oper-plan">
+              <view class="oper-plan__row">
+                <text>周期轮班天数</text>
+                <input v-model="planDays" class="oper-input" type="number" />
+              </view>
+              <view class="oper-plan__btn" @click="clearPlanDays">清空从 {{ selectedDateText }} 开始的 {{ planDays }} 天排班</view>
+              <view class="oper-plan__btn oper-plan__btn--primary" @click="addPlan">添加周期轮班</view>
+            </view>
+          </template>
+        </view>
+      </view>
+    </view>
+    </template>
   </page-frame>
 </template>
 
@@ -451,6 +453,7 @@ export default {
       api.setDay({ ...rec, date, remark: remarkDraft.value.trim() }).catch(() => {})
       closeDialog()
     }
+    function noop() {}
     function startSchedule() {
       if (!store.shifts.length) {
         toast('请先设置好班次再来排班')
@@ -622,6 +625,7 @@ export default {
       planItems,
       applyOperPlan,
       startSchedule,
+      noop,
       closeOper,
       pickOperShift,
       clearSelectedDay,
@@ -683,7 +687,7 @@ export default {
   top: 0;
   bottom: 0;
   background: var(--scrim);
-  z-index: 120;
+  z-index: 9999;
   display: flex;
   align-items: flex-end;
 }

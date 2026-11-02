@@ -17,6 +17,7 @@
       <slot />
     </view>
     <app-tabbar v-if="tab" :current="tab" />
+    <slot name="overlay" />
     <privacy-dialog :visible="privacyVisible" @agree="onPrivacyAgree" />
   </view>
 </template>

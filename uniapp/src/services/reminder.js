@@ -183,11 +183,8 @@ function createAndroidImpl() {
     values.put('ownerAccount', 'JianyunReplica')
     values.put('visible', 1)
     values.put('sync_events', 1)
-    const builder = plus.android.invoke(Calendars.CONTENT_URI, 'buildUpon')
-    plus.android.invoke(builder, 'appendQueryParameter', 'account_name', 'JianyunReplica')
-    plus.android.invoke(builder, 'appendQueryParameter', 'account_type', 'LOCAL')
-    plus.android.invoke(builder, 'appendQueryParameter', 'caller_is_syncadapter', 'true')
-    const uri = plus.android.invoke(builder, 'build')
+    const base = String(plus.android.invoke(Calendars.CONTENT_URI, 'toString'))
+    const uri = Uri.parse(base + '?account_name=JianyunReplica&account_type=LOCAL&caller_is_syncadapter=true')
     const newUri = plus.android.invoke(c, 'insert', uri, values)
     if (!newUri) return ''
     return String(plus.android.invoke(ContentUris, 'parseId', newUri))
@@ -336,11 +333,37 @@ function createAndroidImpl() {
   function notifyNow(payload) {
     const title = (payload && payload.title) || '极简排班提醒'
     const content = (payload && payload.content) || '该处理提醒了'
-    if (typeof uni.createPushMessage === 'function') {
-      uni.createPushMessage({ title, content, payload: (payload && payload.payload) || {} })
-      return { sent: true }
+    try {
+      const Build = plus.android.importClass('android.os.Build')
+      const nm = plus.android.invoke(main, 'getSystemService', 'notification')
+      if (Build.VERSION.SDK_INT >= 26) {
+        const channel = plus.android.newObject('android.app.NotificationChannel', 'jy_reminder', '排班提醒', 4)
+        plus.android.invoke(nm, 'createNotificationChannel', channel)
+        const builder = plus.android.newObject('android.app.Notification$Builder', main, 'jy_reminder')
+        const res = plus.android.invoke(main, 'getResources')
+        const icon = plus.android.invoke(res, 'getIdentifier', 'icon', 'drawable', pkg)
+        plus.android.invoke(builder, 'setSmallIcon', icon)
+        plus.android.invoke(builder, 'setContentTitle', title)
+        plus.android.invoke(builder, 'setContentText', content)
+        const n = plus.android.invoke(builder, 'build')
+        plus.android.invoke(nm, 'notify', Math.floor(Date.now() % 100000), n)
+      } else {
+        const builder = plus.android.newObject('android.app.Notification$Builder', main)
+        const res = plus.android.invoke(main, 'getResources')
+        const icon = plus.android.invoke(res, 'getIdentifier', 'icon', 'drawable', pkg)
+        plus.android.invoke(builder, 'setSmallIcon', icon)
+        plus.android.invoke(builder, 'setContentTitle', title)
+        plus.android.invoke(builder, 'setContentText', content)
+        plus.android.invoke(nm, 'notify', Math.floor(Date.now() % 100000), plus.android.invoke(builder, 'build'))
+      }
+      return { sent: true, via: 'local' }
+    } catch (e) {
+      if (typeof uni.createPushMessage === 'function') {
+        uni.createPushMessage({ title, content, payload: (payload && payload.payload) || {} })
+        return { sent: true, via: 'push' }
+      }
+      return { sent: false, error: String(e && e.message || e) }
     }
-    return { sent: false }
   }
 
   function openSettings(kind) {

@@ -250,10 +250,22 @@ export function useStore() {
 /* ---------------- 周期轮班（本地持久化） ---------------- */
 const PLAN_KEY = 'jy_plans'
 
+function dedupePlans(list) {
+  const map = {}
+  ;(Array.isArray(list) ? list : []).forEach((p) => {
+    if (!p) return
+    const key = p.id || p._id || p.name
+    if (!key) return
+    const prev = map[key]
+    if (!prev || Number(p.updatedAt || 0) >= Number(prev.updatedAt || 0)) map[key] = p
+  })
+  return Object.keys(map).map((k) => map[k])
+}
+
 export function loadPlans() {
   try {
     const list = uni.getStorageSync(PLAN_KEY)
-    store.plans = Array.isArray(list) ? list : []
+    store.plans = dedupePlans(list)
   } catch (e) {
     store.plans = []
   }
@@ -270,7 +282,7 @@ export async function syncPlans() {
   try {
     const list = await api.fetchPlans()
     if (Array.isArray(list) && list.length) {
-      store.plans = list.map((p) => ({
+      const mapped = list.map((p) => ({
         id: p.id || p._id,
         cloudId: p._id,
         name: p.name,
@@ -278,6 +290,22 @@ export async function syncPlans() {
         sort: Number(p.sort) || 0,
         updatedAt: p.updatedAt || 0
       }))
+      const seen = {}
+      const unique = []
+      const extras = []
+      mapped.forEach((p) => {
+        const key = p.id || p.name
+        if (seen[key]) extras.push(p)
+        else {
+          seen[key] = true
+          unique.push(p)
+        }
+      })
+      // 清理历史重复的云端方案
+      extras.forEach((p) => {
+        if (p.cloudId) api.deletePlan(p.cloudId).catch(() => {})
+      })
+      store.plans = unique
       store.plans.sort((a, b) => (a.sort || 0) - (b.sort || 0))
       persistPlans()
     }
@@ -286,9 +314,10 @@ export async function syncPlans() {
 }
 
 export async function savePlan(plan) {
+  const existing = store.plans.find((x) => x.id === plan.id)
   const item = {
     id: plan.id || 'plan-' + Date.now().toString(36),
-    cloudId: plan.cloudId || '',
+    cloudId: plan.cloudId || (existing && existing.cloudId) || '',
     name: String(plan.name || '').trim() || '未命名轮班',
     sequence: Array.isArray(plan.sequence) ? plan.sequence.slice() : [],
     sort: Number.isFinite(plan.sort) ? plan.sort : store.plans.length,

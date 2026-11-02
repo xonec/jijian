@@ -62,6 +62,7 @@ import { store, loadPlans, savePlan, removePlan } from '@/composables/use-store.
 import { back, toast } from '@/composables/use-nav.js'
 
 const planId = ref('')
+const cloudId = ref('')
 const form = reactive({ name: '', sequence: [] })
 const pageTitle = computed(() => (planId.value ? '编辑轮班' : '添加轮班'))
 const placeholderStyle = 'color:#999999'
@@ -81,6 +82,7 @@ onLoad((options) => {
   const plan = store.plans.find((x) => x.id === id)
   if (!plan) return
   planId.value = plan.id
+  cloudId.value = plan.cloudId || ''
   form.name = plan.name
   form.sequence = (plan.sequence || []).slice()
 })
@@ -103,7 +105,7 @@ async function onSave() {
   const name = String(form.name || '').trim()
   if (!name) return toast('请输入轮班名称')
   if (!form.sequence.length) return toast('请至少加入一个班次')
-  await savePlan({ id: planId.value || undefined, name, sequence: form.sequence })
+  await savePlan({ id: planId.value || undefined, cloudId: cloudId.value || undefined, name, sequence: form.sequence })
   toast('已保存')
   setTimeout(() => back(), 300)
 }

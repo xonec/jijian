@@ -406,7 +406,14 @@ exports.main = async (event, context) => {
     }
 
     if (action === 'plan.list') return ok(await getList(ctx, C.plan, 'sort'))
-    if (action === 'plan.save') return ok(await upsert(ctx, C.plan, event.plan || {}))
+    if (action === 'plan.save') {
+      const plan = Object.assign({}, event.plan || {})
+      if (!plan._id && plan.id) {
+        const found = await db.collection(C.plan).where(ownerCond(ctx, { id: plan.id })).limit(1).get()
+        if (found.data && found.data[0]) plan._id = found.data[0]._id
+      }
+      return ok(await upsert(ctx, C.plan, plan))
+    }
     if (action === 'plan.delete') {
       await getOwnedDoc(ctx, C.plan, event.id)
       await db.collection(C.plan).doc(event.id).remove()

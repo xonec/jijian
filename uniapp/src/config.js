@@ -8,7 +8,7 @@ export default {
   // true = 隐藏首页「去广告」入口与会员页「无广告秒开」权益（默认）；
   // false = 保留官方原样，便于 1:1 像素对比截图。
   noAds: true,
-  useCloud: false,
+  useCloud: true,
   cloudFunction: 'workplan',
   seedFunction: 'seedDemo'
 }

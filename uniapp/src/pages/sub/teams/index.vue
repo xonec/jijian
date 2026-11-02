@@ -98,7 +98,9 @@ function joinTeam() {
     success: async (r) => {
       if (!r.confirm || !r.content || !r.content.trim()) return
       try {
-        const res = await api.team.join({ inviteCode: r.content.trim() })
+        const profile = user.value || {}
+        const displayName = profile.nickname || profile.username || ''
+        const res = await api.team.join({ inviteCode: r.content.trim(), nickname: displayName })
         if (res && res.status === 'pending') toast('申请已提交，等待管理员审批')
         else if (res && res.status === 'active') toast(res.restored ? '已恢复成员身份' : '已加入团队')
         load()

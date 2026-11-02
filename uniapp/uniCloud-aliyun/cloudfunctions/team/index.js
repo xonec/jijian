@@ -1,7 +1,9 @@
 'use strict'
 const uniIdCommon = require('uni-id-common')
+const crypto = require('crypto')
 const db = uniCloud.database()
 const _ = db.command
+const guardCol = db.collection('jy_auth_guard')
 const C = {
   team: 'jy_team', member: 'jy_team_member', request: 'jy_team_join_request',
   shift: 'jy_team_shift', schedule: 'jy_team_schedule', audit: 'jy_team_audit', notice: 'jy_team_notification'
@@ -86,6 +88,21 @@ function maskPhone(m, viewer) {
     phoneSetByView: m.phoneSetBy || ''
   })
 }
+async function checkJoinLimit(uid) {
+  const key = crypto.createHash('sha256').update('team-join|' + uid).digest('hex')
+  const now = Date.now()
+  const r = await guardCol.where({ key }).limit(1).get()
+  const doc = (r.data || [])[0]
+  if (!doc || !doc.firstAt || now - doc.firstAt > 3600000) {
+    if (doc) await guardCol.doc(doc._id).remove()
+    await guardCol.add({ key, count: 1, firstAt: now, lockedUntil: 0, updatedAt: now })
+    return
+  }
+  const count = Number(doc.count || 0) + 1
+  if (count > 10) throw new Error('加入申请过于频繁，请稍后再试')
+  await guardCol.doc(doc._id).update({ count, updatedAt: now })
+}
+
 async function addNotice(teamId, targetUid, type, title, content, payload) {
   await db.collection(C.notice).add({ teamId, targetUid, type, title, content, payload: payload || {}, read: false, createdAt: now() })
 }
@@ -205,6 +222,7 @@ const handlers = {
     return { ok: true }
   },
   async 'team.join'(e, c, uid) {
+    await checkJoinLimit(uid)
     const code = trim(e.inviteCode, 12).toUpperCase()
     const tr = await db.collection(C.team).where({ inviteCode: code, status: 'active' }).limit(1).get()
     const t = (tr.data || [])[0]

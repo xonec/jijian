@@ -29,6 +29,7 @@ export const store = reactive({
   palettes: PALETTES,
   vip: VIP,
   projects: PROJECTS,
+  plans: [],
   faq: FAQ,
   updateIntro: UPDATE_INTRO,
 
@@ -240,4 +241,50 @@ export function closeDialog() {
 
 export function useStore() {
   return { store }
+}
+
+/* ---------------- 周期轮班（本地持久化） ---------------- */
+const PLAN_KEY = 'jy_plans'
+
+export function loadPlans() {
+  try {
+    const list = uni.getStorageSync(PLAN_KEY)
+    store.plans = Array.isArray(list) ? list : []
+  } catch (e) {
+    store.plans = []
+  }
+  return store.plans
+}
+
+function persistPlans() {
+  try {
+    uni.setStorageSync(PLAN_KEY, store.plans)
+  } catch (e) {}
+}
+
+export function savePlan(plan) {
+  const item = {
+    id: plan.id || 'plan-' + Date.now().toString(36),
+    name: String(plan.name || '').trim() || '未命名轮班',
+    sequence: Array.isArray(plan.sequence) ? plan.sequence.slice() : [],
+    updatedAt: Date.now()
+  }
+  const idx = store.plans.findIndex((x) => x.id === item.id)
+  if (idx >= 0) store.plans.splice(idx, 1, item)
+  else store.plans.push(item)
+  persistPlans()
+  return item
+}
+
+export function removePlan(id) {
+  const idx = store.plans.findIndex((x) => x.id === id)
+  if (idx >= 0) store.plans.splice(idx, 1)
+  persistPlans()
+}
+
+export function planShiftName(plan, index) {
+  const sid = plan && plan.sequence ? plan.sequence[index] : ''
+  if (!sid) return '空'
+  const sh = store.shifts.find((x) => x.id === sid)
+  return sh ? sh.name : '空'
 }

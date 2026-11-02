@@ -14,10 +14,18 @@
       >
         <template v-if="cell.day">
           <view class="cal-date">
-            <text class="cal-num">{{ cell.day }}</text>
+            <text class="cal-num" :style="{ fontSize: dateFontSize + 'px' }">{{ cell.day }}</text>
             <text v-if="cell.lunar" class="cal-lunar" :class="cell.lunarClass">{{ cell.lunar }}</text>
           </view>
-          <shift-badge v-if="cell.shift" :shift="cell.shift" :show-time="showTime" />
+          <shift-badge
+            v-if="cell.shift"
+            :shift="cell.shift"
+            :show-begin="showBeginTime"
+            :show-end="showEndTime"
+            :name-size="workFontSize"
+            :time-size="timeFontSize"
+            :radius="workRadius"
+          />
         </template>
       </view>
     </view>
@@ -49,7 +57,13 @@ export default {
     weekStart: { type: Number, default: 0 },
     showLunar: { type: Boolean, default: true },
     showHoliday: { type: Boolean, default: true },
-    showTime: { type: Boolean, default: true }
+    showBeginTime: { type: Boolean, default: true },
+    showEndTime: { type: Boolean, default: false },
+    dateFontSize: { type: Number, default: 17 },
+    workFontSize: { type: Number, default: 11 },
+    timeFontSize: { type: Number, default: 11 },
+    workRadius: { type: Number, default: 4 },
+    showHLine: { type: Boolean, default: true }
   },
   emits: ['select', 'prev', 'next', 'today'],
   computed: {
@@ -96,7 +110,8 @@ export default {
       return {
         'cal-cell--today': cell.isToday,
         'cal-cell--selected': cell.isSelected,
-        'cal-cell--empty': !cell.day
+        'cal-cell--empty': !cell.day,
+        'cal-cell--line': !!this.showHLine
       }
     },
     onSelect(cell) {
@@ -143,6 +158,9 @@ export default {
 .cal-grid {
   display: flex;
   flex-wrap: wrap;
+}
+.cal-cell--line {
+  border-bottom: 1px solid var(--line);
 }
 .cal-cell {
   width: 14.2857%;

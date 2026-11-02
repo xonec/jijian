@@ -30,13 +30,13 @@
     </view>
 
     <!-- 当月班次统计色条；空月份与原版一致显示提示 -->
-    <view v-if="hasSchedule" class="legend">
+    <view v-if="hasSchedule && showStat" class="legend">
       <view v-for="(it, i) in legendItems" :key="i" class="legend__item">
         <view class="legend__dot" :style="{ background: it.color }" />
         <text class="legend__text">{{ it.name }}({{ it.value }})</text>
       </view>
     </view>
-    <view v-else class="empty-month">当前月份没有设置排班</view>
+    <view v-else-if="showStat" class="empty-month">当前月份没有设置排班</view>
 
     <!-- 月历 -->
     <calendar-grid
@@ -48,7 +48,13 @@
       :week-start="store.weekStart"
       :show-lunar="showLunar"
       :show-holiday="showHoliday"
-      :show-time="showTime"
+      :show-begin-time="showBeginTime"
+      :show-end-time="showEndTime"
+      :date-font-size="dateFontSize"
+      :work-font-size="workFontSize"
+      :time-font-size="timeFontSize"
+      :work-radius="workRadius"
+      :show-h-line="showHLine"
       @select="onSelect"
       @prev="prevMonth"
       @next="nextMonth"
@@ -64,7 +70,7 @@
       <view class="work-row" @click="openSheet('shift', 'first')">
         <template v-if="selectedShift">
           <shift-badge :shift="selectedShift" mode="chip" big />
-          <text class="work-row__time">{{ fmtTime(selectedShift) }}</text>
+          <text v-if="selectedTimeText" class="work-row__time">{{ selectedTimeText }}</text>
         </template>
         <text v-else class="work-row__add">
           <ri-icon name="add" :size="14" />
@@ -87,7 +93,7 @@
           </text>
         </template>
       </view>
-      <view class="remark" :class="{ 'remark--accent': !remarkText }" @click="onRemark">
+      <view v-if="showRemark" class="remark" :class="{ 'remark--accent': !remarkText }" @click="onRemark">
         <ri-icon :name="remarkText ? 'pencil' : 'add'" :size="13" />
         <text>{{ remarkText || '设置备注' }}</text>
       </view>
@@ -134,7 +140,23 @@
           </template>
 
           <template v-else-if="operTab === '周期轮班'">
-            <view class="oper-empty">你还没有设置周期排班喔</view>
+            <view v-if="!store.plans.length" class="oper-empty">你还没有设置周期排班喔</view>
+            <view v-else class="oper-plan-list">
+              <view v-for="plan in store.plans" :key="plan.id" class="oper-plan-item">
+                <view class="oper-plan-item__head">
+                  <text class="oper-plan-item__name">{{ plan.name }}</text>
+                  <text class="oper-plan-item__use" @click="applyOperPlan(plan)">使用此轮班</text>
+                </view>
+                <view class="oper-plan-seq">
+                  <view
+                    v-for="(item, idx) in planItems(plan)"
+                    :key="idx"
+                    class="oper-seq-chip"
+                    :style="{ background: item.color }"
+                  >{{ item.name }}</view>
+                </view>
+              </view>
+            </view>
             <view class="oper-plan">
               <view class="oper-plan__row">
                 <text>周期轮班天数</text>
@@ -194,6 +216,14 @@
             :model-value="it.v"
             @update:model-value="(v) => (it.v = v)"
           />
+          <picker
+            v-else-if="isNumericConfig(it.k)"
+            :range="numericOptions(it.k)"
+            :value="numericIndex(it.k)"
+            @change="onNumericChange(it.k, $event)"
+          >
+            <view class="form-row__v form-row__pick">{{ it.v }}</view>
+          </picker>
           <text v-else class="form-row__v">{{ it.v }}</text>
         </view>
       </view>
@@ -259,7 +289,7 @@ import { computed, ref } from 'vue'
 import {
   store, monthTitle, selectedDateText, selectedShift, selectedWeekday, fmtTime,
   selectDay, stepMonth, jumpToday, closeSheet, openSheet, closeDialog, openDialog,
-  saveRemark, WEEK, applyBootstrap, setWeekStart, setDayWork, shiftById, rebuildDays
+  saveRemark, WEEK, applyBootstrap, setWeekStart, setDayWork, shiftById, rebuildDays, loadPlans
 } from '@/composables/use-store.js'
 import { useTheme } from '@/composables/use-theme.js'
 import { goPage, toast } from '@/composables/use-nav.js'
@@ -310,9 +340,49 @@ export default {
       const it = store.displayConfig.find((x) => x.k === key)
       return it ? it.v : fallback
     }
-    const showLunar = computed(() => configValue('显示中国农历', true))
-    const showHoliday = computed(() => configValue('显示中国节假日', true))
-    const showTime = computed(() => configValue('显示上班时间', true))
+    const configNumber = (key, fallback) => {
+      const n = Number(configValue(key, fallback))
+      return Number.isFinite(n) ? n : fallback
+    }
+    const showLunar = computed(() => !!configValue('显示中国农历', true))
+    const showHoliday = computed(() => !!configValue('显示中国节假日', true))
+    const showBeginTime = computed(() => !!configValue('显示上班时间', true))
+    const showEndTime = computed(() => !!configValue('显示下班时间', false))
+    const showRemark = computed(() => !!configValue('显示备注', false))
+    const showStat = computed(() => !!configValue('显示统计指标', true))
+    const showHLine = computed(() => !!configValue('显示分割线', true))
+    const dateFontSize = computed(() => configNumber('日期字号', 17))
+    const workFontSize = computed(() => configNumber('班次字号', 11))
+    const timeFontSize = computed(() => configNumber('时间字号', 11))
+    const workRadius = computed(() => configNumber('班次圆角', 4))
+    const selectedTimeText = computed(() => {
+      const sh = selectedShift.value
+      if (!sh) return ''
+      if (sh.allDay) return showBeginTime.value || showEndTime.value ? '全天' : ''
+      if (showBeginTime.value && showEndTime.value) return sh.start + '~' + sh.end
+      if (showBeginTime.value) return sh.start
+      if (showEndTime.value) return sh.end
+      return ''
+    })
+    function isNumericConfig(key) {
+      return ['日期字号', '班次字号', '时间字号', '班次圆角'].includes(key)
+    }
+    function numericOptions(key) {
+      const max = key === '班次圆角' ? 10 : 30
+      const min = key === '班次圆角' ? 0 : 8
+      return Array.from({ length: max - min + 1 }, (_, i) => String(min + i))
+    }
+    function numericIndex(key) {
+      const opts = numericOptions(key)
+      const idx = opts.indexOf(String(configValue(key, opts[0])))
+      return idx < 0 ? 0 : idx
+    }
+    function onNumericChange(key, e) {
+      const opts = numericOptions(key)
+      const idx = Number(e.detail.value) || 0
+      const it = store.displayConfig.find((x) => x.k === key)
+      if (it) it.v = opts[idx]
+    }
 
     const dayMapData = computed(() => {
       const map = {}
@@ -464,9 +534,34 @@ export default {
         }
       })
     }
+    function planItems(plan) {
+      return (plan.sequence || []).map((sid) => {
+        if (!sid) return { name: '空', color: '#999999' }
+        const sh = store.shifts.find((x) => x.id === sid)
+        return sh ? { name: sh.name, color: sh.color } : { name: '空', color: '#999999' }
+      })
+    }
+    async function applyOperPlan(plan) {
+      const n = Math.max(1, Math.min(365, Number(planDays.value) || 90))
+      const seq = plan.sequence || []
+      if (!seq.length) return toast('该轮班还没有班次')
+      const start = new Date(store.view.y, store.view.m - 1, store.selected)
+      const tasks = []
+      for (let i = 0; i < n; i += 1) {
+        const d = new Date(start.getTime() + i * 86400000)
+        const date = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0')
+        const sid = seq[i % seq.length] || ''
+        const payload = { date, workId: sid, secondWorkId: '', remark: '' }
+        store.scheduleRaw[date] = payload
+        tasks.push(api.setDay(payload).catch(() => {}))
+      }
+      rebuildDays()
+      await Promise.all(tasks)
+      toast('已应用轮班 ' + plan.name)
+      closeOper()
+    }
     function addPlan() {
-      toast('周期轮班编辑页还在开发中')
-      goPage('work-edit')
+      goPage('plan-edit')
     }
     function onOper(label) {
       if (label === '关闭') return closeOper()
@@ -495,7 +590,20 @@ export default {
       dayMapData,
       showLunar,
       showHoliday,
-      showTime,
+      showBeginTime,
+      showEndTime,
+      showRemark,
+      showStat,
+      showHLine,
+      dateFontSize,
+      workFontSize,
+      timeFontSize,
+      workRadius,
+      selectedTimeText,
+      isNumericConfig,
+      numericOptions,
+      numericIndex,
+      onNumericChange,
       remarkDraft,
       selectDay,
       stepMonth,
@@ -518,6 +626,8 @@ export default {
       saveConfigAction,
       onRemark,
       saveRemarkAction,
+      planItems,
+      applyOperPlan,
       startSchedule,
       closeOper,
       pickOperShift,
@@ -528,6 +638,7 @@ export default {
     }
   },
   onShow() {
+    loadPlans()
     this.loadData()
   }
 }
@@ -697,6 +808,52 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.form-row__pick {
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--surface-2);
+  font-size: 13px;
+  color: var(--text-2);
+}
+.oper-plan-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.oper-plan-item {
+  background: var(--surface);
+  border-radius: 10px;
+  padding: 9px 10px;
+}
+.oper-plan-item__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 7px;
+}
+.oper-plan-item__name {
+  font-size: 13px;
+  color: var(--text-1);
+  font-weight: 500;
+}
+.oper-plan-item__use {
+  font-size: 12px;
+  color: var(--primary);
+  padding: 2px 4px;
+}
+.oper-plan-seq {
+  display: flex;
+  gap: 5px;
+  overflow-x: auto;
+}
+.oper-seq-chip {
+  flex-shrink: 0;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #ffffff;
+  font-size: 10px;
 }
 .empty-month {
   font-size: 13px;

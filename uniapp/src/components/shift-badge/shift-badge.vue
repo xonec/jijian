@@ -2,9 +2,9 @@
   <view v-if="mode === 'chip'" class="chip" :class="{ 'chip--big': big }" :style="{ background: shift.color }">
     {{ shift.name }}
   </view>
-  <view v-else class="shift-badge" :style="{ background: shift.color }">
-    <text class="shift-badge__n">{{ shift.name }}</text>
-    <text v-if="showTime" class="shift-badge__t">{{ timeText }}</text>
+  <view v-else class="shift-badge" :style="{ background: shift.color, borderRadius: radius + 'px' }">
+    <text class="shift-badge__n" :style="{ fontSize: nameSize + 'px' }">{{ shift.name }}</text>
+    <text v-if="timeText" class="shift-badge__t" :style="{ fontSize: timeSize + 'px' }">{{ timeText }}</text>
   </view>
 </template>
 
@@ -15,13 +15,21 @@ export default {
     shift: { type: Object, required: true },
     mode: { type: String, default: 'badge' },
     big: { type: Boolean, default: false },
-    showTime: { type: Boolean, default: true }
+    showBegin: { type: Boolean, default: true },
+    showEnd: { type: Boolean, default: false },
+    nameSize: { type: Number, default: 11 },
+    timeSize: { type: Number, default: 11 },
+    radius: { type: Number, default: 4 }
   },
   computed: {
     timeText() {
       const s = this.shift
       if (!s) return ''
-      return s.allDay ? '全天' : s.start
+      if (s.allDay) return this.showBegin || this.showEnd ? '全天' : ''
+      if (this.showBegin && this.showEnd) return s.start + '~' + s.end
+      if (this.showBegin) return s.start
+      if (this.showEnd) return s.end
+      return ''
     }
   }
 }

@@ -27,17 +27,36 @@
     </view>
 
     <view v-else>
-      <!-- 轮班（plan）数据尚未纳入 mock/store，原型空态即为「暂无轮班」 -->
-      <view class="empty">暂无轮班</view>
-      <view class="add-row" @click="openEdit">添加轮班</view>
+      <view v-if="plans.length" class="plan-list">
+        <view
+          v-for="plan in plans"
+          :key="plan.id"
+          class="plan-card"
+          @click="openPlanEdit(plan)"
+          @longpress="onPlanLongPress(plan)"
+        >
+          <text class="plan-card__name">{{ plan.name }}</text>
+          <view class="plan-card__seq">
+            <view
+              v-for="(item, idx) in planChips(plan)"
+              :key="idx"
+              class="plan-chip"
+              :style="{ background: item.color }"
+            >{{ item.name }}</view>
+          </view>
+        </view>
+      </view>
+      <view v-else class="empty">暂无轮班</view>
+      <view class="add-row" @click="openPlanAdd">添加轮班</view>
       <view class="sort-link" @click="onSort">轮班排序</view>
+      <view class="hint center">长按轮班可删除</view>
     </view>
   </page-frame>
 </template>
 
 <script>
 import { api } from '@/services/api.js'
-import { store, fmtTime } from '@/composables/use-store.js'
+import { store, fmtTime, loadPlans, removePlan } from '@/composables/use-store.js'
 import { goPage, toast } from '@/composables/use-nav.js'
 
 export default {
@@ -55,10 +74,14 @@ export default {
   computed: {
     isWork() {
       return this.store.workTab === 'work'
+    },
+    plans() {
+      return this.store.plans
     }
   },
   onShow() {
     this.loadShifts()
+    loadPlans()
   },
   methods: {
     fmtTime,
@@ -77,6 +100,33 @@ export default {
     },
     openAdd() {
       goPage('work-edit')
+    },
+    openPlanAdd() {
+      goPage('plan-edit')
+    },
+    openPlanEdit(plan) {
+      if (!plan) return this.openPlanAdd()
+      goPage('plan-edit', { id: plan.id })
+    },
+    planChips(plan) {
+      return (plan.sequence || []).map((sid) => {
+        if (!sid) return { name: '空', color: '#999999' }
+        const sh = this.store.shifts.find((x) => (x.id || x._id) === sid)
+        return sh ? { name: sh.name, color: sh.color } : { name: '空', color: '#999999' }
+      })
+    },
+    onPlanLongPress(plan) {
+      if (!plan) return
+      uni.showModal({
+        title: '删除轮班',
+        content: '确定删除「' + plan.name + '」？',
+        confirmText: '删除',
+        success: (res) => {
+          if (!res.confirm) return
+          removePlan(plan.id)
+          toast('已删除轮班')
+        }
+      })
     },
     onLongPress(sh) {
       if (!sh) return
@@ -117,5 +167,32 @@ export default {
   display: flex;
   justify-content: center;
   padding: 18px 0 14px;
+}
+.plan-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.plan-card {
+  background: var(--surface);
+  border-radius: var(--r-card);
+  padding: 10px 12px;
+}
+.plan-card__name {
+  display: block;
+  font-size: 14px;
+  color: var(--text-1);
+  margin-bottom: 8px;
+}
+.plan-card__seq {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.plan-chip {
+  padding: 3px 7px;
+  border-radius: 4px;
+  color: #ffffff;
+  font-size: 11px;
 }
 </style>

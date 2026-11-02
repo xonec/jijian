@@ -112,15 +112,15 @@ export const SETTING_GROUPS = [
 
 export const DISPLAY_CONFIG = [
   { k: '一周开始日', v: '周一', type: 'segment' },
-  { k: '日期字号', v: '20' },
-  { k: '班次字号', v: '12' },
-  { k: '时间字号', v: '10' },
+  { k: '日期字号', v: '17' },
+  { k: '班次字号', v: '11' },
+  { k: '时间字号', v: '11' },
   { k: '班次圆角', v: '4' },
   { k: '显示中国农历', v: true },
   { k: '显示中国节假日', v: true },
   { k: '显示上班时间', v: true },
-  { k: '显示下班时间', v: true },
-  { k: '显示备注', v: true },
+  { k: '显示下班时间', v: false },
+  { k: '显示备注', v: false },
   { k: '显示统计指标', v: true },
   { k: '显示分割线', v: true }
 ]

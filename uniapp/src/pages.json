@@ -45,6 +45,12 @@
       }
     },
     {
+      "path": "pages/sub/plan-edit/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/sub/alarm-edit/index",
       "style": {
         "navigationStyle": "custom"

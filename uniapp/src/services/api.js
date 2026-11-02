@@ -220,6 +220,32 @@ export const api = {
     }
   },
 
+  /* ---------------- 团队 ---------------- */
+  team: {
+    create(data) { return callCloud('team.create', data, 'team') },
+    listMine() { return callCloud('team.listMine', {}, 'team') },
+    detail(teamId) { return callCloud('team.detail', { teamId }, 'team') },
+    generateInvite(teamId) { return callCloud('team.generateInvite', { teamId }, 'team') },
+    memberList(teamId) { return callCloud('team.memberList', { teamId }, 'team') },
+    join(data) { return callCloud('team.join', data, 'team') },
+    listPending(teamId) { return callCloud('teamJoin.listPending', { teamId }, 'team') },
+    approve(teamId, requestId) { return callCloud('teamJoin.approve', { teamId, requestId }, 'team') },
+    reject(teamId, requestId) { return callCloud('teamJoin.reject', { teamId, requestId }, 'team') },
+    updateMemberProfile(data) { return callCloud('team.updateMemberProfile', data, 'team') },
+    setRole(teamId, uid, role) { return callCloud('team.setRole', { teamId, uid, role }, 'team') },
+    removeMember(teamId, uid) { return callCloud('team.removeMember', { teamId, uid }, 'team') },
+    shifts(teamId) { return callCloud('teamShift.list', { teamId }, 'team') },
+    saveShift(teamId, shift) { return callCloud('teamShift.save', { teamId, shift }, 'team') },
+    deleteShift(teamId, id) { return callCloud('teamShift.delete', { teamId, id }, 'team') },
+    scheduleRange(data) { return callCloud('teamSchedule.range', data, 'team') },
+    setSchedule(data) { return callCloud('teamSchedule.set', data, 'team') },
+    clearSchedule(data) { return callCloud('teamSchedule.clear', data, 'team') },
+    notifications(teamId, offset) { return callCloud('teamNotification.list', { teamId, offset }, 'team') },
+    unreadCount(teamId) { return callCloud('teamNotification.unreadCount', { teamId }, 'team') },
+    markAllRead(teamId) { return callCloud('teamNotification.markAllRead', { teamId }, 'team') },
+    audits(teamId) { return callCloud('teamAudit.list', { teamId }, 'team') }
+  },
+
   /* ---------------- 备份（本地 / 云） ---------------- */
   backup: {
     async list(scope) {

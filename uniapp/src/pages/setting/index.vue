@@ -17,6 +17,10 @@
       <text class="vip-card__go">{{ vipCardGo }}</text>
     </view>
 
+    <view class="group">
+      <cell-row icon="user" label="我的团队" @click="goTeams" />
+    </view>
+
     <view v-for="g in store.settingGroups" :key="g.title" class="group">
       <cell-row
         v-for="it in g.items"
@@ -125,6 +129,9 @@ export default {
     }
   },
   methods: {
+    goTeams() {
+      goPage('teams')
+    },
     valueOf(item) {
       if (item.label === 'APP风格') return this.modeLabel
       return item.value || ''

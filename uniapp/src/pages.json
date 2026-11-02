@@ -51,6 +51,18 @@
       }
     },
     {
+      "path": "pages/sub/teams/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/sub/team-detail/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/sub/alarm-edit/index",
       "style": {
         "navigationStyle": "custom"

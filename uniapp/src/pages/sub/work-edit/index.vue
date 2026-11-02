@@ -140,6 +140,8 @@ const DEFAULTS = {
 }
 
 const editId = ref('')
+const teamId = ref('')
+const isTeam = computed(() => !!teamId.value)
 const sheet = ref('')
 
 function resetForm() {
@@ -207,9 +209,12 @@ function pickRest(v) {
 onLoad((options) => {
   // 每次进入页面先重置，避免“编辑后返回再添加”残留上一次表单内容
   resetForm()
-  if (!options || !options.id) return
+  if (!options) return
+  teamId.value = options.teamId || ''
+  if (!options.id) return
   editId.value = options.id
-  api.fetchShifts()
+  const loadShifts = teamId.value ? api.team.shifts(teamId.value) : api.fetchShifts()
+  loadShifts
     .then((list) => {
       const sh = (list || []).find((x) => x._id === options.id || x.id === options.id)
       if (!sh) {
@@ -238,13 +243,15 @@ async function save() {
     return
   }
   // 同名班次检查（编辑自身除外）
-  const dup = (store.shifts || []).find((s) => {
-    const sid = s._id || s.id
-    return s.name === name && sid !== editId.value
-  })
-  if (dup) {
-    toast('已存在同名班次')
-    return
+  if (!isTeam.value) {
+    const dup = (store.shifts || []).find((s) => {
+      const sid = s._id || s.id
+      return s.name === name && sid !== editId.value
+    })
+    if (dup) {
+      toast('已存在同名班次')
+      return
+    }
   }
 
   const id = editId.value || genId()
@@ -260,8 +267,12 @@ async function save() {
   }
   if (editId.value) payload._id = editId.value
   try {
-    const saved = await api.saveShift(payload)
-    syncStoreShift(payload, saved)
+    if (isTeam.value) {
+      await api.team.saveShift(teamId.value, payload)
+    } else {
+      const saved = await api.saveShift(payload)
+      syncStoreShift(payload, saved)
+    }
     toast(editId.value ? '已保存' : '班次已添加')
     setTimeout(() => back(), 400)
   } catch (e) {
@@ -280,15 +291,19 @@ function removeShift() {
     success: async (res) => {
       if (!res.confirm) return
       try {
-        await api.deleteShift(key)
-        const idx = store.shifts.findIndex((s) => {
-          const sid = s.id || s._id
-          return sid === key || s._id === key || s.id === key
-        })
-        if (idx >= 0) store.shifts.splice(idx, 1)
-        ;(store.days || []).forEach((d) => {
-          if (d.work === key) d.work = ''
-        })
+        if (isTeam.value) {
+          await api.team.deleteShift(teamId.value, key)
+        } else {
+          await api.deleteShift(key)
+          const idx = store.shifts.findIndex((s) => {
+            const sid = s.id || s._id
+            return sid === key || s._id === key || s.id === key
+          })
+          if (idx >= 0) store.shifts.splice(idx, 1)
+          ;(store.days || []).forEach((d) => {
+            if (d.work === key) d.work = ''
+          })
+        }
         toast('已删除班次')
         setTimeout(() => back(), 400)
       } catch (e) {

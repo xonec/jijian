@@ -38,6 +38,14 @@
     "updatedAt": {
       "bsonType": "timestamp",
       "title": "更新时间"
+    },
+    "rest": {
+      "bsonType": "string",
+      "title": "休息分钟"
+    },
+    "remark": {
+      "bsonType": "string",
+      "title": "备注"
     }
   },
   "permission": {

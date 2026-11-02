@@ -42,11 +42,11 @@ async function load() {
 }
 function openAdd() {
   if (!isAdmin.value) return
-  goPage('team-shift-edit', { teamId: teamId.value })
+  goPage('work-edit', { teamId: teamId.value })
 }
 function openEdit(s) {
   if (!isAdmin.value) return
-  goPage('team-shift-edit', { teamId: teamId.value, id: s._id })
+  goPage('work-edit', { teamId: teamId.value, id: s._id })
 }
 function onLongPress(s) {
   if (!isAdmin.value) return

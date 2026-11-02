@@ -69,12 +69,6 @@
       }
     },
     {
-      "path": "pages/sub/team-shift-edit/index",
-      "style": {
-        "navigationStyle": "custom"
-      }
-    },
-    {
       "path": "pages/sub/team-schedule/index",
       "style": {
         "navigationStyle": "custom"

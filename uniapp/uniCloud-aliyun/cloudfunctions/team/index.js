@@ -244,7 +244,7 @@ const handlers = {
   async 'teamShift.save'(e, c, uid) {
     await requireAdmin(e.teamId, uid)
     const s = e.shift || {}
-    const payload = { teamId: e.teamId, name: trim(s.name, 20), color: trim(s.color, 20), start: trim(s.start, 10), end: trim(s.end, 10), allDay: !!s.allDay, sort: Number(s.sort) || 0, createdBy: uid, updatedAt: now() }
+    const payload = { teamId: e.teamId, name: trim(s.name, 20), color: trim(s.color, 20), start: trim(s.start, 10), end: trim(s.end, 10), allDay: !!s.allDay, rest: trim(s.rest, 5), remark: trim(s.remark, 30), sort: Number(s.sort) || 0, createdBy: uid, updatedAt: now() }
     if (!payload.name) throw new Error('请输入班次名称')
     if (s._id) { await db.collection(C.shift).doc(s._id).update(payload); return { _id: s._id } }
     const r = await db.collection(C.shift).add(payload)

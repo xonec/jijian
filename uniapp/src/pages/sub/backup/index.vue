@@ -5,15 +5,14 @@
         <text class="form-row__k">本地备份目录</text>
         <text class="form-row__v form-row__v--muted">默认目录</text>
       </view>
-      <view class="dir-row" @click="onSetDir">
+      <view class="dir-row">
         <view class="dir-row__ico">
           <ri-icon name="folder" :size="18" />
         </view>
         <view class="dir-row__main">
-          <text class="dir-row__t">点击设置本地备份目录</text>
-          <text class="dir-row__s">设置独立目录后，卸载 App 也能从该目录找回数据</text>
+          <text class="dir-row__t">应用私有目录</text>
+          <text class="dir-row__s">当前版本备份保存在 App 私有存储，卸载 App 会丢失；系统目录选择需要 Android SAF，暂未接入</text>
         </view>
-        <ri-icon name="arrow_right" :size="15" class="dir-row__chev" />
       </view>
     </view>
 
@@ -193,10 +192,6 @@ async function doCreate() {
     hideLoadingSafe()
     toast((e && e.message) || '备份失败，请重试')
   }
-}
-
-function onSetDir() {
-  toast('演示环境暂不支持选择系统目录')
 }
 
 function goCloud() {

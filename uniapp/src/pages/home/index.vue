@@ -550,8 +550,9 @@ export default {
   }
 }
 .home-actions {
-  margin-top: 14px;
+  padding: 14px 0 0;
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 8px;

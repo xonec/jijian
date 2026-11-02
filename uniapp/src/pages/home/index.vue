@@ -164,11 +164,6 @@
               <view class="oper-plan__btn oper-plan__btn--primary" @click="addPlan">添加周期轮班</view>
             </view>
           </template>
-
-          <template v-else>
-            <view class="oper-empty">确定要清空 {{ selectedDateText }} 的排班吗？</view>
-            <view class="oper-clear" @click="clearSelectedDay">清空当天排班</view>
-          </template>
         </view>
       </view>
     </view>
@@ -490,8 +485,7 @@ export default {
       store.scheduleRaw[date] = payload
       store.secondWorks[store.selected] = ''
       rebuildDays()
-      const sh = store.shifts.find((x) => x.id === id)
-      toast('已排班：' + (sh ? sh.name : ''))
+      moveSelected(1)
       try {
         await api.setDay(payload)
       } catch (e) {
@@ -499,22 +493,14 @@ export default {
       }
     }
     async function clearSelectedDay() {
-      uni.showModal({
-        title: '清空排班',
-        content: '真的要清空 ' + selectedDateText.value + ' 的排班吗？',
-        success: async (r) => {
-          if (!r.confirm) return
-          const date = selectedDateText.value
-          delete store.scheduleRaw[date]
-          delete store.remarks[store.selected]
-          store.secondWorks[store.selected] = ''
-          rebuildDays()
-          try {
-            await api.setDay({ date, workId: '', secondWorkId: '', remark: '' })
-          } catch (e) {}
-          toast('已清空')
-        }
-      })
+      const date = selectedDateText.value
+      delete store.scheduleRaw[date]
+      delete store.remarks[store.selected]
+      store.secondWorks[store.selected] = ''
+      rebuildDays()
+      try {
+        await api.setDay({ date, workId: '', secondWorkId: '', remark: '' })
+      } catch (e) {}
     }
     async function clearPlanDays() {
       const n = Math.max(1, Math.min(365, Number(planDays.value) || 90))
@@ -570,6 +556,10 @@ export default {
       if (label === '关闭') return closeOper()
       if (label === '上一天') return moveSelected(-1)
       if (label === '下一天') return moveSelected(1)
+      if (label === '清除') {
+        clearSelectedDay()
+        return
+      }
       operTab.value = label
     }
 

@@ -1,0 +1,59 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_team",
+  "description": "团队",
+  "fields": {
+    "name": {
+      "bsonType": "string",
+      "title": "团队名称"
+    },
+    "ownerId": {
+      "bsonType": "string",
+      "title": "创建者 uid"
+    },
+    "inviteCode": {
+      "bsonType": "string",
+      "title": "邀请码"
+    },
+    "joinMode": {
+      "bsonType": "string",
+      "title": "加入方式"
+    },
+    "allowMemberEditSelf": {
+      "bsonType": "bool",
+      "title": "成员可改自己排班"
+    },
+    "status": {
+      "bsonType": "string",
+      "title": "状态"
+    },
+    "createdAt": {
+      "bsonType": "timestamp",
+      "title": "创建时间"
+    },
+    "updatedAt": {
+      "bsonType": "timestamp",
+      "title": "更新时间"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  },
+  "indexes": [
+    {
+      "IndexName": "uk_invite",
+      "MgoKeySchema": {
+        "MgoIndexKeys": [
+          {
+            "Name": "inviteCode",
+            "Direction": "1"
+          }
+        ],
+        "MgoIsUnique": true
+      }
+    }
+  ]
+}

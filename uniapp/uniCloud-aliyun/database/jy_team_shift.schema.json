@@ -1,0 +1,49 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_team_shift",
+  "description": "团队班次",
+  "fields": {
+    "teamId": {
+      "bsonType": "string",
+      "title": "团队 id"
+    },
+    "name": {
+      "bsonType": "string",
+      "title": "班次名称"
+    },
+    "color": {
+      "bsonType": "string",
+      "title": "颜色"
+    },
+    "start": {
+      "bsonType": "string",
+      "title": "开始时间"
+    },
+    "end": {
+      "bsonType": "string",
+      "title": "结束时间"
+    },
+    "allDay": {
+      "bsonType": "bool",
+      "title": "是否全天"
+    },
+    "sort": {
+      "bsonType": "int",
+      "title": "排序"
+    },
+    "createdBy": {
+      "bsonType": "string",
+      "title": "创建人"
+    },
+    "updatedAt": {
+      "bsonType": "timestamp",
+      "title": "更新时间"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  }
+}

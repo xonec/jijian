@@ -1,0 +1,45 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_team_audit",
+  "description": "团队排班审计",
+  "fields": {
+    "teamId": {
+      "bsonType": "string",
+      "title": "团队 id"
+    },
+    "targetUid": {
+      "bsonType": "string",
+      "title": "被修改成员"
+    },
+    "date": {
+      "bsonType": "string",
+      "title": "日期"
+    },
+    "before": {
+      "bsonType": "object",
+      "title": "修改前"
+    },
+    "after": {
+      "bsonType": "object",
+      "title": "修改后"
+    },
+    "operatorUid": {
+      "bsonType": "string",
+      "title": "操作人"
+    },
+    "operatorRole": {
+      "bsonType": "string",
+      "title": "操作人角色"
+    },
+    "createdAt": {
+      "bsonType": "timestamp",
+      "title": "创建时间"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  }
+}

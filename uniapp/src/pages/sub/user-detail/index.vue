@@ -23,7 +23,7 @@
           v-model="form.nick"
           class="form-input"
           type="text"
-          maxlength="16"
+          maxlength="20"
           placeholder="请输入昵称"
           :placeholder-style="placeholderStyle"
         />

@@ -1,0 +1,37 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_plan",
+  "description": "周期轮班方案",
+  "fields": {
+    "owner": {
+      "bsonType": "string",
+      "title": "归属用户"
+    },
+    "deviceId": {
+      "bsonType": "string",
+      "title": "设备ID"
+    },
+    "id": {
+      "bsonType": "string",
+      "title": "业务ID"
+    },
+    "name": {
+      "bsonType": "string",
+      "title": "方案名称"
+    },
+    "sequence": {
+      "bsonType": "array",
+      "title": "班次序列（空字符串表示空档）"
+    },
+    "sort": {
+      "bsonType": "int",
+      "title": "排序"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  }
+}

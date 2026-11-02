@@ -51,6 +51,17 @@
             @confirm="submit"
           />
         </view>
+        <view v-if="mode === 'register'" class="form-row">
+          <text class="form-row__k">昵称</text>
+          <input
+            v-model="form.nickname"
+            class="form-input"
+            type="text"
+            maxlength="20"
+            placeholder="选填，默认使用账号"
+            :placeholder-style="placeholderStyle"
+          />
+        </view>
         <view class="form-row">
           <text class="form-row__k">密码</text>
           <input
@@ -108,7 +119,7 @@ const tabs = [
 
 const mode = ref('login')
 const loading = ref(false)
-const form = reactive({ username: '', password: '', confirm: '' })
+const form = reactive({ username: '', password: '', confirm: '', nickname: '' })
 let backTimer = null
 
 onUnmounted(() => {
@@ -146,13 +157,17 @@ async function submit() {
   if (mode.value === 'register' && form.password !== form.confirm) {
     return toast('两次输入的密码不一致')
   }
+  const nickname = String(form.nickname || '').trim()
+  if (mode.value === 'register' && nickname && (nickname.length < 2 || nickname.length > 20)) {
+    return toast('昵称长度需要 2~20 个字符')
+  }
   loading.value = true
   try {
     if (mode.value === 'login') {
       await login({ username, password: form.password })
       toast('登录成功')
     } else {
-      await register({ username, password: form.password, nickname: username })
+      await register({ username, password: form.password, nickname: nickname || username })
       toast('注册成功')
     }
     backTimer = setTimeout(() => back(), 350)

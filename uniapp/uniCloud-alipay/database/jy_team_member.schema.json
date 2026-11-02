@@ -1,0 +1,79 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_team_member",
+  "description": "团队成员",
+  "fields": {
+    "teamId": {
+      "bsonType": "string",
+      "title": "团队 id"
+    },
+    "uid": {
+      "bsonType": "string",
+      "title": "用户 uid"
+    },
+    "role": {
+      "bsonType": "string",
+      "title": "角色"
+    },
+    "nickname": {
+      "bsonType": "string",
+      "title": "昵称快照"
+    },
+    "realName": {
+      "bsonType": "string",
+      "title": "真实姓名"
+    },
+    "phone": {
+      "bsonType": "string",
+      "title": "手机号"
+    },
+    "phoneSetBy": {
+      "bsonType": "string",
+      "title": "手机号设置来源"
+    },
+    "phoneSetById": {
+      "bsonType": "string",
+      "title": "手机号设置人"
+    },
+    "employeeNo": {
+      "bsonType": "string",
+      "title": "工号"
+    },
+    "status": {
+      "bsonType": "string",
+      "title": "状态"
+    },
+    "joinedAt": {
+      "bsonType": "timestamp",
+      "title": "加入时间"
+    },
+    "updatedAt": {
+      "bsonType": "timestamp",
+      "title": "更新时间"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  },
+  "indexes": [
+    {
+      "IndexName": "uk_team_uid",
+      "MgoKeySchema": {
+        "MgoIndexKeys": [
+          {
+            "Name": "teamId",
+            "Direction": "1"
+          },
+          {
+            "Name": "uid",
+            "Direction": "1"
+          }
+        ],
+        "MgoIsUnique": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_team_join_request",
+  "description": "团队加入申请",
+  "fields": {
+    "teamId": {
+      "bsonType": "string",
+      "title": "团队 id"
+    },
+    "uid": {
+      "bsonType": "string",
+      "title": "用户 uid"
+    },
+    "nickname": {
+      "bsonType": "string",
+      "title": "昵称"
+    },
+    "realName": {
+      "bsonType": "string",
+      "title": "真实姓名"
+    },
+    "phone": {
+      "bsonType": "string",
+      "title": "手机号"
+    },
+    "employeeNo": {
+      "bsonType": "string",
+      "title": "工号"
+    },
+    "message": {
+      "bsonType": "string",
+      "title": "申请说明"
+    },
+    "status": {
+      "bsonType": "string",
+      "title": "状态"
+    },
+    "reviewedBy": {
+      "bsonType": "string",
+      "title": "审批人"
+    },
+    "reviewedAt": {
+      "bsonType": "timestamp",
+      "title": "审批时间"
+    },
+    "createdAt": {
+      "bsonType": "timestamp",
+      "title": "创建时间"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  }
+}

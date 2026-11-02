@@ -1,0 +1,71 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_team_schedule",
+  "description": "团队排班",
+  "fields": {
+    "teamId": {
+      "bsonType": "string",
+      "title": "团队 id"
+    },
+    "uid": {
+      "bsonType": "string",
+      "title": "成员 uid"
+    },
+    "date": {
+      "bsonType": "string",
+      "title": "日期 YYYY-MM-DD"
+    },
+    "workId": {
+      "bsonType": "string",
+      "title": "第一班次"
+    },
+    "secondWorkId": {
+      "bsonType": "string",
+      "title": "第二班次"
+    },
+    "remark": {
+      "bsonType": "string",
+      "title": "备注"
+    },
+    "createdBy": {
+      "bsonType": "string",
+      "title": "创建人"
+    },
+    "updatedBy": {
+      "bsonType": "string",
+      "title": "更新人"
+    },
+    "updatedAt": {
+      "bsonType": "timestamp",
+      "title": "更新时间"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  },
+  "indexes": [
+    {
+      "IndexName": "uk_team_uid_date",
+      "MgoKeySchema": {
+        "MgoIndexKeys": [
+          {
+            "Name": "teamId",
+            "Direction": "1"
+          },
+          {
+            "Name": "uid",
+            "Direction": "1"
+          },
+          {
+            "Name": "date",
+            "Direction": "1"
+          }
+        ],
+        "MgoIsUnique": true
+      }
+    }
+  ]
+}

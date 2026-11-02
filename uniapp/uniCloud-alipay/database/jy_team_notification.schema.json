@@ -1,0 +1,45 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_team_notification",
+  "description": "团队站内通知",
+  "fields": {
+    "teamId": {
+      "bsonType": "string",
+      "title": "团队 id"
+    },
+    "targetUid": {
+      "bsonType": "string",
+      "title": "接收人"
+    },
+    "type": {
+      "bsonType": "string",
+      "title": "类型"
+    },
+    "title": {
+      "bsonType": "string",
+      "title": "标题"
+    },
+    "content": {
+      "bsonType": "string",
+      "title": "内容"
+    },
+    "payload": {
+      "bsonType": "object",
+      "title": "附加数据"
+    },
+    "read": {
+      "bsonType": "bool",
+      "title": "是否已读"
+    },
+    "createdAt": {
+      "bsonType": "timestamp",
+      "title": "创建时间"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  }
+}

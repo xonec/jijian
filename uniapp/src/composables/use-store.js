@@ -20,7 +20,7 @@ export const store = reactive({
   weekStart: 1, // 原版默认周一开头
   weekStartLabel: '周一',
   shifts: SHIFTS.map((s) => ({ ...s })),
-  days: DAYS.map((d) => ({ ...d })),
+  days: [],
   remarks: { ...REMARKS },
   alarms: ALARMS.map((a) => ({ ...a })),
   stat: STAT,

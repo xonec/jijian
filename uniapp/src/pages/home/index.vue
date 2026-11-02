@@ -93,21 +93,63 @@
       </view>
     </view>
 
-    <!-- 操作按钮 -->
-    <view class="home-actions">
-      <view class="btn btn--primary" @click="store.editMode = !store.editMode">
-        {{ store.editMode ? '完成排班' : '开启排班' }}
-      </view>
-      <view v-if="!store.editMode" class="btn btn--ghost" @click="openSheet('shift', 'second')">
-        第二班次
-      </view>
+    <!-- 操作按钮：与原版一致，无记录=通栏按钮；有记录=三个小按钮 -->
+    <view v-if="!selectedHasRecord" class="start-card" @click="startSchedule">
+      <text>{{ store.editMode ? '完成排班' : '开启排班' }}</text>
+    </view>
+    <view v-else class="home-actions">
+      <view class="home-action" @click="onRemark">设置备注</view>
+      <view class="home-action" @click="startSchedule">{{ store.editMode ? '完成排班' : '开启排班' }}</view>
+      <view class="home-action" @click="openSheet('shift', 'second')">第二班次</view>
     </view>
 
-    <!-- 排班模式底部操作条 -->
-    <view v-if="store.editMode" class="oper-panel">
-      <view v-for="op in operItems" :key="op.label" class="oper-item" @click="onOper(op.label)">
-        <ri-icon :name="op.icon" :size="20" />
-        <text>{{ op.label }}</text>
+    <!-- 排班操作面板（原版 ScheduleOperView 的底部弹窗） -->
+    <view v-if="store.editMode" class="oper-mask" @click.self="closeOper">
+      <view class="oper-sheet">
+        <view class="oper-handle" />
+        <view class="oper-tabs">
+          <view
+            v-for="op in operItems"
+            :key="op.label"
+            class="oper-tab"
+            :class="{ 'oper-tab--on': operTab === op.label }"
+            @click="onOper(op.label)"
+          >{{ op.label }}</view>
+        </view>
+        <view class="oper-body">
+          <template v-if="operTab === '自定义排班'">
+            <view v-if="!store.shifts.length" class="oper-empty">你还没有设置班次喔</view>
+            <view v-else class="oper-shift-list">
+              <view
+                v-for="sh in store.shifts"
+                :key="sh.id"
+                class="oper-shift"
+                :style="{ background: sh.color }"
+                @click="pickOperShift(sh.id)"
+              >
+                <text class="oper-shift__name">{{ sh.name }}</text>
+                <text class="oper-shift__time">{{ fmtTime(sh) }}</text>
+              </view>
+            </view>
+          </template>
+
+          <template v-else-if="operTab === '周期轮班'">
+            <view class="oper-empty">你还没有设置周期排班喔</view>
+            <view class="oper-plan">
+              <view class="oper-plan__row">
+                <text>周期轮班天数</text>
+                <input v-model="planDays" class="oper-input" type="number" />
+              </view>
+              <view class="oper-plan__btn" @click="clearPlanDays">清空从 {{ selectedDateText }} 开始的 {{ planDays }} 天排班</view>
+              <view class="oper-plan__btn oper-plan__btn--primary" @click="addPlan">添加周期轮班</view>
+            </view>
+          </template>
+
+          <template v-else>
+            <view class="oper-empty">确定要清空 {{ selectedDateText }} 的排班吗？</view>
+            <view class="oper-clear" @click="clearSelectedDay">清空当天排班</view>
+          </template>
+        </view>
       </view>
     </view>
 
@@ -217,7 +259,7 @@ import { computed, ref } from 'vue'
 import {
   store, monthTitle, selectedDateText, selectedShift, selectedWeekday, fmtTime,
   selectDay, stepMonth, jumpToday, closeSheet, openSheet, closeDialog, openDialog,
-  saveRemark, WEEK, applyBootstrap, setWeekStart, setDayWork, shiftById
+  saveRemark, WEEK, applyBootstrap, setWeekStart, setDayWork, shiftById, rebuildDays
 } from '@/composables/use-store.js'
 import { useTheme } from '@/composables/use-theme.js'
 import { goPage, toast } from '@/composables/use-nav.js'
@@ -252,13 +294,17 @@ export default {
       store.sheetArg === 'second' ? '选择第二班次' : '选择第一班次'
     )
     const operItems = [
-      { label: '自定义排班', icon: 'pencil' },
-      { label: '周期轮班', icon: 'refresh' },
-      { label: '清除', icon: 'delete_bin' },
-      { label: '上一天', icon: 'down' },
-      { label: '下一天', icon: 'down2' },
-      { label: '关闭', icon: 'remove' }
+      { label: '自定义排班' },
+      { label: '周期轮班' },
+      { label: '清除' },
+      { label: '上一天' },
+      { label: '下一天' },
+      { label: '关闭' }
     ]
+    const operTab = ref('自定义排班')
+    const planDays = ref('90')
+    let lastPickAt = 0
+    const selectedHasRecord = computed(() => !!(selectedShift.value || secondShift.value || remarkText.value))
 
     const configValue = (key, fallback) => {
       const it = store.displayConfig.find((x) => x.k === key)
@@ -342,21 +388,91 @@ export default {
       api.setDay({ ...rec, date, remark: remarkDraft.value.trim() }).catch(() => {})
       closeDialog()
     }
-    function onOper(label) {
-      if (label === '关闭') {
+    function startSchedule() {
+      if (!store.shifts.length) {
+        toast('请先设置好班次再来排班')
+        return
+      }
+      if (store.editMode) {
         store.editMode = false
         return
       }
-      if (label === '上一天' && store.selected > 1) store.selected -= 1
-      if (label === '下一天') store.selected += 1
-      if (label === '清除') {
-        store.secondWorks[store.selected] = ''
-      }
-      if (label === '周期轮班') {
-        goPage('work-edit')
+      operTab.value = '自定义排班'
+      store.editMode = true
+    }
+    function closeOper() {
+      store.editMode = false
+    }
+    function moveSelected(delta) {
+      const dt = new Date(store.view.y, store.view.m - 1, store.selected + delta)
+      store.view.y = dt.getFullYear()
+      store.view.m = dt.getMonth() + 1
+      store.selected = dt.getDate()
+    }
+    async function pickOperShift(id) {
+      const now = Date.now()
+      if (now - lastPickAt < 320) {
+        toast('不要太着急了')
         return
       }
-      toast(label + '（示例）')
+      lastPickAt = now
+      try {
+        await setDayWork(store.selected, id)
+        store.secondWorks[store.selected] = ''
+        const sh = store.shifts.find((x) => x.id === id)
+        toast('已排班：' + (sh ? sh.name : ''))
+      } catch (e) {
+        toast((e && (e.message || e.errMsg)) || '排班失败')
+      }
+    }
+    async function clearSelectedDay() {
+      uni.showModal({
+        title: '清空排班',
+        content: '真的要清空 ' + selectedDateText.value + ' 的排班吗？',
+        success: async (r) => {
+          if (!r.confirm) return
+          const date = selectedDateText.value
+          delete store.scheduleRaw[date]
+          delete store.remarks[store.selected]
+          store.secondWorks[store.selected] = ''
+          rebuildDays()
+          try {
+            await api.setDay({ date, workId: '', secondWorkId: '', remark: '' })
+          } catch (e) {}
+          toast('已清空')
+        }
+      })
+    }
+    async function clearPlanDays() {
+      const n = Math.max(1, Math.min(365, Number(planDays.value) || 90))
+      uni.showModal({
+        title: '清空排班',
+        content: '清空从 ' + selectedDateText.value + ' 开始的 ' + n + ' 天排班？',
+        success: async (r) => {
+          if (!r.confirm) return
+          const start = new Date(store.view.y, store.view.m - 1, store.selected)
+          const tasks = []
+          for (let i = 0; i < n; i += 1) {
+            const d = new Date(start.getTime() + i * 86400000)
+            const date = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0')
+            delete store.scheduleRaw[date]
+            tasks.push(api.setDay({ date, workId: '', secondWorkId: '', remark: '' }).catch(() => {}))
+          }
+          rebuildDays()
+          await Promise.all(tasks)
+          toast('已清空 ' + n + ' 天')
+        }
+      })
+    }
+    function addPlan() {
+      toast('周期轮班编辑页还在开发中')
+      goPage('work-edit')
+    }
+    function onOper(label) {
+      if (label === '关闭') return closeOper()
+      if (label === '上一天') return moveSelected(-1)
+      if (label === '下一天') return moveSelected(1)
+      operTab.value = label
     }
 
     return {
@@ -373,6 +489,9 @@ export default {
       legendItems,
       hasSchedule,
       operItems,
+      operTab,
+      planDays,
+      selectedHasRecord,
       dayMapData,
       showLunar,
       showHoliday,
@@ -399,6 +518,12 @@ export default {
       saveConfigAction,
       onRemark,
       saveRemarkAction,
+      startSchedule,
+      closeOper,
+      pickOperShift,
+      clearSelectedDay,
+      clearPlanDays,
+      addPlan,
       onOper
     }
   },
@@ -409,6 +534,169 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.start-card {
+  margin-top: 14px;
+  height: 50px;
+  border-radius: var(--r-card);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--text-1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  &:active {
+    background: var(--surface-2);
+  }
+}
+.home-actions {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.home-action {
+  height: 34px;
+  padding: 0 16px;
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--text-2);
+  &:active {
+    background: var(--surface-2);
+  }
+}
+.oper-mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--scrim);
+  z-index: 120;
+  display: flex;
+  align-items: flex-end;
+}
+.oper-sheet {
+  width: 100%;
+  background: var(--surface);
+  border-radius: var(--r-sheet) var(--r-sheet) 0 0;
+  padding-bottom: env(safe-area-inset-bottom);
+  overflow: hidden;
+}
+.oper-handle {
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--line);
+  margin: 8px auto 2px;
+}
+.oper-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px 12px;
+}
+.oper-tab {
+  font-size: 13px;
+  color: var(--text-2);
+  padding: 4px 2px;
+}
+.oper-tab--on {
+  color: var(--primary);
+  font-weight: 600;
+}
+.oper-body {
+  background: var(--surface-2);
+  min-height: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.oper-empty {
+  padding: 36px 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-3);
+}
+.oper-shift-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.oper-shift {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 8px;
+  padding: 9px 12px;
+  color: #ffffff;
+  font-size: 13px;
+  &:active {
+    opacity: 0.85;
+  }
+}
+.oper-shift__name {
+  font-weight: 500;
+}
+.oper-shift__time {
+  font-size: 12px;
+}
+.oper-plan {
+  padding-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.oper-plan__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--text-2);
+}
+.oper-input {
+  width: 72px;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 8px;
+  background: var(--surface);
+  font-size: 13px;
+  text-align: center;
+}
+.oper-plan__btn {
+  height: 36px;
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text-2);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:active {
+    opacity: 0.8;
+  }
+}
+.oper-plan__btn--primary {
+  background: var(--primary);
+  color: #ffffff;
+}
+.oper-clear {
+  height: 42px;
+  margin-top: 8px;
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--delete);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .empty-month {
   font-size: 13px;
   color: var(--text-3);

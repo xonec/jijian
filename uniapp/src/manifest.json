@@ -18,8 +18,7 @@
     "modules": {
       "Camera": {},
       "Geolocation": {},
-      "Record": {},
-      "Push": {}
+      "Record": {}
     },
     "distribute": {
       "android": {

@@ -27,6 +27,8 @@
         >
           <text class="plan-seq__idx">{{ idx + 1 }}</text>
           <view class="plan-seq__chip" :style="{ background: item.color }">{{ item.name }}</view>
+          <text class="plan-seq__op" @click.stop="moveAt(idx, -1)">↑</text>
+          <text class="plan-seq__op" @click.stop="moveAt(idx, 1)">↓</text>
           <ri-icon name="remove" :size="14" class="plan-seq__del" />
         </view>
       </view>
@@ -89,11 +91,19 @@ function addShift(id) {
 function removeAt(idx) {
   form.sequence.splice(idx, 1)
 }
-function onSave() {
+function moveAt(idx, delta) {
+  const to = idx + delta
+  if (to < 0 || to >= form.sequence.length) return
+  const list = form.sequence.slice()
+  const [item] = list.splice(idx, 1)
+  list.splice(to, 0, item)
+  form.sequence = list
+}
+async function onSave() {
   const name = String(form.name || '').trim()
   if (!name) return toast('请输入轮班名称')
   if (!form.sequence.length) return toast('请至少加入一个班次')
-  savePlan({ id: planId.value || undefined, name, sequence: form.sequence })
+  await savePlan({ id: planId.value || undefined, name, sequence: form.sequence })
   toast('已保存')
   setTimeout(() => back(), 300)
 }
@@ -102,9 +112,9 @@ function onDelete() {
     title: '删除轮班',
     content: '确定删除「' + form.name + '」？',
     confirmText: '删除',
-    success: (r) => {
+    success: async (r) => {
       if (!r.confirm) return
-      removePlan(planId.value)
+      await removePlan(planId.value)
       toast('已删除')
       setTimeout(() => back(), 300)
     }
@@ -140,6 +150,11 @@ function onDelete() {
   border-radius: 6px;
   color: #ffffff;
   font-size: 12px;
+}
+.plan-seq__op {
+  font-size: 12px;
+  color: var(--text-3);
+  padding: 0 2px;
 }
 .plan-seq__del {
   color: var(--delete);

@@ -289,7 +289,7 @@ import { computed, ref } from 'vue'
 import {
   store, monthTitle, selectedDateText, selectedShift, selectedWeekday, fmtTime,
   selectDay, stepMonth, jumpToday, closeSheet, openSheet, closeDialog, openDialog,
-  saveRemark, WEEK, applyBootstrap, setWeekStart, setDayWork, shiftById, rebuildDays, loadPlans
+  saveRemark, WEEK, applyBootstrap, setWeekStart, setDayWork, shiftById, rebuildDays, loadPlans, syncPlans
 } from '@/composables/use-store.js'
 import { useTheme } from '@/composables/use-theme.js'
 import { goPage, toast } from '@/composables/use-nav.js'
@@ -639,6 +639,7 @@ export default {
   },
   onShow() {
     loadPlans()
+    syncPlans()
     this.loadData()
   }
 }

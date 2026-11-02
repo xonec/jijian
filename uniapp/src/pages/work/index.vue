@@ -48,15 +48,31 @@
       </view>
       <view v-else class="empty">暂无轮班</view>
       <view class="add-row" @click="openPlanAdd">添加轮班</view>
-      <view class="sort-link" @click="onSort">轮班排序</view>
+      <view class="sort-link" @click="openPlanSort">轮班排序</view>
       <view class="hint center">长按轮班可删除</view>
+
+      <view v-if="planSortVisible" class="sort-mask" @click.self="planSortVisible = false">
+        <view class="sort-sheet">
+          <view class="sort-sheet__head">
+            <text>轮班排序</text>
+            <text class="sort-sheet__save" @click="savePlanSort">保存</text>
+          </view>
+          <view v-for="(plan, idx) in planSortDraft" :key="plan.id" class="sort-row">
+            <text class="sort-row__name">{{ plan.name }}</text>
+            <view class="sort-row__ops">
+              <text @click.stop="moveSort(idx, -1)">↑</text>
+              <text @click.stop="moveSort(idx, 1)">↓</text>
+            </view>
+          </view>
+        </view>
+      </view>
     </view>
   </page-frame>
 </template>
 
 <script>
 import { api } from '@/services/api.js'
-import { store, fmtTime, loadPlans, removePlan } from '@/composables/use-store.js'
+import { store, fmtTime, loadPlans, removePlan, syncPlans } from '@/composables/use-store.js'
 import { goPage, toast } from '@/composables/use-nav.js'
 
 export default {
@@ -68,7 +84,9 @@ export default {
         { key: 'work', label: '班次' },
         { key: 'plan', label: '轮班' }
       ],
-      shifts: store.shifts
+      shifts: store.shifts,
+      planSortVisible: false,
+      planSortDraft: []
     }
   },
   computed: {
@@ -82,6 +100,7 @@ export default {
   onShow() {
     this.loadShifts()
     loadPlans()
+    syncPlans()
   },
   methods: {
     fmtTime,
@@ -156,7 +175,24 @@ export default {
       })
     },
     onSort() {
-      toast('功能演示')
+      this.openPlanSort()
+    },
+    openPlanSort() {
+      this.planSortDraft = this.store.plans.map((p) => ({ ...p }))
+      this.planSortVisible = true
+    },
+    moveSort(idx, delta) {
+      const to = idx + delta
+      if (to < 0 || to >= this.planSortDraft.length) return
+      const list = this.planSortDraft.slice()
+      const [item] = list.splice(idx, 1)
+      list.splice(to, 0, item)
+      this.planSortDraft = list
+    },
+    savePlanSort() {
+      reorderPlans(this.planSortDraft)
+      this.planSortVisible = false
+      toast('排序已保存')
     }
   }
 }
@@ -194,5 +230,52 @@ export default {
   border-radius: 4px;
   color: #ffffff;
   font-size: 11px;
+}
+.sort-mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--scrim);
+  z-index: 120;
+  display: flex;
+  align-items: flex-end;
+}
+.sort-sheet {
+  width: 100%;
+  max-height: 60vh;
+  background: var(--surface);
+  border-radius: var(--r-sheet) var(--r-sheet) 0 0;
+  padding-bottom: env(safe-area-inset-bottom);
+  overflow-y: auto;
+}
+.sort-sheet__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  font-size: 15px;
+  color: var(--text-1);
+  border-bottom: 1px solid var(--line);
+}
+.sort-sheet__save {
+  color: var(--primary);
+  font-size: 14px;
+}
+.sort-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--text-2);
+}
+.sort-row__ops {
+  display: flex;
+  gap: 18px;
+  font-size: 15px;
+  color: var(--text-3);
 }
 </style>

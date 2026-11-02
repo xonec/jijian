@@ -23,6 +23,7 @@ const C = {
   alarm: 'jy_alarm',
   project: 'jy_project',
   config: 'jy_config',
+  plan: 'jy_plan',
   share: 'jy_share',
   faq: 'jy_faq'
 }
@@ -404,6 +405,13 @@ exports.main = async (event, context) => {
       return ok(Object.assign({}, next, { _id: addRes.id }))
     }
 
+    if (action === 'plan.list') return ok(await getList(ctx, C.plan))
+    if (action === 'plan.save') return ok(await upsert(ctx, C.plan, event.plan || {}))
+    if (action === 'plan.delete') {
+      await getOwnedDoc(ctx, C.plan, event.id)
+      await db.collection(C.plan).doc(event.id).remove()
+      return ok({ ok: true })
+    }
     if (action === 'shift.list') return ok(await getList(ctx, C.shift, 'sort'))
     if (action === 'shift.save') return ok(await upsert(ctx, C.shift, event.shift || {}))
     if (action === 'shift.delete') {

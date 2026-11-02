@@ -97,6 +97,20 @@ export const api = {
     return local.deleteShift(id)
   },
 
+  /* 周期轮班方案 */
+  async fetchPlans() {
+    if (isCloud()) return callCloud('plan.list')
+    return []
+  },
+  async savePlan(plan) {
+    if (isCloud()) return callCloud('plan.save', { plan })
+    return plan
+  },
+  async deletePlan(id) {
+    if (isCloud()) return callCloud('plan.delete', { id })
+    return true
+  },
+
   /* 提醒 */
   async fetchAlarms() {
     if (isCloud()) return callCloud('alarm.list')

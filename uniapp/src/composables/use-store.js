@@ -262,9 +262,27 @@ function persistPlans() {
   } catch (e) {}
 }
 
-export function savePlan(plan) {
+export async function syncPlans() {
+  try {
+    const list = await api.fetchPlans()
+    if (Array.isArray(list) && list.length) {
+      store.plans = list.map((p) => ({
+        id: p.id || p._id,
+        cloudId: p._id,
+        name: p.name,
+        sequence: Array.isArray(p.sequence) ? p.sequence : [],
+        updatedAt: p.updatedAt || 0
+      }))
+      persistPlans()
+    }
+  } catch (e) {}
+  return store.plans
+}
+
+export async function savePlan(plan) {
   const item = {
     id: plan.id || 'plan-' + Date.now().toString(36),
+    cloudId: plan.cloudId || '',
     name: String(plan.name || '').trim() || '未命名轮班',
     sequence: Array.isArray(plan.sequence) ? plan.sequence.slice() : [],
     updatedAt: Date.now()
@@ -273,12 +291,33 @@ export function savePlan(plan) {
   if (idx >= 0) store.plans.splice(idx, 1, item)
   else store.plans.push(item)
   persistPlans()
+  try {
+    const cloud = await api.savePlan({ ...item, _id: item.cloudId || undefined })
+    if (cloud && cloud._id) {
+      item.cloudId = cloud._id
+      if (cloud.id) item.id = cloud.id
+      const j = store.plans.findIndex((x) => x.id === item.id)
+      if (j >= 0) store.plans.splice(j, 1, item)
+      persistPlans()
+    }
+  } catch (e) {}
   return item
 }
 
-export function removePlan(id) {
+export async function removePlan(id) {
   const idx = store.plans.findIndex((x) => x.id === id)
+  const item = idx >= 0 ? store.plans[idx] : null
   if (idx >= 0) store.plans.splice(idx, 1)
+  persistPlans()
+  if (item && item.cloudId) {
+    try {
+      await api.deletePlan(item.cloudId)
+    } catch (e) {}
+  }
+}
+
+export function reorderPlans(list) {
+  if (Array.isArray(list)) store.plans = list.slice()
   persistPlans()
 }
 

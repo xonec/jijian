@@ -395,6 +395,8 @@ export default {
         applyBootstrap(db && db.data ? db.data : db)
       } catch (e) {
         console.warn('[home] bootstrap failed, fallback local', e)
+        store.loaded = true
+        rebuildDays()
       }
     }
 

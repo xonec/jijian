@@ -138,7 +138,7 @@ export function rebuildDays() {
 watch(
   () => [store.view.y, store.view.m],
   () => {
-    if (store.loaded) rebuildDays()
+    rebuildDays()
   }
 )
 

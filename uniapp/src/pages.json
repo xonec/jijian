@@ -123,6 +123,12 @@
       }
     },
     {
+      "path": "pages/sub/account-delete/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/sub/login/index",
       "style": {
         "navigationStyle": "custom"

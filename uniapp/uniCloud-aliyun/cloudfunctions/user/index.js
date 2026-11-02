@@ -472,7 +472,71 @@ async function changePassword(event, context) {
   return ok({ ok: true })
 }
 
-/* ------------------------------------------------------------------ */
+async function deleteAccount(event, context) {
+  const ctx = await requireUser(event, context)
+  if (ctx.error) return fail(ctx.error)
+  const password = String(event.password || '')
+  const confirm = String(event.confirm || '')
+  if (!password) return fail('请输入当前账号密码')
+  if (confirm !== '注销账号') return fail('请输入“注销账号”确认')
+  if (!verifyPassword(password, ctx.user.password)) {
+    await recordLoginFailure(String(ctx.user.username || ''), context)
+    return fail('密码错误')
+  }
+
+  const uid = ctx.user._id
+  const deleted = {}
+
+  // 创建者如果团队还有其他成员，必须先转让/解散
+  const owned = await db.collection('jy_team').where({ ownerId: uid, status: 'active' }).get()
+  for (const team of owned.data || []) {
+    const others = await db.collection('jy_team_member')
+      .where({ teamId: team._id, status: 'active', uid: _.neq(uid) }).count()
+    if ((others.total || 0) > 0) {
+      return fail('你是团队「' + team.name + '」的创建者，请先转让或解散团队后再注销')
+    }
+  }
+
+  // 个人数据
+  const personal = ['jy_shift', 'jy_schedule', 'jy_alarm', 'jy_project', 'jy_config', 'jy_plan', 'jy_backup', 'jy_share', 'jy_feedback']
+  for (const col of personal) {
+    try {
+      const r = await db.collection(col).where(_.or([{ owner: uid }, { user_id: uid }, { uid }])).remove()
+      deleted[col] = (r.deleted || 0)
+    } catch (e) { deleted[col] = 0 }
+  }
+  try {
+    const r = await db.collection('jy_webdav').where({ user_id: uid }).remove()
+    deleted.jy_webdav = (r.deleted || 0)
+  } catch (e) { deleted.jy_webdav = 0 }
+  for (const col of ['jy_vip', 'jy_vip_order']) {
+    try {
+      const r = await db.collection(col).where({ uid }).remove()
+      deleted[col] = (r.deleted || 0)
+    } catch (e) { deleted[col] = 0 }
+  }
+
+  // 自己的团队数据
+  for (const team of owned.data || []) {
+    for (const col of ['jy_team_shift', 'jy_team_schedule', 'jy_team_audit', 'jy_team_notification', 'jy_team_join_request', 'jy_team_member']) {
+      try { await db.collection(col).where({ teamId: team._id }).remove() } catch (e) {}
+    }
+    try { await db.collection('jy_team').doc(team._id).remove() } catch (e) {}
+  }
+
+  // 作为普通成员的关联数据
+  const memberships = await db.collection('jy_team_member').where({ uid }).get()
+  for (const m of memberships.data || []) {
+    try { await db.collection('jy_team_schedule').where({ teamId: m.teamId, uid }).remove() } catch (e) {}
+    try { await db.collection('jy_team_notification').where({ teamId: m.teamId, targetUid: uid }).remove() } catch (e) {}
+    try { await db.collection('jy_team_join_request').where({ teamId: m.teamId, uid }).remove() } catch (e) {}
+    try { await db.collection('jy_team_audit').where({ teamId: m.teamId, targetUid: uid }).remove() } catch (e) {}
+    try { await db.collection('jy_team_member').doc(m._id).remove() } catch (e) {}
+  }
+
+  await usersCol.doc(uid).remove()
+  return ok({ ok: true, deleted })
+}
 
 const handlers = {
   'auth.register': register,
@@ -480,7 +544,8 @@ const handlers = {
   'auth.logout': logout,
   'auth.getInfo': getInfo,
   'auth.updateInfo': updateInfo,
-  'auth.changePassword': changePassword
+  'auth.changePassword': changePassword,
+  'auth.deleteAccount': deleteAccount
 }
 
 exports.main = async (event, context) => {

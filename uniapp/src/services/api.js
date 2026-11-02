@@ -223,6 +223,10 @@ export const api = {
     async changePassword(payload) {
       if (isCloud()) return callCloud('auth.changePassword', payload, 'user')
       return local.authChangePassword(payload)
+    },
+    async deleteAccount(payload) {
+      if (isCloud()) return callCloud('auth.deleteAccount', payload, 'user')
+      throw new Error('本地模式不支持注销账号')
     }
   },
 

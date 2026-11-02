@@ -559,7 +559,8 @@ const handlers = {
   'auth.getInfo': getInfo,
   'auth.updateInfo': updateInfo,
   'auth.changePassword': changePassword,
-  'auth.deleteAccount': deleteAccount
+  'auth.deleteAccount': deleteAccount,
+  'auth.wxLogin': wxLogin
 }
 
 exports.main = async (event, context) => {

@@ -224,6 +224,10 @@ export const api = {
       if (isCloud()) return callCloud('auth.changePassword', payload, 'user')
       return local.authChangePassword(payload)
     },
+    async wxLogin(payload) {
+      if (isCloud()) return callCloud('auth.wxLogin', payload, 'user')
+      throw new Error('本地模式不支持微信登录')
+    },
     async deleteAccount(payload) {
       if (isCloud()) return callCloud('auth.deleteAccount', payload, 'user')
       throw new Error('本地模式不支持注销账号')

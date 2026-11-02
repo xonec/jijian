@@ -95,6 +95,12 @@ export async function login(payload) {
   return persist(data)
 }
 
+/** 微信一键登录（小程序） */
+export async function wxLogin(payload) {
+  const data = await api.auth.wxLogin(payload || {})
+  return persist(data)
+}
+
 /** 注册（注册成功即登录，返回结构与登录一致） */
 export async function register(payload) {
   const data = await api.auth.register(payload || {})

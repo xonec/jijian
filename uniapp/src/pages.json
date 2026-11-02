@@ -131,7 +131,10 @@
     {
       "path": "pages/sub/login/index",
       "style": {
-        "navigationStyle": "custom"
+        "navigationStyle": "custom",
+        "usingComponents": {
+          "login6": "plugin://myPlugin/login-temp6"
+        }
       }
     },
     {

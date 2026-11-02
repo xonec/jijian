@@ -95,6 +95,20 @@
         {{ mode === 'login' ? '还没有账号？立即注册' : '已有账号？返回登录' }}
       </view>
 
+      <!-- #ifdef MP-WEIXIN -->
+      <view class="wx-login-btn" @click="openWxLogin">
+        <text class="wx-login-btn__icon">微信</text>
+        <text>微信一键登录</text>
+      </view>
+      <login6
+        v-if="wxLoginVisible"
+        :loginData="wxLoginData"
+        @success="onWxLoginSuccess"
+        @fail="onWxLoginFail"
+        @cancel="wxLoginVisible = false"
+      />
+      <!-- #endif -->
+
       <view class="hint">
         账号仅用于绑定付费状态与反馈意见，不会上传您的排班数据；排班数据默认保存在本机，换机请使用「本地备份与恢复」或「云备份」。
       </view>
@@ -109,7 +123,7 @@ import { useAuth } from '@/composables/use-auth.js'
 import { back, toast } from '@/composables/use-nav.js'
 import { useTheme } from '@/composables/use-theme.js'
 
-const { auth, syncFromStorage, login, register, logout } = useAuth()
+const { auth, syncFromStorage, login, register, logout, wxLogin } = useAuth()
 const { theme } = useTheme()
 
 const tabs = [
@@ -118,6 +132,14 @@ const tabs = [
 ]
 
 const mode = ref('login')
+const wxLoginVisible = ref(false)
+const wxLoginData = {
+  version: 'release',
+  logo: { isShow: false },
+  base: { title: '微信一键登录', subtitle: '登录后同步账号与团队数据' },
+  confirmBtn: { btnText: '微信快速登录' },
+  cancelBtn: { isShow: true, btnText: '暂不登录' }
+}
 const loading = ref(false)
 const form = reactive({ username: '', password: '', confirm: '', nickname: '' })
 let backTimer = null
@@ -178,6 +200,38 @@ async function submit() {
   }
 }
 
+function openWxLogin() {
+  wxLoginVisible.value = true
+}
+function wxDetail(e) {
+  return (e && (e.detail || (e.mp && e.mp.detail))) || {}
+}
+async function onWxLoginSuccess(e) {
+  wxLoginVisible.value = false
+  const d = wxDetail(e)
+  const code = d.code || d.loginCode || (d.data && d.data.code) || ''
+  if (!code) {
+    toast('微信登录未返回 code，请更新插件版本')
+    return
+  }
+  loading.value = true
+  try {
+    const profile = d.userInfo || d
+    await wxLogin({ code, nickname: profile.nickName || profile.nickname || '', avatar: profile.avatarUrl || '' })
+    toast('登录成功')
+    backTimer = setTimeout(() => back(), 350)
+  } catch (err) {
+    toast((err && (err.message || err.errMsg)) || '微信登录失败')
+  } finally {
+    loading.value = false
+  }
+}
+function onWxLoginFail(e) {
+  wxLoginVisible.value = false
+  const d = wxDetail(e)
+  toast(d.errMsg || d.message || '微信登录失败')
+}
+
 function onLogout() {
   uni.showModal({
     title: '退出登录',
@@ -192,6 +246,24 @@ function onLogout() {
 </script>
 
 <style lang="scss" scoped>
+.wx-login-btn {
+  margin-top: 18px;
+  height: 46px;
+  border-radius: var(--r-card);
+  background: #07c160;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 15px;
+}
+.wx-login-btn__icon {
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
 .auth-hero {
   padding: 30px 8px 2px;
   text-align: center;

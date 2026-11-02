@@ -86,6 +86,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { onShow } from '@dcloudio/uni-app'
 import { toast } from '@/composables/use-nav.js'
 import {
   isSupported, diagnose, requestPermissions, testCalendarAlarm, notifyNow, openSettings as openNativeSettings
@@ -156,6 +157,10 @@ async function refresh() {
   }
 }
 
+onShow(() => {
+  refresh()
+})
+
 onMounted(() => {
   try {
     const saved = uni.getStorageSync('jy_notify_brand')
@@ -191,7 +196,8 @@ async function requestAll() {
   try {
     await requestPermissions('all')
   } catch (e) {}
-  await refresh()
+  setTimeout(refresh, 800)
+  setTimeout(refresh, 2000)
   toast('已发起权限申请')
 }
 

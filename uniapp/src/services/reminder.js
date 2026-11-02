@@ -109,6 +109,7 @@ function createAndroidImpl() {
       notification: sdkInt < 33 ? true : checkPerm('android.permission.POST_NOTIFICATIONS'),
       calendarRead: checkPerm('android.permission.READ_CALENDAR'),
       calendarWrite: checkPerm('android.permission.WRITE_CALENDAR'),
+      network: true,
       location: checkPerm('android.permission.ACCESS_FINE_LOCATION') || checkPerm('android.permission.ACCESS_COARSE_LOCATION'),
       camera: checkPerm('android.permission.CAMERA'),
       record: checkPerm('android.permission.RECORD_AUDIO'),
@@ -154,17 +155,17 @@ function createAndroidImpl() {
     try {
       const c = cr()
       const projection = ['_id', 'calendar_displayName', 'calendar_access_level', 'visible', 'isPrimary']
-      const cursor = c.query(Calendars.CONTENT_URI, projection, null, null, null)
+      const cursor = plus.android.invoke(c, 'query', Calendars.CONTENT_URI, projection, null, null, null)
       let best = ''
       if (cursor) {
-        while (cursor.moveToNext()) {
-          const id = String(cursor.getLong(0) || '')
-          const level = Number(cursor.getInt(2) || 0)
-          const visible = Number(cursor.getInt(3) || 0)
-          const primary = Number(cursor.getInt(4) || 0)
+        while (plus.android.invoke(cursor, 'moveToNext')) {
+          const id = String(plus.android.invoke(cursor, 'getLong', 0) || '')
+          const level = Number(plus.android.invoke(cursor, 'getInt', 2) || 0)
+          const visible = Number(plus.android.invoke(cursor, 'getInt', 3) || 0)
+          const primary = Number(plus.android.invoke(cursor, 'getInt', 4) || 0)
           if (id && (visible === 1 || primary === 1) && level >= 500) { best = id; if (primary === 1) break }
         }
-        cursor.close()
+        plus.android.invoke(cursor, 'close')
       }
       return best
     } catch (e) {
@@ -179,19 +180,15 @@ function createAndroidImpl() {
     values.put('account_type', 'LOCAL')
     values.put('name', '极简排班')
     values.put('calendar_displayName', '极简排班')
-    values.put('calendar_color', -11158646) // 0xFF55BB8A
-    values.put('calendar_access_level', 700)
     values.put('ownerAccount', 'JianyunReplica')
     values.put('visible', 1)
     values.put('sync_events', 1)
-    let uri = Calendars.CONTENT_URI
-    uri = uri
-      .buildUpon()
-      .appendQueryParameter(Calendars.ACCOUNT_NAME, 'JianyunReplica')
-      .appendQueryParameter(Calendars.ACCOUNT_TYPE, 'LOCAL')
-      .appendQueryParameter('caller_is_syncadapter', 'true')
-      .build()
-    const newUri = c.insert(uri, values)
+    const builder = plus.android.invoke(Calendars.CONTENT_URI, 'buildUpon')
+    plus.android.invoke(builder, 'appendQueryParameter', 'account_name', 'JianyunReplica')
+    plus.android.invoke(builder, 'appendQueryParameter', 'account_type', 'LOCAL')
+    plus.android.invoke(builder, 'appendQueryParameter', 'caller_is_syncadapter', 'true')
+    const uri = plus.android.invoke(builder, 'build')
+    const newUri = plus.android.invoke(c, 'insert', uri, values)
     if (!newUri) return ''
     return String(plus.android.invoke(ContentUris, 'parseId', newUri))
   }
@@ -207,20 +204,20 @@ function createAndroidImpl() {
 
   function buildEventValues(calendarId, title, beginMs, endMs, description, strong) {
     const values = new ContentValues()
-    values.put('calendar_id', Number(calendarId))
+    values.put('calendar_id', String(calendarId))
     values.put('title', title)
     values.put('description', description || '')
     values.put('eventLocation', '')
-    values.put('dtstart', beginMs)
-    values.put('dtend', endMs)
+    values.put('dtstart', String(beginMs))
+    values.put('dtend', String(endMs))
     values.put('eventTimezone', 'Asia/Shanghai')
-    values.put('allDay', 0)
-    values.put('hasAlarm', 1)
-    values.put('eventStatus', Events.STATUS_CONFIRMED)
-    values.put('visibility', Events.VISIBILITY_DEFAULT)
+    values.put('allDay', '0')
+    values.put('hasAlarm', '1')
+    values.put('eventStatus', String(Events.STATUS_CONFIRMED))
+    values.put('visibility', String(Events.VISIBILITY_DEFAULT))
     if (strong) {
       // 强提醒：允许系统在勿扰下提醒（部分机型支持）
-      values.put('availability', Events.AVAILABILITY_BUSY)
+      values.put('availability', String(Events.AVAILABILITY_BUSY))
     }
     return values
   }
@@ -228,14 +225,14 @@ function createAndroidImpl() {
   function insertEvent(calendarId, title, beginMs, endMs, description, strong) {
     const c = cr()
     const values = buildEventValues(calendarId, title, beginMs, endMs, description, strong)
-    const uri = c.insert(Events.CONTENT_URI, values)
+    const uri = plus.android.invoke(c, 'insert', Events.CONTENT_URI, values)
     if (!uri) return ''
     const eventId = String(plus.android.invoke(ContentUris, 'parseId', uri))
     const rem = new ContentValues()
     rem.put('event_id', Number(eventId))
     rem.put('minutes', 0)
     rem.put('method', Reminders.METHOD_ALERT)
-    c.insert(Reminders.CONTENT_URI, rem)
+    plus.android.invoke(c, 'insert', Reminders.CONTENT_URI, rem)
     return eventId
   }
 
@@ -243,14 +240,14 @@ function createAndroidImpl() {
     const c = cr()
     const values = buildEventValues(calendarId, title, beginMs, endMs, description, strong)
     const uri = plus.android.invoke(ContentUris, 'withAppendedId', Events.CONTENT_URI, Number(eventId))
-    return c.update(uri, values, null, null)
+    return plus.android.invoke(c, 'update', uri, values, null, null)
   }
 
   function deleteEvent(eventId) {
     try {
       const c = cr()
       const uri = plus.android.invoke(ContentUris, 'withAppendedId', Events.CONTENT_URI, Number(eventId))
-      return c.delete(uri, null, null)
+      return plus.android.invoke(c, 'delete', uri, null, null)
     } catch (e) {
       return 0
     }
@@ -362,7 +359,7 @@ function createAndroidImpl() {
       intent.setData(Uri.parse('package:' + pkg))
     }
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    main.startActivity(intent)
+    plus.android.invoke(main, 'startActivity', intent)
     return { opened: true, kind }
   }
 

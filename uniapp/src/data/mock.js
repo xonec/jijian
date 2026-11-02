@@ -94,6 +94,7 @@ export const SETTING_GROUPS = [
     items: [
       { icon: 'palette', label: 'APP风格', value: '跟随系统', action: 'theme' },
       { icon: 'calendar', label: '桌面小组件配置', value: '' },
+      { icon: 'settings', label: '通知与系统权限', value: '' },
       { icon: 'file_download', label: '导入小程序排班', value: '' }
     ]
   },

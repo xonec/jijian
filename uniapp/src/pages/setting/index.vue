@@ -84,6 +84,7 @@ export default {
         本地备份与恢复: 'backup',
         分享与导入排班: 'share',
         桌面小组件配置: 'widget',
+        通知与系统权限: 'permission',
         导入小程序排班: 'wechat',
         常见问题解答: 'faq',
         用户在线反馈: 'feedback'

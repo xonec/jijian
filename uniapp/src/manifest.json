@@ -100,7 +100,7 @@
     "usingComponents": true,
     "plugins": {
       "myPlugin": {
-        "version": "1.0.0",
+        "version": "1.1.0",
         "provider": "wx5e45e28a1b85ca58"
       }
     }

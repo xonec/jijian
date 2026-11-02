@@ -450,8 +450,15 @@ exports.main = async (event, context) => {
       return ok(true)
     }
 
-    if (action === 'project.list') return ok(await getList(ctx, C.project))
-    if (action === 'project.save') return ok(await upsert(ctx, C.project, event.project || {}))
+    if (action === 'project.list') return ok(await getList(ctx, C.project, 'sort'))
+    if (action === 'project.save') {
+      const p = event.project || {}
+      if (!p._id && !p.id && p.sort === undefined) {
+        const list = await getList(ctx, C.project)
+        p.sort = list.length
+      }
+      return ok(await upsert(ctx, C.project, p))
+    }
     if (action === 'project.setCurrent') {
       const list = await getList(ctx, C.project)
       for (const p of list) {

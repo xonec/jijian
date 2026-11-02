@@ -33,6 +33,16 @@
       </view>
     </app-sheet>
 
+    <app-sheet :visible="sortVisible" title="项目排序" @close="sortVisible = false">
+      <view v-for="(p, i) in projects" :key="p.id || p._id" class="sort-item">
+        <text class="sort-item__name">{{ p.name }}</text>
+        <view class="sort-item__ops">
+          <text class="sort-arrow" :class="{ disabled: i === 0 }" @click.stop="moveProject(i, -1)">↑</text>
+          <text class="sort-arrow" :class="{ disabled: i === projects.length - 1 }" @click.stop="moveProject(i, 1)">↓</text>
+        </view>
+      </view>
+    </app-sheet>
+
     <app-dialog :visible="addVisible" title="添加项目" @close="addVisible = false">
       <input
         v-model="newName"
@@ -63,6 +73,7 @@ const projects = ref([])
 const menuVisible = ref(false)
 const menuProject = ref(null)
 const addVisible = ref(false)
+const sortVisible = ref(false)
 const newName = ref('')
 
 const placeholderStyle = computed(() => 'color:' + (theme.value === 'dark' ? '#888888' : '#999999'))
@@ -75,9 +86,9 @@ function normalize(list) {
 async function load() {
   try {
     const list = await api.fetchProjects()
-    projects.value = normalize(list)
+    projects.value = normalize(list).sort((a, b) => (Number(a.sort) || 0) - (Number(b.sort) || 0))
   } catch (e) {
-    projects.value = normalize(store.projects)
+    projects.value = normalize(store.projects).sort((a, b) => (Number(a.sort) || 0) - (Number(b.sort) || 0))
   }
   syncStoreProjects()
 }
@@ -100,7 +111,23 @@ function openAdd() {
   addVisible.value = true
 }
 function sortTip() {
-  toast('项目排序功能暂未接入')
+  sortVisible.value = true
+}
+
+async function moveProject(index, delta) {
+  const next = index + delta
+  if (next < 0 || next >= projects.value.length) return
+  const list = projects.value.slice()
+  const [item] = list.splice(index, 1)
+  list.splice(next, 0, item)
+  projects.value = list.map((p, i) => ({ ...p, sort: i }))
+  try {
+    await api.sortProjects(projects.value.map((p) => p._id || p.id))
+    await load()
+    toast('排序已保存')
+  } catch (e) {
+    toast('排序保存失败')
+  }
 }
 
 async function switchCurrent() {
@@ -168,6 +195,18 @@ async function doAdd() {
   padding: 0 14px;
   position: relative;
 }
+.sort-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 4px;
+  border-bottom: 1px solid var(--line);
+}
+.sort-item:last-child { border-bottom: 0; }
+.sort-item__name { font-size: 14px; color: var(--text-1); }
+.sort-item__ops { display: flex; gap: 16px; }
+.sort-arrow { font-size: 18px; color: var(--primary); padding: 0 6px; }
+.sort-arrow.disabled { color: var(--text-3); opacity: 0.35; }
 .project-row + .project-row::before {
   content: '';
   position: absolute;

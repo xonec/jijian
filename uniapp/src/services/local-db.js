@@ -183,8 +183,10 @@ export async function saveProject(project) {
     if (idx >= 0) db.projects[idx] = { ...db.projects[idx], ...project }
   } else {
     project._id = 'p' + Date.now()
+    project.sort = project.sort === undefined ? db.projects.length : project.sort
     db.projects.push(project)
   }
+  db.projects.sort((a, b) => (Number(a.sort) || 0) - (Number(b.sort) || 0))
   save(db)
   return project
 }

@@ -158,7 +158,7 @@ export default {
         goPage(path)
         return
       }
-      toast('功能演示')
+      toast('功能暂不可用')
     },
     pickTheme(key) {
       theme.setMode(key)

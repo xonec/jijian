@@ -1,9 +1,5 @@
 <template>
   <page-frame :title="pageTitle" back>
-    <view class="seg-row">
-      <seg-tabs v-model="form.tab" :items="tabs" />
-    </view>
-
     <view class="group-title group-title--first">基本信息</view>
     <view class="form-card">
       <view class="form-row">
@@ -122,10 +118,6 @@ import { useTheme } from '@/composables/use-theme.js'
 
 const { theme } = useTheme()
 
-const tabs = [
-  { key: 'normal', label: '普通班次' },
-  { key: 'combo', label: '组合班次' }
-]
 const COLORS = ['#1BA784', '#303048', '#F8723D', '#3E7BD6', '#C04851', '#E0A12E', '#806D9E', '#4A4A4A', '#2D8A7A', '#B5563F']
 const restOptions = [
   { value: '0', label: '0 分钟' },
@@ -139,7 +131,6 @@ const restOptions = [
 const form = store.workForm
 
 const DEFAULTS = {
-  tab: 'normal',
   name: '',
   allDay: false,
   start: '08:00',
@@ -152,7 +143,6 @@ const editId = ref('')
 const sheet = ref('')
 
 function resetForm() {
-  form.tab = DEFAULTS.tab
   form.name = DEFAULTS.name
   form.allDay = DEFAULTS.allDay
   form.start = DEFAULTS.start
@@ -226,7 +216,6 @@ onLoad((options) => {
         toast('班次不存在')
         return
       }
-      form.tab = 'normal'
       form.name = sh.name || ''
       form.allDay = !!sh.allDay
       form.start = (sh.start || '09:00').replace(/^次日/, '')
@@ -242,10 +231,6 @@ async function save() {
   const name = String(form.name || '').trim()
   if (!name) {
     toast('请输入班次名称')
-    return
-  }
-  if (form.tab === 'combo') {
-    toast('组合班次暂未开放，请使用普通班次')
     return
   }
   if (!form.allDay && !form.start) {

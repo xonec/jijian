@@ -24,6 +24,10 @@
     "count": {
       "bsonType": "int",
       "title": "排班天数"
+    },
+    "sort": {
+      "bsonType": "int",
+      "title": "排序"
     }
   },
   "permission": {

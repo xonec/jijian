@@ -138,6 +138,12 @@ export const api = {
     if (isCloud()) return callCloud('project.save', { project })
     return local.saveProject(project)
   },
+  async sortProjects(ids) {
+    for (let i = 0; i < ids.length; i += 1) {
+      await this.saveProject({ _id: ids[i], id: ids[i], sort: i })
+    }
+    return true
+  },
   async setCurrentProject(id) {
     if (isCloud()) return callCloud('project.setCurrent', { id })
     return local.setCurrentProject(id)

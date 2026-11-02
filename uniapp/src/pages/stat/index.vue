@@ -101,6 +101,11 @@
 
 <script>
 import { api } from '@/services/api.js'
+
+function csvCell(v) {
+  const s = String(v == null ? '' : v)
+  return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s
+}
 import { store, shiftById } from '@/composables/use-store.js'
 import { toast } from '@/composables/use-nav.js'
 
@@ -191,7 +196,59 @@ export default {
       this.loadStat()
     },
     onExport() {
-      toast('功能演示')
+      if (!this.hasData) {
+        toast('暂无数据可导出')
+        return
+      }
+      const rows = [['日期', '星期', '班次', '上班', '下班']]
+      ;(this.stat.details || []).forEach((d) => {
+        rows.push([d.d, d.w, this.shiftName(d.work), d.start || '', d.end || ''])
+      })
+      const csv = '\ufeff' + rows.map((r) => r.map(csvCell).join(',')).join('\r\n')
+      const name = '排班统计-' + this.statMonthTitle + '.csv'
+      // #ifdef H5
+      try {
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+        const a = document.createElement('a')
+        a.href = URL.createObjectURL(blob)
+        a.download = name
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        URL.revokeObjectURL(a.href)
+        toast('已导出 CSV')
+        return
+      } catch (e) {}
+      // #endif
+      // #ifdef APP-PLUS
+      if (plus && plus.io) {
+        plus.io.requestFileSystem(plus.io.PRIVATE_DOC, (fs) => {
+          fs.root.getFile(name, { create: true }, (entry) => {
+            entry.createWriter((writer) => {
+              writer.onwrite = () => toast('已导出到应用文档目录')
+              writer.onerror = () => toast('导出失败')
+              writer.write(csv)
+            }, () => toast('导出失败'))
+          }, () => toast('导出失败'))
+        }, () => toast('导出失败'))
+        return
+      }
+      // #endif
+      // #ifdef MP-WEIXIN
+      try {
+        const filePath = wx.env.USER_DATA_PATH + '/' + name
+        wx.getFileSystemManager().writeFileSync(filePath, csv, 'utf8')
+        if (uni.shareFileMessage) {
+          uni.shareFileMessage({ filePath, fileName: name, success: () => toast('已导出'), fail: () => {
+            uni.setClipboardData({ data: csv, success: () => toast('统计已复制到剪贴板') })
+          } })
+        } else {
+          uni.setClipboardData({ data: csv, success: () => toast('统计已复制到剪贴板') })
+        }
+        return
+      } catch (e) {}
+      // #endif
+      uni.setClipboardData({ data: csv, success: () => toast('统计已复制到剪贴板') })
     }
   }
 }

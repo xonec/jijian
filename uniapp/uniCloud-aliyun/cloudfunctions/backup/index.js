@@ -56,7 +56,15 @@ async function verifyToken(token) {
     const clientInfo = (uniCloud.getClientInfo && uniCloud.getClientInfo()) || {}
     const ins = uniIdCommon.createInstance({ clientInfo })
     const res = await ins.checkToken(token, { autoRefresh: false })
-    return (res && res.uid) || ''
+    if (!res || !res.uid) return ''
+    const u = await db.collection('uni-id-users').doc(res.uid).get()
+    const user = (u.data || [])[0]
+    if (!user) return ''
+    if (user.status === 1 || user.status === 4) return ''
+    const iat = 1000 * Number(res.iat || 0)
+    if (user.valid_token_date && user.valid_token_date > iat) return ''
+    if (Array.isArray(user.token) && user.token.length && user.token.indexOf(token) === -1) return ''
+    return res.uid
   } catch (e) {
     return ''
   }
@@ -64,9 +72,9 @@ async function verifyToken(token) {
 
 /* owner = 有效 token 的 uid，否则 deviceId */
 async function resolveOwner(event) {
-  const deviceId = String(event.deviceId || 'dev-anonymous')
   const uid = await verifyToken(String(event.uniIdToken || event.token || ''))
-  return { uid, deviceId, owner: uid || deviceId }
+  if (!uid) throw new Error('请先登录后再使用云备份')
+  return { uid, deviceId: '', owner: uid }
 }
 
 /*

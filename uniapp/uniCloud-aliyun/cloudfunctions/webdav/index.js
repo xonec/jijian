@@ -47,11 +47,18 @@ async function resolveUid(event) {
     const clientInfo = (uniCloud.getClientInfo && uniCloud.getClientInfo()) || {}
     const ins = uniIdCommon.createInstance({ clientInfo })
     const result = await ins.checkToken(token, { autoRefresh: false })
-    if (result && result.uid && !result.errCode) return result.uid
+    if (!result || !result.uid || result.errCode) return ''
+    const u = await db.collection('uni-id-users').doc(result.uid).get()
+    const user = (u.data || [])[0]
+    if (!user) return ''
+    if (user.status === 1 || user.status === 4) return ''
+    const iat = 1000 * Number(result.iat || 0)
+    if (user.valid_token_date && user.valid_token_date > iat) return ''
+    if (Array.isArray(user.token) && user.token.length && user.token.indexOf(token) === -1) return ''
+    return result.uid
   } catch (e) {
-    // token 无效 / 过期时，按游客（deviceId）处理
+    return ''
   }
-  return ''
 }
 
 function ownerCond(uid, deviceId) {
@@ -70,21 +77,19 @@ let cachedKey = null
 
 function webdavKey() {
   if (cachedKey) return cachedKey
-  let secret = ''
-  try {
-    const createConfig = require('uni-config-center')
-    const center = createConfig({ pluginId: 'uni-id' })
-    let conf = center.config()
-    if (Array.isArray(conf)) conf = conf.find((item) => item && item.tokenSecret) || conf[0]
-    secret = (conf && conf.tokenSecret) || ''
-  } catch (e) {
-    secret = ''
-  }
+  let secret = String(process.env.WEBDAV_ENC_KEY || '')
   if (!secret) {
-    // 配置缺失时的固定派生：功能可用，但生产环境请补齐 uni-id/config.json 的 tokenSecret
-    secret = 'jianyun-webdav-fixed-secret-v1'
-    console.warn('[webdav] 未读取到 uni-config-center 的 tokenSecret，使用固定派生密钥')
+    try {
+      const createConfig = require('uni-config-center')
+      const center = createConfig({ pluginId: 'uni-id' })
+      let conf = center.config()
+      if (Array.isArray(conf)) conf = conf.find((item) => item && item.tokenSecret) || conf[0]
+      secret = (conf && conf.tokenSecret) || ''
+    } catch (e) {
+      secret = ''
+    }
   }
+  if (!secret) throw new Error('WebDAV 加密密钥未配置')
   cachedKey = crypto.createHash('sha256').update('jy-webdav|' + secret).digest()
   return cachedKey
 }
@@ -378,15 +383,15 @@ async function saveAccount(event, uid, deviceId) {
   const name = String(input.name || '').trim().slice(0, 40)
   const rawBaseUrl = String(input.baseUrl || '').trim().slice(0, 300)
   if (!rawBaseUrl) throw new Error('请填写 WebDAV 地址')
-  if (!/^https?:\/\//i.test(rawBaseUrl)) throw new Error('地址需以 http:// 或 https:// 开头')
+  if (!/^https:\/\//i.test(rawBaseUrl)) throw new Error('WebDAV 地址必须使用 https://')
   let parsed
   try {
     parsed = new URL(rawBaseUrl)
   } catch (e) {
     throw new Error('WebDAV 地址格式不正确')
   }
-  if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
-    throw new Error('仅支持 http/https 地址')
+  if (parsed.protocol !== 'https:') {
+    throw new Error('WebDAV 地址必须使用 https://')
   }
   const baseUrl = normalizeBaseUrl(rawBaseUrl)
   const username = String(input.username || '').trim().slice(0, 120)
@@ -579,10 +584,11 @@ exports.main = async (event) => {
   const evt = event || {}
   const rawAction = String(evt.action || '')
   const action = rawAction.indexOf('webdav.') === 0 ? rawAction.slice(7) : rawAction
-  const deviceId = String(evt.deviceId || 'dev-anonymous')
+  const deviceId = ''
 
   try {
     const uid = await resolveUid(evt)
+    if (!uid) throw new Error('请先登录后再使用 WebDAV')
     switch (action) {
       case 'accounts':
         return ok(await listAccounts(uid, deviceId))

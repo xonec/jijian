@@ -86,9 +86,9 @@ async function checkToken(token, context) {
 }
 
 async function resolveOwner(event, context) {
-  const deviceId = event.deviceId || 'dev-anonymous'
   const uid = await checkToken(event.uniIdToken || event.token || '', context)
-  return { deviceId, uid, owner: uid || deviceId }
+  if (!uid) throw new Error('请先登录后再使用云端排班')
+  return { deviceId: '', uid, owner: uid }
 }
 
 /** 新增数据时写入的归属字段：登录账号只写 owner；游客 owner 与 deviceId 同值 */

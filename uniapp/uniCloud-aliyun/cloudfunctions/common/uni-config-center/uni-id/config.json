@@ -1,5 +1,5 @@
 {
-  "tokenSecret": "e96f17c9a07f61f48f656b2bed4439540dea0a6653786347",
+  "tokenSecret": "0ea3df88e73908df4bee1fd2e644565005146a755e137bd574ec73942b3f6075ad9e60c23f8b7b5b0e45ae9b3ce64243",
   "tokenExpiresIn": 7200,
   "tokenExpiresThreshold": 1200,
   "maxTokenLength": 10,
@@ -15,5 +15,5 @@
       "weixin": {}
     }
   },
-  "_comment": "uni-id-common 配置：生产环境请替换 tokenSecret；app 端 token 有效期更长"
+  "_comment": "tokenSecret 已轮换；生产请改由环境变量/密钥管理注入，勿提交仓库"
 }

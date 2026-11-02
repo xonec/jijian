@@ -26,7 +26,15 @@ async function getUid(event, context) {
   } })
   try {
     const r = await ins.checkToken(token, { autoRefresh: false })
-    return (r && r.uid) || ''
+    if (!r || !r.uid) return ''
+    const res = await db.collection('uni-id-users').doc(r.uid).get()
+    const user = (res.data || [])[0]
+    if (!user) return ''
+    if (user.status === 1 || user.status === 4) return ''
+    const iat = 1000 * Number(r.iat || 0)
+    if (user.valid_token_date && user.valid_token_date > iat) return ''
+    if (Array.isArray(user.token) && user.token.length && user.token.indexOf(token) === -1) return ''
+    return r.uid
   } catch (e) { return '' }
 }
 

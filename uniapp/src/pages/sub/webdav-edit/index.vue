@@ -202,8 +202,8 @@ function validate() {
     toast('请填写 WebDAV 地址')
     return false
   }
-  if (!/^https?:\/\//i.test(baseUrl)) {
-    toast('地址需以 http:// 或 https:// 开头')
+  if (!/^https:\/\//i.test(baseUrl)) {
+    toast('WebDAV 地址必须使用 https://')
     return false
   }
   if (!String(form.username || '').trim()) {

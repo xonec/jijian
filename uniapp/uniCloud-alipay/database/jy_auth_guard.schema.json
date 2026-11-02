@@ -1,0 +1,33 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_auth_guard",
+  "description": "登录失败限流",
+  "fields": {
+    "key": {
+      "bsonType": "string",
+      "title": "限流键"
+    },
+    "count": {
+      "bsonType": "int",
+      "title": "次数"
+    },
+    "firstAt": {
+      "bsonType": "timestamp",
+      "title": "窗口开始"
+    },
+    "lockedUntil": {
+      "bsonType": "timestamp",
+      "title": "锁定截止"
+    },
+    "updatedAt": {
+      "bsonType": "timestamp",
+      "title": "更新时间"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  }
+}

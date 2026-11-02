@@ -30,6 +30,7 @@ const uniIdCommon = require('uni-id-common')
 const db = uniCloud.database()
 const _ = db.command
 const usersCol = db.collection('uni-id-users')
+const guardCol = db.collection('jy_auth_guard')
 
 const PBKDF2_ITERATIONS = 100000
 const PBKDF2_KEYLEN = 32
@@ -40,6 +41,54 @@ const GUEST_DATA_COLLECTIONS = ['jy_shift', 'jy_schedule', 'jy_alarm', 'jy_proje
 
 const ok = (data) => ({ code: 0, data })
 const fail = (message) => ({ code: -1, message })
+
+/* ---------------- 登录失败限流 ---------------- */
+const LOGIN_MAX_FAIL = 5
+const LOGIN_WINDOW_MS = 15 * 60 * 1000
+const LOGIN_LOCK_MS = 15 * 60 * 1000
+
+function clientIp(context) {
+  const c = context || {}
+  return String(c.CLIENTIP || c.clientIP || c.clientIp || 'unknown')
+}
+function guardKey(kind, account, context) {
+  return crypto.createHash('sha256').update(kind + '|' + String(account || '') + '|' + clientIp(context)).digest('hex')
+}
+async function readGuard(key) {
+  try {
+    const r = await guardCol.where({ key }).limit(1).get()
+    return (r.data || [])[0] || null
+  } catch (e) { return null }
+}
+async function checkLoginGuard(account, context) {
+  const key = guardKey('login', account, context)
+  const doc = await readGuard(key)
+  const t = Date.now()
+  if (doc && doc.lockedUntil && doc.lockedUntil > t) {
+    return { blocked: true, message: '登录尝试次数过多，请15分钟后再试' }
+  }
+  if (doc && doc.firstAt && t - doc.firstAt > LOGIN_WINDOW_MS) return { blocked: false, key, doc: null }
+  return { blocked: false, key, doc }
+}
+async function recordLoginFailure(account, context) {
+  const key = guardKey('login', account, context)
+  const doc = await readGuard(key)
+  const t = Date.now()
+  if (!doc || !doc.firstAt || t - doc.firstAt > LOGIN_WINDOW_MS) {
+    await guardCol.add({ key, count: 1, firstAt: t, lockedUntil: 0, updatedAt: t })
+    return
+  }
+  const count = Number(doc.count || 0) + 1
+  const lockedUntil = count >= LOGIN_MAX_FAIL ? t + LOGIN_LOCK_MS : 0
+  await guardCol.doc(doc._id).update({ count, lockedUntil, updatedAt: t })
+}
+async function clearLoginGuard(account, context) {
+  const key = guardKey('login', account, context)
+  try {
+    const r = await guardCol.where({ key }).limit(1).get()
+    if ((r.data || [])[0]) await guardCol.doc(r.data[0]._id).remove()
+  } catch (e) {}
+}
 
 /* ------------------------------------------------------------------ */
 /* uni-id 实例与 token                                                 */
@@ -333,13 +382,20 @@ async function login(event, context) {
   const password = String(event.password || '')
   if (!username || !password) return fail('请输入账号和密码')
 
+  const guard = await checkLoginGuard(username, context)
+  if (guard.blocked) return fail(guard.message)
+
   const res = await usersCol.where({ username }).limit(1).get()
   const user = (res.data || [])[0]
   // 账号不存在与密码错误统一提示，避免账号枚举
-  if (!user || !verifyPassword(password, user.password)) return fail('账号或密码错误')
+  if (!user || !verifyPassword(password, user.password)) {
+    await recordLoginFailure(username, context)
+    return fail('账号或密码错误')
+  }
   if (user.status === 1) return fail('该账号已被封禁')
   if (user.status === 4) return fail('该账号已注销')
 
+  await clearLoginGuard(username, context)
   const tokenRes = await createTokenFor(user._id, context)
   if (tokenRes.error) return fail(tokenRes.error)
   await normalizeValidDateAfterIssue(user._id, tokenRes.token)

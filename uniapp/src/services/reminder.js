@@ -21,6 +21,44 @@
 const EVENTS_KEY = 'jy_reminder_events'
 const CAL_ID_KEY = 'jy_reminder_calendar_id'
 
+let _jyNative
+function getJyNative() {
+  if (_jyNative !== undefined) return _jyNative
+  try {
+    _jyNative = typeof uni !== 'undefined' && typeof uni.requireNativePlugin === 'function'
+      ? uni.requireNativePlugin('jy-native')
+      : null
+  } catch (e) {
+    _jyNative = null
+  }
+  return _jyNative
+}
+
+function callJyNative(method, args) {
+  return new Promise((resolve, reject) => {
+    const n = getJyNative()
+    if (!n || typeof n[method] !== 'function') {
+      const e = new Error('native plugin not available')
+      e.code = 'NO_NATIVE'
+      reject(e)
+      return
+    }
+    try {
+      n[method](...(args || []), (res) => {
+        if (res && res.success !== false) {
+          resolve(res || {})
+        } else {
+          const e = new Error((res && (res.error || res.code)) || 'native call failed')
+          e.code = res && res.code
+          reject(e)
+        }
+      })
+    } catch (e) {
+      reject(e)
+    }
+  })
+}
+
 function androidReady() {
   return (
     typeof plus !== 'undefined' &&
@@ -264,7 +302,7 @@ function createAndroidImpl() {
   }
 
   /** 写入/更新一条提醒到系统日历；alarm: { id/_id, time, shiftName, when, strong } */
-  function syncAlarm(alarm) {
+  async function syncAlarm(alarm) {
     if (!alarm) throw new Error('缺少提醒数据')
     const id = String(alarm.id || alarm._id || '')
     if (!id) throw new Error('提醒没有 id')
@@ -283,6 +321,16 @@ function createAndroidImpl() {
     const end = begin + 15 * 60 * 1000
     const map = readMap()
     let eventId = map[id]
+    if (getJyNative()) {
+      if (eventId) {
+        try { await callJyNative('deleteCalendarEvent', [String(eventId)]) } catch (e) {}
+      }
+      const res = await callJyNative('addCalendarEvent', [alarmTitle(alarm), begin, end, alarmDescription(alarm)])
+      eventId = res.eventId
+      map[id] = eventId
+      writeMap(map)
+      return { eventId, start: begin, end, calendarId: res.calendarId || calendarId, title: alarmTitle(alarm), via: 'native' }
+    }
     if (eventId) {
       updateEvent(eventId, calendarId, alarmTitle(alarm), begin, end, alarmDescription(alarm), !!alarm.strong)
     } else {
@@ -293,23 +341,42 @@ function createAndroidImpl() {
     return { eventId, start: begin, end, calendarId, title: alarmTitle(alarm) }
   }
 
-  function removeAlarm(alarmId) {
+  async function removeAlarm(alarmId) {
     const id = String(alarmId || '')
     const map = readMap()
     const eventId = map[id]
     if (!eventId) return { removed: false }
-    deleteEvent(eventId)
+    if (getJyNative()) {
+      try { await callJyNative('deleteCalendarEvent', [String(eventId)]) } catch (e) {}
+    } else {
+      deleteEvent(eventId)
+    }
     delete map[id]
     writeMap(map)
     return { removed: true }
   }
 
   /** 1 分钟后的测试事件，用于权限页验证日历链路 */
-  function testCalendarAlarm() {
+  async function testCalendarAlarm() {
     if (!checkPerm('android.permission.WRITE_CALENDAR')) {
       const err = new Error('未授权日历写入权限')
       err.code = 'NO_CALENDAR_PERMISSION'
       throw err
+    }
+    if (getJyNative()) {
+      const begin = Date.now() + 60 * 1000
+      const end = begin + 5 * 60 * 1000
+      try {
+        const res = await callJyNative('addCalendarEvent', [
+          '极简排班 · 日历提醒测试',
+          begin,
+          end,
+          '这是「极简排班（复刻）」写入的测试提醒，1 分钟后由系统日历提醒。'
+        ])
+        return { eventId: res.eventId, start: begin, calendarId: res.calendarId, via: 'native' }
+      } catch (e) {
+        if (e && e.code === 'NO_CALENDAR_PERMISSION') throw e
+      }
     }
     const calendarId = ensureCalendarId()
     if (!calendarId) {
@@ -330,9 +397,15 @@ function createAndroidImpl() {
     return { eventId, start: begin, calendarId }
   }
 
-  function notifyNow(payload) {
+  async function notifyNow(payload) {
     const title = (payload && payload.title) || '极简排班提醒'
     const content = (payload && payload.content) || '该处理提醒了'
+    if (getJyNative()) {
+      try {
+        const res = await callJyNative('notify', [title, content])
+        return { sent: true, via: 'native', result: res }
+      } catch (e) {}
+    }
     try {
       const Build = plus.android.importClass('android.os.Build')
       const nm = plus.android.invoke(main, 'getSystemService', 'notification')

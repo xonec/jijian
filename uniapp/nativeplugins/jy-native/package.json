@@ -1,0 +1,24 @@
+{
+  "name": "jy-native",
+  "id": "jy-native",
+  "version": "1.0.0",
+  "description": "极简排班原生桥接：本地通知 + 系统日历",
+  "_dp_type": "nativeplugin",
+  "_dp_nativeplugin": {
+    "android": {
+      "integrateType": "aar",
+      "minSdkVersion": 26,
+      "abis": [
+        "armeabi-v7a",
+        "arm64-v8a"
+      ],
+      "plugins": [
+        {
+          "type": "module",
+          "name": "jy-native",
+          "class": "cn.jianyun.replica.nativeplugin.JYNativeModule"
+        }
+      ]
+    }
+  }
+}

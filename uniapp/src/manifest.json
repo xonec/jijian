@@ -72,6 +72,20 @@
           "pid": "",
           "parameters": {}
         }
+      },
+      "jy-native": {
+        "__plugin_info__": {
+          "name": "jy-native",
+          "description": "极简排班原生桥接：本地通知 + 系统日历",
+          "platforms": "Android",
+          "url": "",
+          "android_package_name": "",
+          "ios_bundle_id": "",
+          "isCloud": false,
+          "bought": 1,
+          "pid": "",
+          "parameters": {}
+        }
       }
     }
   },

@@ -1,18 +1,22 @@
 package cn.jianyun.replica.nativeplugin;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.CalendarContract;
+import android.provider.DocumentsContract;
 import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
 import android.provider.CalendarContract.Reminders;
@@ -20,6 +24,7 @@ import android.text.TextUtils;
 import io.dcloud.feature.uniapp.annotation.UniJSMethod;
 import io.dcloud.feature.uniapp.bridge.UniJSCallback;
 import io.dcloud.feature.uniapp.common.UniModule;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
@@ -199,6 +204,76 @@ public class JYNativeModule extends UniModule {
             reply(callback, r);
         } catch (Throwable e) {
             reply(callback, error("DELETE_CALENDAR_FAILED", String.valueOf(e.getMessage())));
+        }
+    }
+
+
+    /** 启动系统目录选择 Activity；结果写入 SharedPreferences，需调用 getDirectory 读取 */
+    @UniJSMethod(uiThread = true)
+    public void clearDirectory(UniJSCallback callback) {
+        try {
+            Context c = ctx();
+            if (c == null) { reply(callback, error("NO_CONTEXT", "无法获取 Context")); return; }
+            c.getSharedPreferences(SafPickerActivity.PREFS, Context.MODE_PRIVATE).edit().remove(SafPickerActivity.KEY_URI).apply();
+            reply(callback, ok());
+        } catch (Throwable e) {
+            reply(callback, error("CLEAR_DIR_FAILED", String.valueOf(e.getMessage())));
+        }
+    }
+
+    @UniJSMethod(uiThread = true)
+    public void chooseDirectory(UniJSCallback callback) {
+        try {
+            Context c = ctx();
+            if (c == null) { reply(callback, error("NO_CONTEXT", "无法获取 Context")); return; }
+            c.getSharedPreferences(SafPickerActivity.PREFS, Context.MODE_PRIVATE).edit().remove(SafPickerActivity.KEY_URI).apply();
+            Intent intent = new Intent(c, SafPickerActivity.class);
+            if (!(c instanceof Activity)) intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            c.startActivity(intent);
+            reply(callback, ok());
+        } catch (Throwable e) {
+            reply(callback, error("CHOOSE_DIR_FAILED", String.valueOf(e.getMessage())));
+        }
+    }
+
+    @UniJSMethod(uiThread = true)
+    public void getDirectory(UniJSCallback callback) {
+        try {
+            Context c = ctx();
+            if (c == null) { reply(callback, error("NO_CONTEXT", "无法获取 Context")); return; }
+            SharedPreferences sp = c.getSharedPreferences(SafPickerActivity.PREFS, Context.MODE_PRIVATE);
+            String uri = sp.getString(SafPickerActivity.KEY_URI, "");
+            Map<String, Object> r = ok();
+            r.put("uri", uri == null ? "" : uri);
+            reply(callback, r);
+        } catch (Throwable e) {
+            reply(callback, error("GET_DIR_FAILED", String.valueOf(e.getMessage())));
+        }
+    }
+
+    @UniJSMethod(uiThread = true)
+    public void writeBackup(String uriString, String fileName, String content, UniJSCallback callback) {
+        OutputStream out = null;
+        try {
+            Context c = ctx();
+            if (c == null) { reply(callback, error("NO_CONTEXT", "无法获取 Context")); return; }
+            if (TextUtils.isEmpty(uriString)) { reply(callback, error("NO_DIR", "未选择系统目录")); return; }
+            String name = TextUtils.isEmpty(fileName) ? "backup.json" : fileName.replace("/", "_");
+            Uri treeUri = Uri.parse(uriString);
+            Uri fileUri = DocumentsContract.createDocument(c.getContentResolver(), treeUri, "application/json", name);
+            if (fileUri == null) { reply(callback, error("CREATE_FILE_FAILED", "无法创建备份文件")); return; }
+            out = c.getContentResolver().openOutputStream(fileUri);
+            if (out == null) { reply(callback, error("OPEN_STREAM_FAILED", "无法写入备份文件")); return; }
+            out.write(String.valueOf(content).getBytes("UTF-8"));
+            out.flush();
+            Map<String, Object> r = ok();
+            r.put("uri", fileUri.toString());
+            r.put("name", name);
+            reply(callback, r);
+        } catch (Throwable e) {
+            reply(callback, error("WRITE_BACKUP_FAILED", String.valueOf(e.getMessage())));
+        } finally {
+            try { if (out != null) out.close(); } catch (Throwable ignored) {}
         }
     }
 

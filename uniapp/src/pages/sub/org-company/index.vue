@@ -7,6 +7,10 @@
           <text class="head__name">{{ company.name }}</text>
           <text class="head__sub">{{ roleText(role) }} · {{ employeeCount }} 名员工</text>
         </view>
+        <view v-if="isAdmin" class="invite" @click="makeInvite">
+          <text class="invite__label">员工邀请码</text>
+          <text class="invite__code">{{ company.inviteCode || '点击生成' }}</text>
+        </view>
       </view>
 
       <view class="links">
@@ -61,6 +65,19 @@ function roleText(r) { return r === 'owner' ? '创建者' : r === 'admin' ? '管
 function openImport() { goPage('org-import', { companyId: companyId.value, departmentId: firstDeptId() }) }
 function openBoard(d) { goPage('org-board', { companyId: companyId.value, departmentId: d ? d._id : firstDeptId() }) }
 function openStats() { goPage('org-stats', { companyId: companyId.value }) }
+async function makeInvite() {
+  if (company.value && company.value.inviteCode) {
+    uni.setClipboardData({ data: company.value.inviteCode })
+    toast('邀请码已复制')
+    return
+  }
+  try {
+    const r = await api.org.inviteCompany({ companyId: companyId.value })
+    company.value = Object.assign({}, company.value, { inviteCode: r.inviteCode })
+    uni.setClipboardData({ data: r.inviteCode })
+    toast('邀请码已生成并复制')
+  } catch (e) { toast((e && (e.message || e.errMsg)) || '生成失败') }
+}
 function openEmployees() { goPage('org-employees', { companyId: companyId.value, departmentId: firstDeptId() }) }
 function firstDeptId() { return departments.value.length ? departments.value[0]._id : '' }
 function addDepartment() {
@@ -110,6 +127,10 @@ onShow(() => { if (companyId.value && company.value) load() })
 .head { padding: 16px; }
 .head__name { display: block; font-size: 18px; color: var(--text-1); }
 .head__sub { display: block; margin-top: 5px; font-size: 12px; color: var(--text-3); }
+.invite { text-align: right; }
+.invite__label { display: block; font-size: 10px; color: var(--text-3); }
+.invite__code { display: block; margin-top: 3px; font-size: 14px; letter-spacing: 2px; color: var(--primary); }
+.head { display: flex; justify-content: space-between; align-items: flex-start; }
 .links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; }
 .link { background: var(--surface); border-radius: var(--r-card); padding: 14px; }
 .link__t { display: block; font-size: 14px; color: var(--text-1); }

@@ -45,3 +45,6 @@ uniapp/nativeplugins/uni-widget/android/local.properties
 
 # 云函数依赖（部署时由 HBuilderX 安装）
 uniapp/uniCloud-aliyun/cloudfunctions/*/node_modules/
+
+# 原生插件编译中间产物
+uniapp/nativeplugins/*/android/build/

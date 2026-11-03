@@ -259,6 +259,8 @@ export const api = {
     listCompanies() { return callCloud('company.list', {}, 'schedule') },
     createCompany(data) { return callCloud('company.create', data, 'schedule') },
     companyDetail(data) { return callCloud('company.detail', data, 'schedule') },
+    inviteCompany(data) { return callCloud('company.invite', data, 'schedule') },
+    claimCompany(data) { return callCloud('company.claim', data, 'schedule') },
     saveDepartment(data) { return callCloud('department.save', data, 'schedule') },
     listEmployees(data) { return callCloud('employee.list', data, 'schedule') },
     saveEmployee(data) { return callCloud('employee.save', data, 'schedule') },

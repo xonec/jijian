@@ -10,6 +10,10 @@
           <ri-icon name="calendar" :size="18" />
           <text>我的排班</text>
         </view>
+        <view class="action" @click="openClaim">
+          <ri-icon name="user" :size="18" />
+          <text>认领员工</text>
+        </view>
         <view class="action" @click="createCompany">
           <ri-icon name="add" :size="18" />
           <text>创建公司</text>
@@ -48,6 +52,7 @@ const isLogin = computed(() => !!(user.value && (user.value._id || user.value.us
 function roleText(role) { return role === 'owner' ? '创建者' : role === 'admin' ? '管理员' : '成员' }
 function goLogin() { goPage('login') }
 function openMy() { goPage('org-my') }
+function openClaim() { goPage('org-claim') }
 function open(c) { goPage('org-company', { id: c._id }) }
 async function load() {
   user.value = uni.getStorageSync('uni_id_user') || null

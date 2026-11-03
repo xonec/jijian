@@ -17,6 +17,12 @@ const ok = (data) => ({ code: 0, data })
 const fail = (message) => ({ code: -1, message })
 const now = () => new Date()
 const trim = (v, n) => String(v == null ? '' : v).trim().slice(0, n || 200)
+function code6() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+  let s = ''
+  for (let i = 0; i < 6; i += 1) s += chars[Math.floor(Math.random() * chars.length)]
+  return s
+}
 
 async function getUid(event, context) {
   const token = event.uniIdToken || event.token || ''
@@ -98,7 +104,7 @@ async function createCompany(event, context) {
   const name = trim(event.name, 60)
   if (!name) return fail('请输入公司名称')
   const t = now()
-  const c = await db.collection(C.company).add({ name, ownerUid: uid, status: 'active', createdAt: t, updatedAt: t })
+  const c = await db.collection(C.company).add({ name, ownerUid: uid, inviteCode: code6(), status: 'active', createdAt: t, updatedAt: t })
   await db.collection(C.companyMember).add({ companyId: c.id, uid, role: 'owner', createdAt: t })
   const d = await db.collection(C.department).add({ companyId: c.id, parentId: '', name: '默认部门', type: 'dept', managerUid: uid, sort: 0, status: 'active', createdAt: t, updatedAt: t })
   return ok({ companyId: c.id, departmentId: d.id })
@@ -189,6 +195,38 @@ async function saveEmployee(event, context) {
   patch.createdAt = now()
   const r = await db.collection(C.employee).add(patch)
   return ok({ _id: r.id })
+}
+
+
+async function inviteCode(event, context) {
+  const uid = await requireUid(event, context)
+  await requireAdmin(event.companyId, uid)
+  const code = code6()
+  await db.collection(C.company).doc(event.companyId).update({ inviteCode: code, updatedAt: now() })
+  return ok({ inviteCode: code })
+}
+async function claimCompany(event, context) {
+  const uid = await requireUid(event, context)
+  const code = trim(event.inviteCode, 20).toUpperCase()
+  const name = trim(event.name, 30)
+  const employeeNo = trim(event.employeeNo, 40)
+  if (!code) return fail('请输入公司邀请码')
+  if (!name) return fail('请输入姓名')
+  const cr = await db.collection(C.company).where({ inviteCode: code, status: 'active' }).limit(1).get()
+  const company = (cr.data || [])[0]
+  if (!company) return fail('邀请码无效')
+  const q = { companyId: company._id, name, status: _.neq('left') }
+  const er = await db.collection(C.employee).where(q).limit(20).get()
+  let list = er.data || []
+  if (employeeNo) list = list.filter((e) => String(e.employeeNo || '') === employeeNo)
+  if (list.length > 1) return fail('存在同名员工，请输入工号或联系管理员')
+  if (!list.length) return fail('未找到匹配的员工档案')
+  const employee = list[0]
+  if (employee.uid && employee.uid !== uid) return fail('该员工已被其他账号认领')
+  await db.collection(C.employee).doc(employee._id).update({ uid, status: 'active', updatedAt: now() })
+  const mr = await db.collection(C.companyMember).where({ companyId: company._id, uid }).limit(1).get()
+  if (!(mr.data || []).length) await db.collection(C.companyMember).add({ companyId: company._id, uid, role: 'member', createdAt: now() })
+  return ok({ companyId: company._id, departmentId: employee.departmentId || '', employeeId: employee._id })
 }
 
 /* ---------------- 导入 ---------------- */
@@ -496,6 +534,8 @@ const handlers = {
   'company.create': createCompany,
   'company.list': listCompanies,
   'company.detail': companyDetail,
+  'company.invite': inviteCode,
+  'company.claim': claimCompany,
   'department.save': saveDepartment,
   'employee.list': listEmployees,
   'employee.save': saveEmployee,

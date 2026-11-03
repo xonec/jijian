@@ -22,6 +22,10 @@
     "updatedAt": {
       "bsonType": "timestamp",
       "title": "更新时间"
+    },
+    "inviteCode": {
+      "bsonType": "string",
+      "title": "员工认领邀请码"
     }
   },
   "permission": {

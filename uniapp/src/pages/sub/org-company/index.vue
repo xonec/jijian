@@ -64,15 +64,31 @@ function openStats() { goPage('org-stats', { companyId: companyId.value }) }
 function openEmployees() { goPage('org-employees', { companyId: companyId.value, departmentId: firstDeptId() }) }
 function firstDeptId() { return departments.value.length ? departments.value[0]._id : '' }
 function addDepartment() {
+  uni.showActionSheet({
+    itemList: ['新建部门', '新建班组'],
+    success: (r) => {
+      const type = r.tapIndex === 1 ? 'group' : 'dept'
+      if (type === 'group' && !departments.value.some((d) => d.type === 'dept')) return toast('请先创建部门')
+      if (type === 'group') {
+        const depts = departments.value.filter((d) => d.type === 'dept')
+        uni.showActionSheet({
+          itemList: depts.map((d) => '上级：' + d.name),
+          success: (p) => promptDepartment(type, depts[p.tapIndex]._id)
+        })
+      } else promptDepartment(type, '')
+    }
+  })
+}
+function promptDepartment(type, parentId) {
   uni.showModal({
-    title: '新建部门',
+    title: type === 'group' ? '新建班组' : '新建部门',
     editable: true,
-    placeholderText: '部门名称',
+    placeholderText: '名称',
     success: async (r) => {
       if (!r.confirm) return
       const name = String(r.content || '').trim()
       if (!name) return toast('请输入名称')
-      try { await api.org.saveDepartment({ companyId: companyId.value, name, type: 'dept' }); toast('已创建'); load() } catch (e) { toast((e && (e.message || e.errMsg)) || '创建失败') }
+      try { await api.org.saveDepartment({ companyId: companyId.value, name, type, parentId }); toast('已创建'); load() } catch (e) { toast((e && (e.message || e.errMsg)) || '创建失败') }
     }
   })
 }

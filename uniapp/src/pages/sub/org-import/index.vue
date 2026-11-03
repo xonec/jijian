@@ -143,6 +143,9 @@ function pickFile() {
       reader.readAsDataURL(f)
     }
     input.click()
+    setTimeout(() => {
+      if (!base64.value) toast('当前设备未打开文件选择器，请用微信小程序导入')
+    }, 1200)
   } catch (e) {
     toast('当前设备无法打开文件选择器，请用微信小程序导入')
   }

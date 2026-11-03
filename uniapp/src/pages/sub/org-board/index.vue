@@ -123,13 +123,13 @@ onLoad((o) => { companyId.value = (o && o.companyId) || ''; departmentId.value =
 .plan__dept { display: block; font-size: 15px; color: var(--text-1); }
 .plan__meta { display: block; margin-top: 3px; font-size: 10px; color: var(--text-3); }
 .plan__date { font-size: 11px; color: var(--text-3); }
-.board-head, .board-row { display: flex; min-width: 680px; align-items: stretch; border-bottom: 1px solid var(--line); }
+.board-head, .board-row { display: flex; min-width: 500px; align-items: stretch; border-bottom: 1px solid var(--line); }
 .board-head { background: var(--surface-2); border-radius: 8px 8px 0 0; }
 .board-row:last-child { border-bottom: 0; }
 .board-row--leave, .board-row--rest { background: var(--surface-2); }
-.col-process { width: 110px; min-width: 110px; padding: 8px 6px; font-size: 11px; color: var(--text-2); }
-.col-batch { width: 150px; min-width: 150px; padding: 8px 6px; font-size: 10px; color: var(--text-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.col-shift { width: 130px; min-width: 130px; padding: 8px 6px; font-size: 11px; color: var(--text-2); }
+.col-process { width: 86px; min-width: 86px; padding: 8px 6px; font-size: 11px; color: var(--text-2); }
+.col-batch { width: 100px; min-width: 100px; padding: 8px 6px; font-size: 10px; color: var(--text-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.col-shift { width: 104px; min-width: 104px; padding: 8px 6px; font-size: 11px; color: var(--text-2); }
 .process { display: block; color: var(--text-1); font-size: 12px; line-height: 1.4; }
 .status { display: inline-block; margin-top: 3px; padding: 1px 5px; border-radius: 4px; background: var(--danger-soft); color: var(--danger); font-size: 9px; }
 .board-row--rest .status { background: var(--warning-soft); color: var(--warning); }

@@ -84,7 +84,7 @@ async function requireAdmin(companyId, uid, departmentId) {
   throw new Error('需要公司或部门管理员权限')
 }
 async function companyMembers(companyId) {
-  const r = await db.collection(C.employee).where({ companyId, status: 'active' }).limit(1000).get()
+  const r = await db.collection(C.employee).where({ companyId, status: _.neq('left') }).limit(1000).get()
   return r.data || []
 }
 async function nextVersion(companyId, departmentId, date) {

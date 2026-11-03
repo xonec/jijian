@@ -259,7 +259,8 @@ function publicUser(user) {
     status: typeof user.status === 'number' ? user.status : 0,
     role: user.role || [],
     register_date: user.register_date || 0,
-    last_login_date: user.last_login_date || 0
+    last_login_date: user.last_login_date || 0,
+    wxBound: !!user.wx_openid_hash
   }
 }
 

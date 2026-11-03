@@ -42,3 +42,6 @@ release/*.apk.idsig
 uniapp/nativeplugins/uni-widget/android/.gradle/
 uniapp/nativeplugins/uni-widget/android/build/
 uniapp/nativeplugins/uni-widget/android/local.properties
+
+# 云函数依赖（部署时由 HBuilderX 安装）
+uniapp/uniCloud-aliyun/cloudfunctions/*/node_modules/

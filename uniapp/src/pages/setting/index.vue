@@ -19,6 +19,7 @@
 
     <view class="group">
       <cell-row icon="user" label="我的团队" @click="goTeams" />
+      <cell-row icon="calendar" label="组织排班" @click="goOrg" />
     </view>
 
     <view v-for="g in store.settingGroups" :key="g.title" class="group">

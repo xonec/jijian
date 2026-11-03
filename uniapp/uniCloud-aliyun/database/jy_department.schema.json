@@ -1,0 +1,49 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_department",
+  "description": "部门/班组",
+  "fields": {
+    "companyId": {
+      "bsonType": "string",
+      "title": "公司ID"
+    },
+    "parentId": {
+      "bsonType": "string",
+      "title": "上级部门ID"
+    },
+    "name": {
+      "bsonType": "string",
+      "title": "名称"
+    },
+    "type": {
+      "bsonType": "string",
+      "title": "dept/group"
+    },
+    "managerUid": {
+      "bsonType": "string",
+      "title": "负责人UID"
+    },
+    "sort": {
+      "bsonType": "int",
+      "title": "排序"
+    },
+    "status": {
+      "bsonType": "string",
+      "title": "状态"
+    },
+    "createdAt": {
+      "bsonType": "timestamp",
+      "title": "创建时间"
+    },
+    "updatedAt": {
+      "bsonType": "timestamp",
+      "title": "更新时间"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  }
+}

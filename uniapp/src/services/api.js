@@ -254,6 +254,24 @@ export const api = {
     }
   },
 
+  /* ---------------- 公司组织 / 排班导入 ---------------- */
+  org: {
+    listCompanies() { return callCloud('company.list', {}, 'schedule') },
+    createCompany(data) { return callCloud('company.create', data, 'schedule') },
+    companyDetail(data) { return callCloud('company.detail', data, 'schedule') },
+    saveDepartment(data) { return callCloud('department.save', data, 'schedule') },
+    listEmployees(data) { return callCloud('employee.list', data, 'schedule') },
+    saveEmployee(data) { return callCloud('employee.save', data, 'schedule') },
+    previewImport(data) { return callCloud('schedule.preview', data, 'schedule') },
+    importSchedule(data) { return callCloud('schedule.import', data, 'schedule') },
+    history(data) { return callCloud('schedule.history', data, 'schedule') },
+    board(data) { return callCloud('schedule.board', data, 'schedule') },
+    plan(data) { return callCloud('schedule.plan', data, 'schedule') },
+    mySchedule(data) { return callCloud('schedule.my', data, 'schedule') },
+    updateAssignment(data) { return callCloud('schedule.updateAssignment', data, 'schedule') },
+    stats(data) { return callCloud('schedule.stats', data, 'schedule') }
+  },
+
   /* ---------------- 团队 ---------------- */
   team: {
     create(data) { return callCloud('team.create', data, 'team') },

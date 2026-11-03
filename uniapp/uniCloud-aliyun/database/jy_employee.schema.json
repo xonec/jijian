@@ -1,0 +1,57 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_employee",
+  "description": "员工档案",
+  "fields": {
+    "companyId": {
+      "bsonType": "string",
+      "title": "公司ID"
+    },
+    "departmentId": {
+      "bsonType": "string",
+      "title": "部门ID"
+    },
+    "uid": {
+      "bsonType": "string",
+      "title": "关联用户ID"
+    },
+    "name": {
+      "bsonType": "string",
+      "title": "姓名"
+    },
+    "employeeNo": {
+      "bsonType": "string",
+      "title": "工号"
+    },
+    "position": {
+      "bsonType": "string",
+      "title": "岗位"
+    },
+    "phone": {
+      "bsonType": "string",
+      "title": "手机号"
+    },
+    "status": {
+      "bsonType": "string",
+      "title": "active/pending/left"
+    },
+    "source": {
+      "bsonType": "string",
+      "title": "来源"
+    },
+    "createdAt": {
+      "bsonType": "timestamp",
+      "title": "创建时间"
+    },
+    "updatedAt": {
+      "bsonType": "timestamp",
+      "title": "更新时间"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  }
+}

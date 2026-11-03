@@ -1,0 +1,9 @@
+{
+  "name": "schedule",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "xlsx": "^0.18.5",
+    "uni-id-common": "file:../common/uni-id-common"
+  }
+}

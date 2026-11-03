@@ -1,0 +1,65 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_schedule_plan",
+  "description": "导入的部门排班计划",
+  "fields": {
+    "companyId": {
+      "bsonType": "string",
+      "title": "公司ID"
+    },
+    "departmentId": {
+      "bsonType": "string",
+      "title": "部门ID"
+    },
+    "date": {
+      "bsonType": "string",
+      "title": "日期"
+    },
+    "sourceType": {
+      "bsonType": "string",
+      "title": "excel/csv"
+    },
+    "fileName": {
+      "bsonType": "string",
+      "title": "文件名"
+    },
+    "fileHash": {
+      "bsonType": "string",
+      "title": "文件哈希"
+    },
+    "entries": {
+      "bsonType": "array",
+      "title": "排班明细"
+    },
+    "warnings": {
+      "bsonType": "array",
+      "title": "导入警告"
+    },
+    "counts": {
+      "bsonType": "object",
+      "title": "统计"
+    },
+    "version": {
+      "bsonType": "int",
+      "title": "版本"
+    },
+    "status": {
+      "bsonType": "string",
+      "title": "active/superseded"
+    },
+    "importedBy": {
+      "bsonType": "string",
+      "title": "导入人"
+    },
+    "importedAt": {
+      "bsonType": "timestamp",
+      "title": "导入时间"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  }
+}

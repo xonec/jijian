@@ -1,0 +1,33 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_company",
+  "description": "公司",
+  "fields": {
+    "name": {
+      "bsonType": "string",
+      "title": "公司名称"
+    },
+    "ownerUid": {
+      "bsonType": "string",
+      "title": "创建人"
+    },
+    "status": {
+      "bsonType": "string",
+      "title": "状态"
+    },
+    "createdAt": {
+      "bsonType": "timestamp",
+      "title": "创建时间"
+    },
+    "updatedAt": {
+      "bsonType": "timestamp",
+      "title": "更新时间"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  }
+}

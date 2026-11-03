@@ -1,0 +1,29 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_company_member",
+  "description": "公司成员/管理员",
+  "fields": {
+    "companyId": {
+      "bsonType": "string",
+      "title": "公司ID"
+    },
+    "uid": {
+      "bsonType": "string",
+      "title": "用户ID"
+    },
+    "role": {
+      "bsonType": "string",
+      "title": "owner/admin/member"
+    },
+    "createdAt": {
+      "bsonType": "timestamp",
+      "title": "创建时间"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  }
+}

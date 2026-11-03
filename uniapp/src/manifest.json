@@ -49,11 +49,6 @@
               "android"
             ]
           }
-        },
-        "push": {
-          "unipush": {
-            "version": "2"
-          }
         }
       }
     },

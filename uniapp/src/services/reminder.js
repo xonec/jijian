@@ -431,10 +431,6 @@ function createAndroidImpl() {
       }
       return { sent: true, via: 'local' }
     } catch (e) {
-      if (typeof uni.createPushMessage === 'function') {
-        uni.createPushMessage({ title, content, payload: (payload && payload.payload) || {} })
-        return { sent: true, via: 'push' }
-      }
       return { sent: false, error: String(e && e.message || e) }
     }
   }

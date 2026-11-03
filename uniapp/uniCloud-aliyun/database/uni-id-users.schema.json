@@ -49,6 +49,14 @@
     "last_login_date": {
       "bsonType": "timestamp",
       "title": "最后登录时间"
+    },
+    "wx_openid_hash": {
+      "bsonType": "string",
+      "title": "微信 openid 的 SHA-256（不保存原始 openid）"
+    },
+    "wx_bound_at": {
+      "bsonType": "timestamp",
+      "title": "微信绑定时间"
     }
   },
   "permission": {

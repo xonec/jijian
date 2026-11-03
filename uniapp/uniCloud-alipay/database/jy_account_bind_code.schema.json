@@ -1,0 +1,33 @@
+{
+  "bsType": "collection",
+  "collectionName": "jy_account_bind_code",
+  "description": "账号绑定码",
+  "fields": {
+    "code_hash": {
+      "bsonType": "string",
+      "title": "绑定码哈希"
+    },
+    "uid": {
+      "bsonType": "string",
+      "title": "账号ID"
+    },
+    "used": {
+      "bsonType": "bool",
+      "title": "是否使用"
+    },
+    "expires_at": {
+      "bsonType": "timestamp",
+      "title": "过期时间"
+    },
+    "created_at": {
+      "bsonType": "timestamp",
+      "title": "创建时间"
+    }
+  },
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  }
+}

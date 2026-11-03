@@ -325,6 +325,40 @@ public class JYNativeModule extends UniModule {
         }
     }
 
+
+    /** 打开系统文件选择器，读取 Excel/CSV 为 base64；结果需调用 getPickedScheduleFile 查询 */
+    @UniJSMethod(uiThread = true)
+    public void pickScheduleFile(UniJSCallback callback) {
+        try {
+            Context c = ctx();
+            if (c == null) { reply(callback, error("NO_CONTEXT", "无法获取 Context")); return; }
+            c.getSharedPreferences(SafFileActivity.PREFS, Context.MODE_PRIVATE).edit().clear().apply();
+            Intent intent = new Intent(c, SafFileActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            c.startActivity(intent);
+            reply(callback, ok());
+        } catch (Throwable e) {
+            reply(callback, error("PICK_FILE_FAILED", String.valueOf(e.getMessage())));
+        }
+    }
+
+    @UniJSMethod(uiThread = true)
+    public void getPickedScheduleFile(UniJSCallback callback) {
+        try {
+            Context c = ctx();
+            if (c == null) { reply(callback, error("NO_CONTEXT", "无法获取 Context")); return; }
+            SharedPreferences sp = c.getSharedPreferences(SafFileActivity.PREFS, Context.MODE_PRIVATE);
+            Map<String, Object> r = new HashMap<>();
+            r.put("status", sp.getString(SafFileActivity.KEY_STATUS, ""));
+            r.put("name", sp.getString(SafFileActivity.KEY_NAME, ""));
+            r.put("base64", sp.getString(SafFileActivity.KEY_BASE64, ""));
+            r.put("error", sp.getString(SafFileActivity.KEY_ERROR, ""));
+            reply(callback, r);
+        } catch (Throwable e) {
+            reply(callback, error("GET_FILE_FAILED", String.valueOf(e.getMessage())));
+        }
+    }
+
     @UniJSMethod(uiThread = true)
     public void getImportResult(UniJSCallback callback) {
         try {

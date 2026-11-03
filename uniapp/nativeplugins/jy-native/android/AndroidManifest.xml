@@ -8,5 +8,6 @@
         <activity android:name=".SafPickerActivity" android:exported="false" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
             <activity android:name=".SafExportActivity" android:exported="false" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
             <activity android:name=".SafImportActivity" android:exported="false" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".SafFileActivity" android:exported="false" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
     </application>
 </manifest>

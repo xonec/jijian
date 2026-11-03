@@ -59,6 +59,7 @@ import { computed, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import api from '@/services/api.js'
 import { goPage, toast } from '@/composables/use-nav.js'
+import { isSupported as nativeFileSupported, pickScheduleFile as pickNativeScheduleFile } from '@/services/schedule-file.js'
 
 const companyId = ref('')
 const departmentId = ref('')
@@ -126,29 +127,42 @@ function pickFile() {
   input.click()
   // #endif
   // #ifdef APP-PLUS
-  try {
-    const input = document.createElement('input')
-    input.type = 'file'
-    input.accept = '.xlsx,.xls,.csv'
-    input.onchange = () => {
-      const f = input.files && input.files[0]
-      if (!f) return
-      const reader = new FileReader()
-      reader.onload = async () => {
-        const raw = String(reader.result || '')
-        base64.value = raw.slice(raw.indexOf(',') + 1)
-        fileName.value = f.name
+  ;(async () => {
+    try {
+      if (nativeFileSupported()) {
+        const picked = await pickNativeScheduleFile()
+        if (!picked) return
+        fileName.value = picked.name
+        base64.value = picked.base64
         await doPreview()
+        return
       }
-      reader.readAsDataURL(f)
+    } catch (e) {
+      toast((e && (e.message || e.errMsg)) || '文件选择失败')
+      return
     }
-    input.click()
-    setTimeout(() => {
-      if (!base64.value) toast('当前设备未打开文件选择器，请用微信小程序导入')
-    }, 1200)
-  } catch (e) {
-    toast('当前设备无法打开文件选择器，请用微信小程序导入')
-  }
+    try {
+      const input = document.createElement('input')
+      input.type = 'file'
+      input.accept = '.xlsx,.xls,.csv'
+      input.onchange = () => {
+        const f = input.files && input.files[0]
+        if (!f) return
+        const reader = new FileReader()
+        reader.onload = async () => {
+          const raw = String(reader.result || '')
+          base64.value = raw.slice(raw.indexOf(',') + 1)
+          fileName.value = f.name
+          await doPreview()
+        }
+        reader.readAsDataURL(f)
+      }
+      input.click()
+      setTimeout(() => { if (!base64.value) toast('当前设备未打开文件选择器，请用微信小程序导入') }, 1200)
+    } catch (e) {
+      toast('当前设备无法打开文件选择器，请用微信小程序导入')
+    }
+  })()
   // #endif
 }
 async function doPreview() {

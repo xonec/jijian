@@ -553,6 +553,202 @@ async function deleteAccount(event, context) {
   return ok({ ok: true, deleted })
 }
 
+/* ------------------------------------------------------------------ */
+/* 微信小程序登录与账号绑定                                            */
+/* ------------------------------------------------------------------ */
+const bindTicketCol = db.collection('jy_wx_bind_ticket')
+const bindCodeCol = db.collection('jy_account_bind_code')
+
+function sha256(v) {
+  return crypto.createHash('sha256').update(String(v || '')).digest('hex')
+}
+function randomCode() {
+  return String(crypto.randomInt(0, 1000000)).padStart(6, '0')
+}
+function wxConfig() {
+  let appid = String(process.env.WX_MP_APPID || '')
+  let secret = String(process.env.WX_MP_SECRET || '')
+  try {
+    const createConfig = require('uni-config-center')
+    const center = createConfig({ pluginId: 'uni-id' })
+    const conf = center.config() || {}
+    const oauth = (conf['mp-weixin'] && conf['mp-weixin'].oauth && conf['mp-weixin'].oauth.weixin) || {}
+    appid = appid || String(oauth.appid || '')
+    secret = secret || String(oauth.appsecret || oauth.secret || '')
+  } catch (e) {}
+  return { appid, secret }
+}
+async function issueLogin(user, context) {
+  const tokenRes = await createTokenFor(user._id, context)
+  if (tokenRes.error) return fail(tokenRes.error)
+  await normalizeValidDateAfterIssue(user._id, tokenRes.token)
+  const fresh = (await getUserById(user._id)) || user
+  return ok({ token: tokenRes.token, tokenExpired: tokenRes.tokenExpired, userInfo: publicUser(fresh) })
+}
+async function createBindTicket(openidHash) {
+  const ticket = crypto.randomBytes(32).toString('hex')
+  const t = Date.now()
+  await bindTicketCol.add({
+    ticket_hash: sha256(ticket),
+    openid_hash: openidHash,
+    used: false,
+    attempts: 0,
+    created_at: t,
+    expires_at: t + 10 * 60 * 1000
+  })
+  return ticket
+}
+async function consumeBindTicket(ticket) {
+  const raw = String(ticket || '')
+  if (!raw) throw new Error('绑定会话已失效，请重新微信登录')
+  const hash = sha256(raw)
+  const r = await bindTicketCol.where({ ticket_hash: hash, used: false }).limit(1).get()
+  const doc = (r.data || [])[0]
+  if (!doc) throw new Error('绑定会话已失效，请重新微信登录')
+  if (Number(doc.expires_at) < Date.now()) throw new Error('绑定会话已过期，请重新微信登录')
+  if (Number(doc.attempts || 0) >= 10) throw new Error('尝试次数过多，请重新微信登录')
+  return doc
+}
+async function bumpTicket(ticketDoc) {
+  await bindTicketCol.doc(ticketDoc._id).update({ attempts: Number(ticketDoc.attempts || 0) + 1 })
+}
+async function markTicketUsed(ticketDoc) {
+  await bindTicketCol.doc(ticketDoc._id).update({ used: true })
+}
+
+async function wxLogin(event, context) {
+  const code = String(event.code || '').trim()
+  if (!code) return fail('缺少微信登录 code')
+  const cfg = wxConfig()
+  if (!cfg.appid || !cfg.secret) return fail('微信一键登录未配置 AppID/AppSecret')
+  let result
+  try {
+    const res = await uniCloud.httpclient.request('https://api.weixin.qq.com/sns/jscode2session', {
+      method: 'GET',
+      data: { appid: cfg.appid, secret: cfg.secret, js_code: code, grant_type: 'authorization_code' },
+      dataType: 'json',
+      timeout: 10000
+    })
+    result = res.data || {}
+  } catch (e) {
+    return fail('微信登录请求失败')
+  }
+  if (!result.openid) return fail(result.errmsg || '微信登录失败')
+  const openidHash = sha256(result.openid)
+  const found = await usersCol.where({ wx_openid_hash: openidHash }).limit(1).get()
+  const bound = (found.data || [])[0]
+  if (bound) {
+    if (bound.status === 1) return fail('该账号已被封禁')
+    if (bound.status === 4) return fail('该账号已注销')
+    return issueLogin(bound, context)
+  }
+  const ticket = await createBindTicket(openidHash)
+  return ok({ needBind: true, bindTicket: ticket, expiresIn: 600 })
+}
+
+async function createWxAccount(event, context) {
+  const ticketDoc = await consumeBindTicket(event.bindTicket)
+  const openidHash = ticketDoc.openid_hash
+  const username = 'wx_' + openidHash.slice(0, 24)
+  let user = (await usersCol.where({ username }).limit(1).get()).data[0]
+  const nickname = String(event.nickname || '').trim().slice(0, 20) || '微信用户'
+  const avatar = String(event.avatar || '').slice(0, 500)
+  if (user) {
+    await usersCol.doc(user._id).update({ wx_openid_hash: openidHash, wx_bound_at: Date.now() })
+  } else {
+    const doc = {
+      username,
+      password: hashPassword(crypto.randomBytes(24).toString('hex')),
+      nickname,
+      avatar,
+      wx_openid_hash: openidHash,
+      wx_bound_at: Date.now(),
+      status: 0,
+      role: [],
+      permission: [],
+      token: [],
+      valid_token_date: 0,
+      register_date: Date.now(),
+      last_login_date: Date.now()
+    }
+    try {
+      const add = await usersCol.add(doc)
+      user = Object.assign({ _id: add.id }, doc)
+    } catch (e) {
+      user = (await usersCol.where({ username }).limit(1).get()).data[0]
+      if (!user) return fail('微信账号创建失败')
+    }
+  }
+  await markTicketUsed(ticketDoc)
+  return issueLogin(user, context)
+}
+
+async function bindWxByPassword(event, context) {
+  const ticketDoc = await consumeBindTicket(event.bindTicket)
+  const username = String(event.username || '').trim()
+  const password = String(event.password || '')
+  if (!username || !password) return fail('请输入账号和密码')
+  const user = (await usersCol.where({ username }).limit(1).get()).data[0]
+  if (!user || !verifyPassword(password, user.password)) {
+    await bumpTicket(ticketDoc)
+    return fail('账号或密码错误')
+  }
+  if (user.status === 1) return fail('该账号已被封禁')
+  if (user.status === 4) return fail('该账号已注销')
+  if (user.wx_openid_hash && user.wx_openid_hash !== ticketDoc.openid_hash) return fail('该账号已绑定其他微信')
+  const other = (await usersCol.where({ wx_openid_hash: ticketDoc.openid_hash }).limit(1).get()).data[0]
+  if (other && other._id !== user._id) return fail('该微信已绑定其他账号')
+  await usersCol.doc(user._id).update({ wx_openid_hash: ticketDoc.openid_hash, wx_bound_at: Date.now() })
+  await markTicketUsed(ticketDoc)
+  return issueLogin(user, context)
+}
+
+async function bindWxByCode(event, context) {
+  const ticketDoc = await consumeBindTicket(event.bindTicket)
+  const code = String(event.code || '').trim()
+  if (!/^[0-9]{6}$/.test(code)) return fail('请输入 6 位绑定码')
+  const codeHash = sha256(code)
+  const r = await bindCodeCol.where({ code_hash: codeHash, used: false }).limit(1).get()
+  const rec = (r.data || [])[0]
+  if (!rec || Number(rec.expires_at) < Date.now()) {
+    await bumpTicket(ticketDoc)
+    return fail('绑定码无效或已过期')
+  }
+  const user = await getUserById(rec.uid)
+  if (!user) return fail('账号不存在')
+  if (user.status === 1) return fail('该账号已被封禁')
+  if (user.status === 4) return fail('该账号已注销')
+  if (user.wx_openid_hash && user.wx_openid_hash !== ticketDoc.openid_hash) return fail('该账号已绑定其他微信')
+  const other = (await usersCol.where({ wx_openid_hash: ticketDoc.openid_hash }).limit(1).get()).data[0]
+  if (other && other._id !== user._id) return fail('该微信已绑定其他账号')
+  await usersCol.doc(user._id).update({ wx_openid_hash: ticketDoc.openid_hash, wx_bound_at: Date.now() })
+  await bindCodeCol.doc(rec._id).update({ used: true })
+  await markTicketUsed(ticketDoc)
+  return issueLogin(user, context)
+}
+
+async function createBindCode(event, context) {
+  const ctx = await requireUser(event, context)
+  if (ctx.error) return fail(ctx.error)
+  try { await bindCodeCol.where({ uid: ctx.user._id, used: false }).update({ used: true }) } catch (e) {}
+  let code = randomCode()
+  let hash = sha256(code)
+  const dup = await bindCodeCol.where({ code_hash: hash, used: false }).limit(1).get()
+  if ((dup.data || []).length) { code = randomCode(); hash = sha256(code) }
+  const expiresAt = Date.now() + 5 * 60 * 1000
+  await bindCodeCol.add({ code_hash: hash, uid: ctx.user._id, used: false, expires_at: expiresAt, created_at: Date.now() })
+  return ok({ code, expiresAt })
+}
+
+async function unbindWx(event, context) {
+  const ctx = await requireUser(event, context)
+  if (ctx.error) return fail(ctx.error)
+  const password = String(event.password || '')
+  if (!password || !verifyPassword(password, ctx.user.password)) return fail('密码错误')
+  await usersCol.doc(ctx.user._id).update({ wx_openid_hash: '', wx_bound_at: 0 })
+  return ok({ ok: true })
+}
+
 const handlers = {
   'auth.register': register,
   'auth.login': login,
@@ -561,7 +757,12 @@ const handlers = {
   'auth.updateInfo': updateInfo,
   'auth.changePassword': changePassword,
   'auth.deleteAccount': deleteAccount,
-  'auth.wxLogin': wxLogin
+  'auth.wxLogin': wxLogin,
+  'auth.createWxAccount': createWxAccount,
+  'auth.bindWxByPassword': bindWxByPassword,
+  'auth.bindWxByCode': bindWxByCode,
+  'auth.createBindCode': createBindCode,
+  'auth.unbindWx': unbindWx
 }
 
 exports.main = async (event, context) => {

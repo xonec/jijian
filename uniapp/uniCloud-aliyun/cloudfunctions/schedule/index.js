@@ -217,6 +217,7 @@ async function matchEmployees(companyId, departmentId, names, createMissing) {
   const byName = {}
   list.forEach((e) => { const k = trim(e.name); if (!byName[k]) byName[k] = []; byName[k].push(e) })
   const result = []
+  const missing = []
   for (const name of names) {
     const matches = byName[name] || []
     if (matches.length === 1) {
@@ -224,16 +225,21 @@ async function matchEmployees(companyId, departmentId, names, createMissing) {
     } else if (matches.length > 1) {
       result.push({ name, employeeId: '', uid: '', status: 'duplicate', candidates: matches.map((e) => ({ _id: e._id, departmentId: e.departmentId, uid: e.uid || '' })) })
     } else if (createMissing) {
-      const t = now()
-      const add = await db.collection(C.employee).add({
-        companyId, departmentId: departmentId || '', uid: '', name,
-        employeeNo: '', position: '', phone: '', status: 'pending',
-        source: 'schedule_import', createdAt: t, updatedAt: t
-      })
-      result.push({ name, employeeId: add.id, uid: '', status: 'created' })
+      missing.push(name)
     } else {
       result.push({ name, employeeId: '', uid: '', status: 'missing' })
     }
+  }
+  if (missing.length) {
+    const t = now()
+    const docs = missing.map((name) => ({
+      companyId, departmentId: departmentId || '', uid: '', name,
+      employeeNo: '', position: '', phone: '', status: 'pending',
+      source: 'schedule_import', createdAt: t, updatedAt: t
+    }))
+    const add = await db.collection(C.employee).add(docs)
+    const ids = add.ids || (add.id ? [add.id] : [])
+    missing.forEach((name, i) => result.push({ name, employeeId: ids[i] || '', uid: '', status: 'created' }))
   }
   return result
 }
@@ -420,10 +426,13 @@ function aggregate(plans, filter) {
         else {
           d.workPeople.add(key)
           const h = Number(a.workHours) === 12 ? 12 : 8
-          const dk = plan.date + '|' + a.shiftName + '|' + h
+          const dk = key + '|' + plan.date + '|' + a.shiftName + '|' + h
           if (!d.keys.has(dk)) { d.keys.add(dk); d.hours += h }
           const pr = processes[entry.processName]
-          pr.people.add(key); pr.hours += h; pr.shifts += 1
+          const pk = key + '|' + plan.date + '|' + a.shiftName + '|' + h
+          pr.people.add(key)
+          if (!pr.keys) pr.keys = new Set()
+          if (!pr.keys.has(pk)) { pr.keys.add(pk); pr.hours += h; pr.shifts += 1 }
         }
       }
     }

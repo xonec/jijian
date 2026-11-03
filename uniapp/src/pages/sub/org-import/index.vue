@@ -126,7 +126,26 @@ function pickFile() {
   input.click()
   // #endif
   // #ifdef APP-PLUS
-  toast('App 文件选择将在下一版接入，请先用微信小程序导入')
+  try {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = '.xlsx,.xls,.csv'
+    input.onchange = () => {
+      const f = input.files && input.files[0]
+      if (!f) return
+      const reader = new FileReader()
+      reader.onload = async () => {
+        const raw = String(reader.result || '')
+        base64.value = raw.slice(raw.indexOf(',') + 1)
+        fileName.value = f.name
+        await doPreview()
+      }
+      reader.readAsDataURL(f)
+    }
+    input.click()
+  } catch (e) {
+    toast('当前设备无法打开文件选择器，请用微信小程序导入')
+  }
   // #endif
 }
 async function doPreview() {

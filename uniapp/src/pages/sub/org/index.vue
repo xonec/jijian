@@ -6,6 +6,10 @@
     </view>
     <template v-else>
       <view class="actions">
+        <view class="action" @click="openMy">
+          <ri-icon name="calendar" :size="18" />
+          <text>我的排班</text>
+        </view>
         <view class="action" @click="createCompany">
           <ri-icon name="add" :size="18" />
           <text>创建公司</text>
@@ -43,6 +47,7 @@ const user = ref(null)
 const isLogin = computed(() => !!(user.value && (user.value._id || user.value.username)))
 function roleText(role) { return role === 'owner' ? '创建者' : role === 'admin' ? '管理员' : '成员' }
 function goLogin() { goPage('login') }
+function openMy() { goPage('org-my') }
 function open(c) { goPage('org-company', { id: c._id }) }
 async function load() {
   user.value = uni.getStorageSync('uni_id_user') || null

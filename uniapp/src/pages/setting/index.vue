@@ -133,6 +133,9 @@ export default {
     goTeams() {
       goPage('teams')
     },
+    goOrg() {
+      goPage('org')
+    },
     valueOf(item) {
       if (item.label === 'APP风格') return this.modeLabel
       return item.value || ''

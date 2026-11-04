@@ -65,6 +65,7 @@ import { store } from '@/composables/use-store.js'
 import { goPage, toast } from '@/composables/use-nav.js'
 import { useTheme } from '@/composables/use-theme.js'
 import { vipState, loadVip } from '@/composables/use-vip.js'
+import { fetchInfo } from '@/composables/use-auth.js'
 import { fmtExpire } from '@/data/vip-plans.js'
 
 const theme = useTheme()
@@ -172,8 +173,13 @@ export default {
       if (this.isLogin) goPage('user-detail')
       else goPage('login')
     },
-    refreshUser() {
+    async refreshUser() {
       this.userInfo = uni.getStorageSync('uni_id_user') || null
+      if (!this.isLogin) return
+      // 校验服务端登录态；token 失效时 fetchInfo 会清理本地缓存
+      const info = await fetchInfo()
+      if (info) this.userInfo = info
+      else this.userInfo = uni.getStorageSync('uni_id_user') || null
     },
     openVip() {
       goPage('vip')

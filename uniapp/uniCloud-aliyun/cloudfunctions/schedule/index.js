@@ -357,6 +357,16 @@ function simplifyPlan(plan) {
     }))
   }
 }
+async function latestDate(event, context) {
+  const uid = await requireUid(event, context)
+  await membership(event.companyId, uid)
+  const q = { companyId: event.companyId, status: 'active' }
+  if (event.departmentId) q.departmentId = event.departmentId
+  const r = await db.collection(C.plan).where(q).orderBy('date', 'desc').limit(1).get()
+  const plan = (r.data || [])[0]
+  return ok({ date: plan ? plan.date : '' })
+}
+
 async function board(event, context) {
   const uid = await requireUid(event, context)
   await membership(event.companyId, uid)
@@ -452,11 +462,11 @@ function aggregate(plans, filter) {
   const processes = {}
   for (const plan of plans) {
     for (const entry of plan.entries || []) {
-      if (!daily[plan.date]) daily[plan.date] = { date: plan.date, workPeople: new Set(), leavePeople: new Set(), restPeople: new Set(), hours: 0, keys: new Set() }
-      if (!processes[entry.processName]) processes[entry.processName] = { processName: entry.processName, people: new Set(), hours: 0, shifts: 0 }
       for (const a of entry.assignments || []) {
         const key = a.employeeId || ('name:' + a.employeeName)
         if (filter && !filter(key, a, plan)) continue
+        if (!daily[plan.date]) daily[plan.date] = { date: plan.date, workPeople: new Set(), leavePeople: new Set(), restPeople: new Set(), hours: 0, keys: new Set() }
+        if (!processes[entry.processName]) processes[entry.processName] = { processName: entry.processName, people: new Set(), hours: 0, shifts: 0 }
         mergeAssignment(people, plan, entry, a)
         const d = daily[plan.date]
         if (entry.rowType === 'leave') d.leavePeople.add(key)
@@ -543,6 +553,7 @@ const handlers = {
   'schedule.import': importSchedule,
   'schedule.history': importHistory,
   'schedule.board': board,
+  'schedule.latest': latestDate,
   'schedule.plan': planDetail,
   'schedule.my': mySchedule,
   'schedule.updateAssignment': updateAssignment,

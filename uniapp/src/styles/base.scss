@@ -504,11 +504,14 @@ view, text, button, input, textarea, scroll-view, swiper, image {
 }
 .empty {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 46px 0;
+  gap: 10px;
+  padding: 46px 18px;
   color: var(--text-3);
   font-size: 13px;
+  text-align: center;
 }
 
 /* ---------- 提醒卡片 ---------- */

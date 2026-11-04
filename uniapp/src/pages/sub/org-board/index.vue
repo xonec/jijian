@@ -40,6 +40,7 @@
           </view>
         </view>
         <view v-if="p.warnings && p.warnings.length" class="plan__warn">导入提醒 {{ p.warnings.length }} 条</view>
+        <view class="plan__hint">左右滑动查看全部班次 →</view>
       </view>
     </view>
     <view class="hint">点击人员可修改姓名或 8h/12h；同部门同日期重新导入会覆盖旧版本。</view>
@@ -112,7 +113,20 @@ async function load() {
     plans.value = r?.plans || []
   } catch (e) { toast((e && (e.message || e.errMsg)) || '加载失败') } finally { loading.value = false }
 }
-onLoad((o) => { companyId.value = (o && o.companyId) || ''; departmentId.value = (o && o.departmentId) || ''; date.value = (o && o.date) || date.value; load() })
+onLoad(async (o) => {
+  companyId.value = (o && o.companyId) || ''
+  departmentId.value = (o && o.departmentId) || ''
+  date.value = (o && o.date) || ''
+  if (!date.value) {
+    try {
+      const r = await api.org.latestSchedule({ companyId: companyId.value, departmentId: departmentId.value })
+      date.value = (r && r.date) || new Date().toISOString().slice(0, 10)
+    } catch (e) {
+      date.value = new Date().toISOString().slice(0, 10)
+    }
+  }
+  load()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -123,13 +137,13 @@ onLoad((o) => { companyId.value = (o && o.companyId) || ''; departmentId.value =
 .plan__dept { display: block; font-size: 15px; color: var(--text-1); }
 .plan__meta { display: block; margin-top: 3px; font-size: 10px; color: var(--text-3); }
 .plan__date { font-size: 11px; color: var(--text-3); }
-.board-head, .board-row { display: flex; min-width: 500px; align-items: stretch; border-bottom: 1px solid var(--line); }
+.board-head, .board-row { display: flex; width: 100%; min-width: 0; align-items: stretch; border-bottom: 1px solid var(--line); }
 .board-head { background: var(--surface-2); border-radius: 8px 8px 0 0; }
 .board-row:last-child { border-bottom: 0; }
 .board-row--leave, .board-row--rest { background: var(--surface-2); }
-.col-process { width: 86px; min-width: 86px; padding: 8px 6px; font-size: 11px; color: var(--text-2); }
-.col-batch { width: 100px; min-width: 100px; padding: 8px 6px; font-size: 10px; color: var(--text-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.col-shift { width: 104px; min-width: 104px; padding: 8px 6px; font-size: 11px; color: var(--text-2); }
+.col-process { width: 84px; min-width: 64px; flex: none; padding: 8px 6px; font-size: 11px; color: var(--text-2); }
+.col-batch { width: 76px; min-width: 60px; flex: none; padding: 8px 6px; font-size: 10px; color: var(--text-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.col-shift { flex: 1; min-width: 64px; padding: 8px 6px; font-size: 11px; color: var(--text-2); }
 .process { display: block; color: var(--text-1); font-size: 12px; line-height: 1.4; }
 .status { display: inline-block; margin-top: 3px; padding: 1px 5px; border-radius: 4px; background: var(--danger-soft); color: var(--danger); font-size: 9px; }
 .board-row--rest .status { background: var(--warning-soft); color: var(--warning); }
@@ -138,4 +152,5 @@ onLoad((o) => { companyId.value = (o && o.companyId) || ''; departmentId.value =
 .chip__h { margin-left: 3px; font-size: 8px; opacity: 0.8; }
 .none { color: var(--text-3); font-size: 10px; }
 .plan__warn { margin-top: 8px; font-size: 10px; color: var(--warning); }
+.plan__hint { margin-top: 8px; font-size: 10px; color: var(--text-3); text-align: right; }
 </style>

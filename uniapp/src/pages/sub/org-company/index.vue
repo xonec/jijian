@@ -63,7 +63,10 @@ const flatDepartments = computed(() => {
 })
 function roleText(r) { return r === 'owner' ? '创建者' : r === 'admin' ? '管理员' : '成员' }
 function openImport() { goPage('org-import', { companyId: companyId.value, departmentId: firstDeptId() }) }
-function openBoard(d) { goPage('org-board', { companyId: companyId.value, departmentId: d ? d._id : firstDeptId() }) }
+function openBoard(d) {
+  const deptId = d && d._id ? d._id : firstDeptId()
+  goPage('org-board', { companyId: companyId.value, departmentId: deptId })
+}
 function openStats() { goPage('org-stats', { companyId: companyId.value }) }
 async function makeInvite() {
   if (company.value && company.value.inviteCode) {

@@ -36,6 +36,7 @@
         <view class="btn btn--primary mt14" @click="goLogin">去登录</view>
       </view>
       <view v-else-if="teamLoading" class="empty"><text class="empty__t">加载中…</text></view>
+      <view v-else-if="teamError" class="empty"><text class="empty__t">{{ teamError }}</text></view>
       <view v-else-if="!teams.length" class="empty">
         <text class="empty__t">还没有加入团队</text>
         <view class="btn btn--primary mt14" @click="goTeams">去我的团队</view>
@@ -60,6 +61,7 @@
         <view class="btn btn--primary mt14" @click="goLogin">去登录</view>
       </view>
       <view v-else-if="orgLoading" class="empty"><text class="empty__t">加载中…</text></view>
+      <view v-else-if="orgError" class="empty"><text class="empty__t">{{ orgError }}</text></view>
       <view v-else-if="!companies.length" class="empty">
         <text class="empty__t">还没有公司</text>
         <view class="btn btn--primary mt14" @click="goOrg">创建公司</view>
@@ -125,6 +127,7 @@ import { ref, computed, onMounted } from 'vue'
 import api from '@/services/api.js'
 import { store } from '@/composables/use-store.js'
 import { goPage, toast } from '@/composables/use-nav.js'
+import { clearSession } from '@/composables/use-auth.js'
 import { useTheme } from '@/composables/use-theme.js'
 
 const { theme } = useTheme()
@@ -135,6 +138,8 @@ const teams = ref([])
 const companies = ref([])
 const teamLoading = ref(false)
 const orgLoading = ref(false)
+const teamError = ref('')
+const orgError = ref('')
 const isLogin = computed(() => !!(user.value && (user.value._id || user.value.username)))
 const projects = ref([])
 const menuVisible = ref(false)
@@ -180,15 +185,29 @@ function goOrg() { goPage('org') }
 function goClaim() { goPage('org-claim') }
 function openTeam(t) { goPage('team-schedule', { id: t._id }) }
 function openCompany(c) { goPage('org-company', { id: c._id }) }
+function authExpired(e) {
+  const msg = (e && (e.message || e.errMsg)) || ''
+  return /未登录|登录状态|token|失效|30202|30203|请先登录/i.test(msg)
+}
 async function loadTeams() {
   if (!isLogin.value) return
   teamLoading.value = true
-  try { teams.value = (await api.team.listMine()) || [] } catch (e) { teams.value = [] } finally { teamLoading.value = false }
+  teamError.value = ''
+  try { teams.value = (await api.team.listMine()) || [] } catch (e) {
+    teams.value = []
+    if (authExpired(e)) { clearSession(); user.value = null; toast('登录已过期，请重新登录') }
+    else teamError.value = '团队加载失败，请下拉重试'
+  } finally { teamLoading.value = false }
 }
 async function loadCompanies() {
   if (!isLogin.value) return
   orgLoading.value = true
-  try { companies.value = ((await api.org.listCompanies()) || {}).list || [] } catch (e) { companies.value = [] } finally { orgLoading.value = false }
+  orgError.value = ''
+  try { companies.value = ((await api.org.listCompanies()) || {}).list || [] } catch (e) {
+    companies.value = []
+    if (authExpired(e)) { clearSession(); user.value = null; toast('登录已过期，请重新登录') }
+    else orgError.value = '公司加载失败，请下拉重试'
+  } finally { orgLoading.value = false }
 }
 
 onMounted(() => {

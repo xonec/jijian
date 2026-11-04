@@ -267,6 +267,7 @@ export const api = {
     previewImport(data) { return callCloud('schedule.preview', data, 'schedule') },
     importSchedule(data) { return callCloud('schedule.import', data, 'schedule') },
     history(data) { return callCloud('schedule.history', data, 'schedule') },
+    latestSchedule(data) { return callCloud('schedule.latest', data, 'schedule') },
     board(data) { return callCloud('schedule.board', data, 'schedule') },
     plan(data) { return callCloud('schedule.plan', data, 'schedule') },
     mySchedule(data) { return callCloud('schedule.my', data, 'schedule') },

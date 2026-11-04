@@ -23,12 +23,12 @@
           <text class="plan__date">{{ p.date }}</text>
         </view>
 
-        <view class="board-head">
+        <view class="board-head" :style="boardStyle(p)">
           <text class="col-process">工序</text>
           <text class="col-batch">批次</text>
           <text v-for="s in shiftsOf(p)" :key="s" class="col-shift">{{ s }}</text>
         </view>
-        <view v-for="(e, ei) in p.entries" :key="ei" class="board-row" :class="{ 'board-row--leave': e.rowType === 'leave', 'board-row--rest': e.rowType === 'rest' }">
+        <view v-for="(e, ei) in p.entries" :key="ei" class="board-row" :class="{ 'board-row--leave': e.rowType === 'leave', 'board-row--rest': e.rowType === 'rest' }" :style="boardStyle(p)">
           <view class="col-process">
             <text class="process">{{ e.processName }}</text>
             <text v-if="e.rowType !== 'work'" class="status">{{ e.rowType === 'leave' ? '请假' : '休息' }}</text>
@@ -72,6 +72,9 @@ function shiftsOf(plan) {
   const set = new Set()
   ;(plan.entries || []).forEach((e) => (e.assignments || []).forEach((a) => set.add(a.shiftName)))
   return Array.from(set).sort((a, b) => (order[a] || 99) - (order[b] || 99))
+}
+function boardStyle(plan) {
+  return { gridTemplateColumns: '84px 76px repeat(' + shiftsOf(plan).length + ', minmax(0, 1fr))' }
 }
 function assignmentsOf(entry, shift) {
   return (entry.assignments || []).filter((a) => a.shiftName === shift)
@@ -137,13 +140,13 @@ onLoad(async (o) => {
 .plan__dept { display: block; font-size: 15px; color: var(--text-1); }
 .plan__meta { display: block; margin-top: 3px; font-size: 10px; color: var(--text-3); }
 .plan__date { font-size: 11px; color: var(--text-3); }
-.board-head, .board-row { display: flex; width: 100%; min-width: 0; align-items: stretch; border-bottom: 1px solid var(--line); }
+.board-head, .board-row { display: grid; width: 100%; min-width: 0; align-items: stretch; border-bottom: 1px solid var(--line); }
 .board-head { background: var(--surface-2); border-radius: 8px 8px 0 0; }
 .board-row:last-child { border-bottom: 0; }
 .board-row--leave, .board-row--rest { background: var(--surface-2); }
-.col-process { width: 84px; min-width: 64px; flex: none; padding: 8px 6px; font-size: 11px; color: var(--text-2); }
-.col-batch { width: 76px; min-width: 60px; flex: none; padding: 8px 6px; font-size: 10px; color: var(--text-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.col-shift { flex: 1; min-width: 64px; padding: 8px 6px; font-size: 11px; color: var(--text-2); }
+.col-process { padding: 8px 6px; font-size: 11px; color: var(--text-2); min-width: 0; }
+.col-batch { padding: 8px 6px; font-size: 10px; color: var(--text-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.col-shift { padding: 8px 6px; font-size: 11px; color: var(--text-2); min-width: 0; overflow: hidden; }
 .process { display: block; color: var(--text-1); font-size: 12px; line-height: 1.4; }
 .status { display: inline-block; margin-top: 3px; padding: 1px 5px; border-radius: 4px; background: var(--danger-soft); color: var(--danger); font-size: 9px; }
 .board-row--rest .status { background: var(--warning-soft); color: var(--warning); }

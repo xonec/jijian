@@ -36,7 +36,10 @@
         <view class="btn btn--primary mt14" @click="goLogin">去登录</view>
       </view>
       <view v-else-if="teamLoading" class="empty"><text class="empty__t">加载中…</text></view>
-      <view v-else-if="teamError" class="empty"><text class="empty__t">{{ teamError }}</text></view>
+      <view v-else-if="teamError" class="empty">
+        <text class="empty__t">{{ teamError }}</text>
+        <button class="empty__btn" @click="loadTeams">重新加载</button>
+      </view>
       <view v-else-if="!teams.length" class="empty">
         <text class="empty__t">还没有加入团队</text>
         <view class="btn btn--primary mt14" @click="goTeams">去我的团队</view>
@@ -61,7 +64,10 @@
         <view class="btn btn--primary mt14" @click="goLogin">去登录</view>
       </view>
       <view v-else-if="orgLoading" class="empty"><text class="empty__t">加载中…</text></view>
-      <view v-else-if="orgError" class="empty"><text class="empty__t">{{ orgError }}</text></view>
+      <view v-else-if="orgError" class="empty">
+        <text class="empty__t">{{ orgError }}</text>
+        <button class="empty__btn" @click="loadCompanies">重新加载</button>
+      </view>
       <view v-else-if="!companies.length" class="empty">
         <text class="empty__t">还没有公司</text>
         <view class="btn btn--primary mt14" @click="goOrg">创建公司</view>
@@ -196,7 +202,7 @@ async function loadTeams() {
   try { teams.value = (await api.team.listMine()) || [] } catch (e) {
     teams.value = []
     if (authExpired(e)) { clearSession(); user.value = null; toast('登录已过期，请重新登录') }
-    else teamError.value = '团队加载失败，请下拉重试'
+    else teamError.value = '团队加载失败'
   } finally { teamLoading.value = false }
 }
 async function loadCompanies() {
@@ -206,7 +212,7 @@ async function loadCompanies() {
   try { companies.value = ((await api.org.listCompanies()) || {}).list || [] } catch (e) {
     companies.value = []
     if (authExpired(e)) { clearSession(); user.value = null; toast('登录已过期，请重新登录') }
-    else orgError.value = '公司加载失败，请下拉重试'
+    else orgError.value = '公司加载失败'
   } finally { orgLoading.value = false }
 }
 
@@ -398,4 +404,7 @@ async function doAdd() {
   font-size: 15px;
   flex: 1;
 }
+</style>
+<style scoped>
+.empty__btn { margin-top: 2px; padding: 7px 18px; border-radius: 8px; background: var(--primary-soft); color: var(--primary); font-size: 12px; line-height: 1.2; }
 </style>

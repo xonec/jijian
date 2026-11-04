@@ -65,6 +65,7 @@
 import { computed, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import api from '@/services/api.js'
+import { isSupported as nativeFileExportSupported, exportTextFile } from '@/services/backup-dir.js'
 import { toast } from '@/composables/use-nav.js'
 
 const companyId = ref('')
@@ -105,7 +106,7 @@ function csvText() {
   stats.value.rows.forEach((r) => rows.push([r.name, r.workDays, r.shifts8, r.shifts12, r.hours, r.leaveDays, r.restDays]))
   return '\ufeff' + rows.map((r) => r.map((v) => '"' + String(v).replace(/"/g, '""') + '"').join(',')).join('\n')
 }
-function exportCsv() {
+async function exportCsv() {
   const csv = csvText()
   if (!csv) return toast('暂无数据')
   // #ifdef H5
@@ -115,6 +116,19 @@ function exportCsv() {
   a.download = '排班统计-' + month.value + '.csv'
   a.click()
   URL.revokeObjectURL(a.href)
+  return
+  // #endif
+  // #ifdef APP-PLUS
+  try {
+    if (nativeFileExportSupported()) {
+      const res = await exportTextFile('排班统计-' + month.value + '.csv', csv)
+      if (res && res.status === 'success') return toast('CSV 已保存')
+      if (res && res.status === 'canceled') return
+    }
+  } catch (e) {
+    toast((e && (e.message || e.errMsg)) || 'CSV 保存失败')
+    return
+  }
   // #endif
   // #ifndef H5
   uni.setClipboardData({ data: csv, success: () => uni.showModal({ title: '已复制 CSV', content: '当前版本已把统计 CSV 复制到剪贴板，可粘贴到表格软件。', showCancel: false }) })

@@ -294,6 +294,26 @@ public class JYNativeModule extends UniModule {
         }
     }
 
+
+    /** 通用文本文件导出（CSV 等），由用户选择保存位置 */
+    @UniJSMethod(uiThread = true)
+    public void exportText(String fileName, String content, String mimeType, UniJSCallback callback) {
+        try {
+            Context c = ctx();
+            if (c == null) { reply(callback, error("NO_CONTEXT", "无法获取 Context")); return; }
+            c.getSharedPreferences(SafExportActivity.PREFS, Context.MODE_PRIVATE).edit().clear().apply();
+            Intent intent = new Intent(c, SafExportActivity.class);
+            intent.putExtra("fileName", fileName == null || fileName.isEmpty() ? "export.csv" : fileName);
+            intent.putExtra("content", content == null ? "" : content);
+            intent.putExtra("mimeType", mimeType == null || mimeType.isEmpty() ? "text/csv" : mimeType);
+            if (!(c instanceof Activity)) intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            c.startActivity(intent);
+            reply(callback, ok());
+        } catch (Throwable e) {
+            reply(callback, error("EXPORT_TEXT_FAILED", String.valueOf(e.getMessage())));
+        }
+    }
+
     @UniJSMethod(uiThread = true)
     public void getExportResult(UniJSCallback callback) {
         try {

@@ -24,7 +24,8 @@ public class SafExportActivity extends Activity {
         try {
             Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("application/json");
+            String mimeType = getIntent().getStringExtra("mimeType");
+            intent.setType(mimeType == null || mimeType.isEmpty() ? "application/json" : mimeType);
             intent.putExtra(Intent.EXTRA_TITLE, fileName);
             startActivityForResult(intent, REQ);
         } catch (Throwable e) {

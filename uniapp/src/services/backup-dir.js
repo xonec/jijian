@@ -123,3 +123,17 @@ export async function importBackupFile() {
   }
   throw new Error('读取系统文件超时')
 }
+
+/** 通过系统文件保存器导出文本文件（CSV 等） */
+export async function exportTextFile(fileName, content) {
+  if (!isSupported()) throw new Error('仅 Android App 支持系统文件保存')
+  await call('exportText', fileName, content, 'text/csv')
+  for (let i = 0; i < 240; i += 1) {
+    await new Promise((r) => setTimeout(r, 500))
+    const res = await call('getExportResult')
+    if (res && res.status === 'success') return { status: 'success', name: res.name || fileName }
+    if (res && res.status === 'canceled') return { status: 'canceled' }
+    if (res && res.status === 'error') throw new Error(res.error || '文件保存失败')
+  }
+  throw new Error('文件保存超时')
+}

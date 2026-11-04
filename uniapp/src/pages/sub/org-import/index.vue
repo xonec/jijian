@@ -168,10 +168,11 @@ function pickFile() {
 async function doPreview() {
   if (!companyId.value || !departmentId.value) return toast('请选择部门')
   if (!base64.value) return
+  preview.value = null
   try {
     uni.showLoading({ title: '解析中' })
     preview.value = await api.org.previewImport({ companyId: companyId.value, departmentId: departmentId.value, date: date.value, fileName: fileName.value, base64: base64.value })
-  } catch (e) { toast((e && (e.message || e.errMsg)) || '解析失败') } finally { uni.hideLoading() }
+  } catch (e) { preview.value = null; toast((e && (e.message || e.errMsg)) || '解析失败') } finally { uni.hideLoading() }
 }
 async function confirmImport() {
   if (!preview.value || importing.value) return

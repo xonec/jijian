@@ -91,7 +91,7 @@ async function save() {
     load()
   } catch (e) { toast((e && (e.message || e.errMsg)) || '保存失败') }
 }
-onLoad((o) => { companyId.value = (o && o.companyId) || ''; departmentId.value = (o && o.departmentId) || ''; load() })
+onLoad((o) => { companyId.value = (o && o.companyId) || ''; departmentId.value = ''; load() })
 </script>
 
 <style lang="scss" scoped>

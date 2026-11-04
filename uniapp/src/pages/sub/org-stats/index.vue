@@ -75,6 +75,7 @@ const month = ref(new Date().toISOString().slice(0, 7))
 const stats = ref(null)
 const loading = ref(false)
 const error = ref('')
+const initialized = ref(false)
 const departmentName = computed(() => {
   const d = departments.value.find((x) => x._id === departmentId.value)
   return d ? d.name : ''
@@ -91,6 +92,10 @@ async function load() {
   try {
     const d = await api.org.companyDetail({ companyId: companyId.value })
     departments.value = d.departments || []
+    if (!initialized.value) {
+      initialized.value = true
+      if (d.role === 'owner' || d.role === 'admin') scope.value = 'company'
+    }
     stats.value = await api.org.stats({ companyId: companyId.value, scope: scope.value, departmentId: departmentId.value, month: month.value })
   } catch (e) { error.value = (e && (e.message || e.errMsg)) || '统计失败'; stats.value = null } finally { loading.value = false }
 }

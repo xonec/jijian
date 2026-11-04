@@ -1,11 +1,18 @@
 <template>
-  <page-frame title="项目管理" back>
+  <page-frame title="排班中心" back>
     <template #header-right>
-      <view class="header__icon" @click="openAdd">
+      <view v-if="scope === 'personal'" class="header__icon" @click="openAdd">
         <ri-icon name="add" :size="20" />
       </view>
     </template>
 
+    <view class="scope-tabs">
+      <view class="scope-tab" :class="{ 'scope-tab--on': scope === 'personal' }" @click="setScope('personal')">个人排班</view>
+      <view class="scope-tab" :class="{ 'scope-tab--on': scope === 'team' }" @click="setScope('team')">团队排班</view>
+      <view class="scope-tab" :class="{ 'scope-tab--on': scope === 'org' }" @click="setScope('org')">组织排班</view>
+    </view>
+
+    <template v-if="scope === 'personal'">
     <view v-if="projects.length" class="card">
       <view v-for="p in projects" :key="p.id || p._id" class="project-row" @click="openMenu(p)">
         <text class="project-row__name">{{ p.name }}</text>
@@ -21,6 +28,59 @@
     <view class="add-row" @click="openAdd">添加项目</view>
     <view class="sort-link" @click="sortTip">项目排序</view>
     <view class="hint">删除项目，会把项目下所有排班数据级联删除，确定还要继续吗？</view>
+    </template>
+
+    <template v-else-if="scope === 'team'">
+      <view v-if="!isLogin" class="empty">
+        <text class="empty__t">登录后使用团队排班</text>
+        <view class="btn btn--primary mt14" @click="goLogin">去登录</view>
+      </view>
+      <view v-else-if="teamLoading" class="empty"><text class="empty__t">加载中…</text></view>
+      <view v-else-if="!teams.length" class="empty">
+        <text class="empty__t">还没有加入团队</text>
+        <view class="btn btn--primary mt14" @click="goTeams">去我的团队</view>
+      </view>
+      <template v-else>
+        <view class="card">
+          <view v-for="t in teams" :key="t._id" class="scope-row" @click="openTeam(t)">
+            <view class="scope-row__main">
+              <text class="scope-row__name">{{ t.name }}</text>
+              <text class="scope-row__sub">{{ roleText(t.role) }}<template v-if="t.unread"> · {{ t.unread }} 条未读</template></text>
+            </view>
+            <ri-icon name="arrow_right" :size="15" class="gray" />
+          </view>
+        </view>
+        <view class="scope-action" @click="goTeams">管理我的团队</view>
+      </template>
+    </template>
+
+    <template v-else>
+      <view v-if="!isLogin" class="empty">
+        <text class="empty__t">登录后使用组织排班</text>
+        <view class="btn btn--primary mt14" @click="goLogin">去登录</view>
+      </view>
+      <view v-else-if="orgLoading" class="empty"><text class="empty__t">加载中…</text></view>
+      <view v-else-if="!companies.length" class="empty">
+        <text class="empty__t">还没有公司</text>
+        <view class="btn btn--primary mt14" @click="goOrg">创建公司</view>
+        <view class="btn btn--ghost mt10" @click="goClaim">认领员工</view>
+      </view>
+      <template v-else>
+        <view class="card">
+          <view v-for="c in companies" :key="c._id" class="scope-row" @click="openCompany(c)">
+            <view class="scope-row__main">
+              <text class="scope-row__name">{{ c.name }}</text>
+              <text class="scope-row__sub">{{ roleText(c.role) }}</text>
+            </view>
+            <ri-icon name="arrow_right" :size="15" class="gray" />
+          </view>
+        </view>
+        <view class="scope-actions">
+          <view class="scope-action" @click="goOrg">公司/部门管理</view>
+          <view class="scope-action" @click="goClaim">认领员工</view>
+        </view>
+      </template>
+    </template>
 
     <app-sheet :visible="menuVisible" :title="actionTitle" @close="menuVisible = false">
       <view v-if="menuProject && !menuProject.current" class="opt-row" @click="switchCurrent">
@@ -64,11 +124,18 @@
 import { ref, computed, onMounted } from 'vue'
 import api from '@/services/api.js'
 import { store } from '@/composables/use-store.js'
-import { toast } from '@/composables/use-nav.js'
+import { goPage, toast } from '@/composables/use-nav.js'
 import { useTheme } from '@/composables/use-theme.js'
 
 const { theme } = useTheme()
 
+const scope = ref('personal')
+const user = ref(uni.getStorageSync('uni_id_user') || null)
+const teams = ref([])
+const companies = ref([])
+const teamLoading = ref(false)
+const orgLoading = ref(false)
+const isLogin = computed(() => !!(user.value && (user.value._id || user.value.username)))
 const projects = ref([])
 const menuVisible = ref(false)
 const menuProject = ref(null)
@@ -98,8 +165,36 @@ function syncStoreProjects() {
   store.projects.splice(0, store.projects.length, ...projects.value.map((p) => ({ ...p })))
 }
 
+function roleText(role) {
+  return role === 'owner' ? '创建者' : role === 'admin' ? '管理员' : '成员'
+}
+function setScope(next) {
+  scope.value = next
+  user.value = uni.getStorageSync('uni_id_user') || null
+  if (next === 'team' && isLogin.value) loadTeams()
+  if (next === 'org' && isLogin.value) loadCompanies()
+}
+function goLogin() { goPage('login') }
+function goTeams() { goPage('teams') }
+function goOrg() { goPage('org') }
+function goClaim() { goPage('org-claim') }
+function openTeam(t) { goPage('team-schedule', { id: t._id }) }
+function openCompany(c) { goPage('org-company', { id: c._id }) }
+async function loadTeams() {
+  if (!isLogin.value) return
+  teamLoading.value = true
+  try { teams.value = (await api.team.listMine()) || [] } catch (e) { teams.value = [] } finally { teamLoading.value = false }
+}
+async function loadCompanies() {
+  if (!isLogin.value) return
+  orgLoading.value = true
+  try { companies.value = ((await api.org.listCompanies()) || {}).list || [] } catch (e) { companies.value = [] } finally { orgLoading.value = false }
+}
+
 onMounted(() => {
   load()
+  loadTeams()
+  loadCompanies()
 })
 
 function openMenu(p) {
@@ -187,6 +282,19 @@ async function doAdd() {
 </script>
 
 <style lang="scss" scoped>
+.scope-tabs { display: flex; gap: 8px; padding: 4px 2px 12px; }
+.scope-tab { flex: 1; text-align: center; padding: 8px 0; border-radius: 99px; background: var(--surface-2); color: var(--text-3); font-size: 13px; }
+.scope-tab--on { color: #fff; background: var(--primary); }
+.scope-row { display: flex; align-items: center; gap: 10px; padding: 14px; border-bottom: 1px solid var(--line); }
+.scope-row:last-child { border-bottom: 0; }
+.scope-row__main { flex: 1; min-width: 0; }
+.scope-row__name { display: block; font-size: 14px; color: var(--text-1); }
+.scope-row__sub { display: block; margin-top: 3px; font-size: 11px; color: var(--text-3); }
+.scope-action { margin-top: 12px; height: 44px; border-radius: var(--r-card); background: var(--surface); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 14px; }
+.scope-actions { display: flex; gap: 10px; }
+.scope-actions .scope-action { flex: 1; }
+.empty__t { display: block; font-size: 14px; color: var(--text-2); }
+
 .project-row {
   display: flex;
   align-items: center;

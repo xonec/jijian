@@ -66,6 +66,7 @@ import { reactive, computed, ref } from 'vue'
 import { toast, goPage } from '@/composables/use-nav.js'
 import { useTheme } from '@/composables/use-theme.js'
 import api from '@/services/api.js'
+import { clearSession } from '@/composables/use-auth.js'
 
 const { theme } = useTheme()
 const form = reactive({ nick: '', wechat: '', city: '' })
@@ -90,8 +91,16 @@ async function refresh() {
       form.nick = userInfo.value.nickname || ''
     }
   } catch (e) {
-    // 未登录或 token 失效：回到未登录态
-    userInfo.value = null
+    const msg = (e && (e.message || e.errMsg)) || ''
+    if (/未登录|登录状态|token|失效|30202|30203|请先登录/i.test(msg)) {
+      // 登录已过期：同时清理 storage，否则设置页仍会显示旧账号
+      clearSession()
+      userInfo.value = null
+      toast('登录已过期，请重新登录')
+    } else {
+      // 网络异常：保留本地缓存，不误判为未登录
+      toast('网络异常，当前显示本地缓存的账号信息')
+    }
   }
 }
 

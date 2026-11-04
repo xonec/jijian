@@ -36,7 +36,7 @@
           <text class="col-batch">{{ e.batchNo || '-' }}</text>
           <view v-for="s in shiftsOf(p)" :key="s" class="col-shift">
             <text v-for="(a, ai) in assignmentsOf(e, s)" :key="ai" class="chip" :class="{ 'chip--12': a.workHours === 12 }" @click="editAssignment(p, ei, a)">{{ a.employeeName }}<text v-if="a.workHours === 12" class="chip__h">12h</text></text>
-            <text v-if="!assignmentsOf(e, s).length" class="none">-</text>
+            <text class="add-chip" @click.stop="addPerson(p, ei, s)">＋</text>
           </view>
         </view>
         <view v-if="p.warnings && p.warnings.length" class="plan__warn">导入提醒 {{ p.warnings.length }} 条</view>
@@ -87,7 +87,7 @@ function pickDepartment() {
 function openImport() { goPage('org-import', { companyId: companyId.value, departmentId: departmentId.value }) }
 function openStats() { goPage('org-stats', { companyId: companyId.value, departmentId: departmentId.value }) }
 function editAssignment(plan, entryIndex, a) {
-  uni.showActionSheet({ itemList: ['修改姓名', '改为 8 小时', '改为 12 小时'], success: (r) => {
+  uni.showActionSheet({ itemList: ['修改姓名', '改为 8 小时', '改为 12 小时', '移除人员'], success: (r) => {
     if (r.tapIndex === 0) {
       uni.showModal({ title: '修改姓名', editable: true, placeholderText: a.employeeName, content: a.employeeName, success: (m) => {
         if (!m.confirm) return
@@ -95,8 +95,30 @@ function editAssignment(plan, entryIndex, a) {
         if (!name) return toast('姓名不能为空')
         update(plan, entryIndex, a, { employeeName: name })
       } })
-    } else update(plan, entryIndex, a, { workHours: r.tapIndex === 1 ? 8 : 12 })
+    } else if (r.tapIndex === 3) removePerson(plan, entryIndex, a)
+    else update(plan, entryIndex, a, { workHours: r.tapIndex === 1 ? 8 : 12 })
   } })
+}
+function addPerson(plan, entryIndex, shiftName) {
+  uni.showModal({ title: '添加人员', editable: true, placeholderText: '请输入姓名', success: async (r) => {
+    if (!r.confirm) return
+    const name = String(r.content || '').trim()
+    if (!name) return toast('请输入姓名')
+    try {
+      await api.org.addAssignment({ planId: plan._id, entryIndex, shiftName, employeeName: name, workHours: 8 })
+      toast('已添加')
+      load()
+    } catch (e) { toast((e && (e.message || e.errMsg)) || '添加失败') }
+  } })
+}
+async function removePerson(plan, entryIndex, a) {
+  const assignmentIndex = plan.entries[entryIndex].assignments.indexOf(a)
+  if (assignmentIndex < 0) return
+  try {
+    await api.org.removeAssignment({ planId: plan._id, entryIndex, assignmentIndex })
+    toast('已移除')
+    load()
+  } catch (e) { toast((e && (e.message || e.errMsg)) || '移除失败') }
 }
 async function update(plan, entryIndex, a, patch) {
   const assignmentIndex = plan.entries[entryIndex].assignments.indexOf(a)
@@ -154,6 +176,7 @@ onLoad(async (o) => {
 .chip--12 { background: var(--warning-soft); color: var(--warning); }
 .chip__h { margin-left: 3px; font-size: 8px; opacity: 0.8; }
 .none { color: var(--text-3); font-size: 10px; }
+.add-chip { display: inline-block; margin: 2px 3px 2px 0; padding: 3px 6px; border-radius: 5px; background: var(--surface-2); color: var(--text-3); font-size: 10px; }
 .plan__warn { margin-top: 8px; font-size: 10px; color: var(--warning); }
 .plan__hint { margin-top: 8px; font-size: 10px; color: var(--text-3); text-align: right; }
 </style>

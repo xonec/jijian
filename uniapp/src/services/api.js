@@ -272,6 +272,8 @@ export const api = {
     plan(data) { return callCloud('schedule.plan', data, 'schedule') },
     mySchedule(data) { return callCloud('schedule.my', data, 'schedule') },
     updateAssignment(data) { return callCloud('schedule.updateAssignment', data, 'schedule') },
+    addAssignment(data) { return callCloud('schedule.addAssignment', data, 'schedule') },
+    removeAssignment(data) { return callCloud('schedule.removeAssignment', data, 'schedule') },
     stats(data) { return callCloud('schedule.stats', data, 'schedule') }
   },
 

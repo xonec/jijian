@@ -407,6 +407,49 @@ async function mySchedule(event, context) {
   }
   return ok({ days })
 }
+
+async function addAssignment(event, context) {
+  const uid = await requireUid(event, context)
+  const r = await db.collection(C.plan).doc(event.planId).get()
+  const plan = (r.data || [])[0]
+  if (!plan) return fail('排班不存在')
+  await requireAdmin(plan.companyId, uid, plan.departmentId)
+  const entries = plan.entries || []
+  const entry = entries[event.entryIndex]
+  if (!entry) return fail('工序不存在')
+  const name = trim(event.employeeName, 30)
+  if (!name) return fail('请输入姓名')
+  const shiftName = trim(event.shiftName, 20) || '早班'
+  const workHours = Number(event.workHours) === 12 ? 12 : 8
+  const emps = await db.collection(C.employee).where({ companyId: plan.companyId, name, status: _.neq('left') }).limit(5).get()
+  const emp = (emps.data || [])[0]
+  const assignment = { shiftName, shiftCode: shiftName === '早班' ? 'early' : shiftName === '中班' ? 'mid' : shiftName === '晚班' ? 'late' : 'other', employeeName: name, employeeId: emp ? emp._id : '', uid: emp ? (emp.uid || '') : '', workHours, workSystem: workHours === 12 ? '12h' : '8h', sourceRow: 0 }
+  entry.assignments = (entry.assignments || []).concat([assignment])
+  entries[event.entryIndex] = entry
+  await db.collection(C.plan).doc(plan._id).update({ entries, updatedAt: now() })
+  await db.collection(C.audit).add({ planId: plan._id, companyId: plan.companyId, departmentId: plan.departmentId, date: plan.date, action: 'add_assignment', before: null, after: assignment, operatorUid: uid, createdAt: now() })
+  return ok({ ok: true, assignment })
+}
+
+async function removeAssignment(event, context) {
+  const uid = await requireUid(event, context)
+  const r = await db.collection(C.plan).doc(event.planId).get()
+  const plan = (r.data || [])[0]
+  if (!plan) return fail('排班不存在')
+  await requireAdmin(plan.companyId, uid, plan.departmentId)
+  const entries = plan.entries || []
+  const entry = entries[event.entryIndex]
+  if (!entry) return fail('工序不存在')
+  const list = entry.assignments || []
+  if (event.assignmentIndex < 0 || event.assignmentIndex >= list.length) return fail('人员不存在')
+  const before = list[event.assignmentIndex]
+  entry.assignments = list.filter((_, i) => i !== event.assignmentIndex)
+  entries[event.entryIndex] = entry
+  await db.collection(C.plan).doc(plan._id).update({ entries, updatedAt: now() })
+  await db.collection(C.audit).add({ planId: plan._id, companyId: plan.companyId, departmentId: plan.departmentId, date: plan.date, action: 'remove_assignment', before, after: null, operatorUid: uid, createdAt: now() })
+  return ok({ ok: true })
+}
+
 async function updateAssignment(event, context) {
   const uid = await requireUid(event, context)
   const r = await db.collection(C.plan).doc(event.planId).get()
@@ -557,6 +600,8 @@ const handlers = {
   'schedule.plan': planDetail,
   'schedule.my': mySchedule,
   'schedule.updateAssignment': updateAssignment,
+  'schedule.addAssignment': addAssignment,
+  'schedule.removeAssignment': removeAssignment,
   'schedule.stats': stats
 }
 
